@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+  <style type="text/css">
+   html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+   body { display: flex; user-select: none; }
+   img { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <img alt="" draggable="false" />
+  <script>
+    const key = window.location.search.substring(1)
+    const imgDOM = document.querySelector('body>img')
+    if (/^\d{13}$/.test(key)) {
+      imgDOM.src = 'screenmap://' + key
+    } else {
+      imgDOM.src = decodeURIComponent(key)
+      imgDOM.onload = function () {
+        window.services.sendReady(imgDOM.naturalWidth, imgDOM.naturalHeight)
+      }
+    }
+    const mousedownInfo = { pageX: 0, pageY: 0, timestamp: 0 }
+    function handleMouseMove (event) {
+      window.services.sendPosition(event.screenX - mousedownInfo.pageX, event.screenY - mousedownInfo.pageY)
+    }
+    function handleMouseUp (event) {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+    window.addEventListener('mousedown', (event) => {
+      if (event.button !== 0) return
+      mousedownInfo.pageX = event.pageX
+      mousedownInfo.pageY = event.pageY
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
+    })
+    window.addEventListener('wheel', (event) => {
+      window.services.sendScale(event.deltaY < 0 ? 0.08 : -0.08, event.ctrlKey)
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+const{ipcRenderer}=require("electron");window.services={sendPosition:(e,n)=>{ipcRenderer.send("position",e,n)},sendScale:(e,n)=>{ipcRenderer.send("scale",e,n)},sendReady:(e,n)=>{ipcRenderer.send("ready",e,n)}};

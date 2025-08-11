@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+  <style type="text/css">
+     html, body {
+      margin: 0; 
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #f4f4f4;
+      user-select: none;
+    }
+    .root {
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .close {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 36px;
+      height: 28px;
+      cursor: pointer;
+    }
+    .close:hover:before, .close:hover:after{
+      background-color: #333;
+    }
+    .close:before, .close:after {
+      position: absolute;
+      left: 17px;
+      top: 8px;
+      content: ' ';
+      height: 12px;
+      width: 1px;
+      background-color: #666;
+    }
+    .close:before {
+      transform: rotate(45deg);
+    }
+    .close:after {
+      transform: rotate(-45deg);
+    }
+
+    .body {
+      display: flex;
+      align-items: center;
+    }
+    .body > div :last-child {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      margin-right: 20px;
+    }
+
+    .title {
+      width: 100%;
+      font-size: 16px;
+      padding-bottom: 6px;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .content {
+      width: 100%;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #424242;
+      word-break: break-all;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      overflow: hidden;
+    }
+
+    .buttons > button {
+      border: none;
+      outline: none;
+      box-shadow: none;
+      cursor: pointer;
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 4px;
+      margin-top: 20px;
+      margin-left: 10px;
+      background-color: rgb(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .buttons > button:hover {
+      opacity: 0.85;
+    }
+
+    .buttons > .button-info {
+      background-color: #0B57D0;
+      color: #fff;
+    }
+    .buttons > .button-warning {
+      background-color: #ED6C02;
+      color: #fff;
+    }
+    .buttons > .button-success {
+      background-color: #2E7D32;
+      color: #fff;
+    }
+    .buttons > .button-error {
+      background-color: #D32F2F;
+      color: #fff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body { 
+        background-color: #303133; 
+        color: #fff;
+      }
+      .close:hover:before, .close:hover:after{
+        background-color: #ddd;
+      }
+      .close:before, .close:after {
+        background-color: #aaa;
+      }
+      .content {
+        color: #cecece;
+      }
+      .buttons > button {
+        background-color: rgb(255, 255, 255, 0.15);
+        color: #fff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <span onclick="window.close()" class="close"></span>
+    <div class="body">
+      <img class="icon" alt="" onerror="this.remove()" draggable="false" />
+      <div>
+        <div class="title"></div>
+        <div class="content"></div>
+      </div>
+    </div>
+    <div class="buttons"></div>
+  </div>
+  <script>
+    window.initRender = ({ icon, title, content, url, buttons }) => {
+      const iconDom = document.querySelector('.icon')
+      if (icon) {
+        iconDom.src = icon
+      } else {
+        iconDom.remove()
+      }
+      const titleDom = document.querySelector('.title')
+      if (title) {
+        titleDom.innerText = title
+      } else {
+        titleDom.remove()
+      }
+      const contentDom = document.querySelector('.content')
+      if (content) {
+        contentDom.innerText = content
+      } else {
+        contentDom.remove()
+      }
+      const buttonsDom = document.querySelector('.buttons')
+      if (Array.isArray(buttons)) {
+        const buttonColors = ['error', 'warning', 'info', 'success']
+        buttons.forEach(item => {
+          if (!item || typeof item !== 'object') return
+          const { label, color, url } = item
+          if (!label) return
+          const btnDom = document.createElement('button')
+          btnDom.innerText = label
+          if (color && buttonColors.includes(color)) btnDom.className = 'button-'+ color
+          btnDom.onclick = () => {
+            if (url) {
+              location.href = url
+            } else {
+              window.close()
+            }
+          }
+          buttonsDom.appendChild(btnDom)
+        })
+      } else {
+        buttonsDom.remove()
+        if (url) {
+          document.querySelector('.body').onclick = () => {
+            location.href = url
+          }
+        }
+      }
+      return document.querySelector('.root').clientHeight
+    }
+  </script>
+</body>
+</html>

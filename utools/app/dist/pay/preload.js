@@ -1,0 +1,1 @@
+const{ipcRenderer}=require("electron");window.services={closeWindow:()=>{ipcRenderer.send("pay.services","closeWindow")},goAccount:()=>{ipcRenderer.send("pay.services","goAccount")},startLoopCheckOrderResult:e=>{ipcRenderer.send("pay.services","startLoopCheckOrderResult",e)}};

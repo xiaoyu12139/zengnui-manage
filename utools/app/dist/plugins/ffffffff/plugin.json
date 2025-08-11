@@ -1,0 +1,99 @@
+{
+  "name": "FFFFFFFF",
+  "version": "5.0.0",
+  "pluginName": "管理中心",
+  "main": "index.html",
+  "logo": "logo.png",
+  "preload": "preload.js",
+  "features": [
+    {
+      "code": "store",
+      "icon": "icons/store.png",
+      "explain": "插件应用市场",
+      "cmds": [
+        "插件应用市场"
+      ]
+    },
+    {
+      "code": "settings",
+      "icon": "icons/user.png",
+      "explain": "我的账号、我的数据",
+      "cmds": [
+        "个人中心"
+      ]
+    },
+    {
+      "code": "settings-prefercences",
+      "icon": "icons/setting.png",
+      "explain": "设置、快捷方式、文件启动、所有指令",
+      "cmds": [
+        "设置"
+      ]
+    },
+    {
+      "code": "settings-featurecmds",
+      "icon": "icons/cmds.png",
+      "explain": "显示所有指令",
+      "cmds": [
+        "所有指令"
+      ]
+    },
+    {
+      "code": "settings-localopen",
+      "icon": "icons/localopen.png",
+      "explain": "文件或文件夹加入「文件启动」",
+      "cmds": [
+        {
+          "type": "files",
+          "maxLength": 1,
+          "label": "加入「文件启动」"
+        }
+      ]
+    },
+    {
+      "code": "connection",
+      "explain": "局域网内同帐号，设备间资源互传",
+      "cmds": [
+        "检测我的设备间资源互传"
+      ]
+    },
+    {
+      "code": "store-search",
+      "icon": "icons/search.png",
+      "explain": "插件应用市场内搜索",
+      "cmds": [
+        {
+          "type": "over",
+          "maxLength": 20,
+          "label": "插件应用市场内搜索"
+        }
+      ]
+    },
+    {
+      "code": "plugininstall",
+      "icon": "icons/install.png",
+      "cmds": [
+        {
+          "type": "files",
+          "fileType": "file",
+          "match": "/\\.upxs?$/i",
+          "label": "安装插件应用",
+          "maxLength": 1
+        }
+      ]
+    },
+    {
+      "code": "redeemcode",
+      "icon": "icons/redeem.png",
+      "cmds": [
+        {
+          "type": "regex",
+          "match": "/^uTools-[0-9a-zA-Z]{32}-[A-Z]{2}$/",
+          "label": "兑换码",
+          "minLength": 42,
+          "maxLength": 42
+        }
+      ]
+    }
+  ]
+}

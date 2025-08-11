@@ -1,0 +1,6 @@
+{
+    "name": "png2ico",
+    "version": "1.0.0",
+    "private": true,
+    "module": "index.js"
+}
