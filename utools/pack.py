@@ -1,6 +1,9 @@
 # python执行命令行命令
 import subprocess
 import re
+import json
+import shutil
+from pathlib import Path
 
 def bytes_to_hex_str(bs: bytes) -> str:
     # 将bytes转成16进制表示的字符串，方便查看和patch进文件
@@ -22,10 +25,13 @@ def encode_utools_md5(md5: str, start_byte: int) -> list:
     return decode_utools_md5(enc_md5, start_byte)
 
 print("打包app")
-subprocess.run('asar p --unpack-dir "{node_modules/addon,node_modules/leveldown,node_modules/configuration}" ./app ./app.asar', shell=True)
+# 构建相对于当前Python文件的路径
+app_dir = Path(__file__).parent / "app"
+asar_file = Path(__file__).parent / "app.asar"
+subprocess.run(f'asar p --unpack-dir "{{node_modules/addon,node_modules/leveldown,node_modules/configuration}}" "{app_dir}" "{asar_file}"', shell=True)
 
 print("获取md5")
-result = subprocess.run('openssl dgst -md5 ./app.asar', shell=True, capture_output=True, text=True)
+result = subprocess.run(f'openssl dgst -md5 "{asar_file}"', shell=True, capture_output=True, text=True)
 md5_output = result.stdout.strip()
 print(md5_output)
 
@@ -35,8 +41,23 @@ if md5_match:
     new_md5 = md5_match.group(1)
     print(f"\n提取的MD5值: {new_md5}")
     
-    # 显示原始MD5和编码结果
-    orig_md5 = "c95bd24c8e6b2454b838bf3afa6b700c"
+    # 从配置文件读取原始MD5
+    config_file = Path(__file__).parent / "md5_config.json"
+    
+    # 如果配置文件不存在，使用默认值并创建配置文件
+    if not config_file.exists():
+        orig_md5 = "c95bd24c8e6b2454b838bf3afa6b700c"
+        config_data = {"original_md5": orig_md5}
+        with open(config_file, "w", encoding="utf-8") as f:
+            json.dump(config_data, f, indent=2, ensure_ascii=False)
+        print(f"\n创建配置文件: {config_file}")
+    else:
+        # 从配置文件读取原始MD5
+        with open(config_file, "r", encoding="utf-8") as f:
+            config_data = json.load(f)
+        orig_md5 = config_data.get("original_md5", "c95bd24c8e6b2454b838bf3afa6b700c")
+        print(f"\n从配置文件读取原始MD5: {orig_md5}")
+    
     print(f"\n原始MD5: {orig_md5}")
     orig_encoded_md5 = encode_utools_md5(orig_md5, 0x3E)
     print("编码后的原始MD5:")
@@ -51,7 +72,7 @@ if md5_match:
     print(bytes_to_hex_str(encoded_md5[16:32]))
     
     # 修改win32-x64.node文件中的MD5编码
-    node_file_path = "./app.asar.unpacked/node_modules/addon/win32-x64.node"
+    node_file_path = (Path(__file__).parent / "app.asar.unpacked/node_modules/addon/win32-x64.node").resolve()
     try:
         with open(node_file_path, "rb") as f:
             file_data = bytearray(f.read())
@@ -70,6 +91,12 @@ if md5_match:
                 f.write(file_data)
             print(f"\n成功修改 {node_file_path}")
             print(f"在位置 {pos} 处替换了完整的32字节MD5编码")
+            
+            # 保存新的MD5到配置文件
+            config_data["original_md5"] = new_md5
+            with open(config_file, "w", encoding="utf-8") as f:
+                json.dump(config_data, f, indent=2, ensure_ascii=False)
+            print(f"已保存新的MD5到配置文件: {new_md5}")
         else:
             # 尝试分别查找前16字节和后16字节
             orig_first_half = bytes(orig_encoded_md5[0:16])
@@ -96,6 +123,12 @@ if md5_match:
                 with open(node_file_path, "wb") as f:
                     f.write(file_data)
                 print(f"成功修改 {node_file_path}")
+                
+                # 保存新的MD5到配置文件
+                config_data["original_md5"] = new_md5
+                with open(config_file, "w", encoding="utf-8") as f:
+                    json.dump(config_data, f, indent=2, ensure_ascii=False)
+                print(f"已保存新的MD5到配置文件: {new_md5}")
             else:
                 print(f"\n在 {node_file_path} 中未找到原始MD5编码（完整或分段）")
                 # 显示文件大小和一些调试信息
@@ -108,5 +141,44 @@ if md5_match:
         print(f"\n修改文件时出错: {e}")
 else:
     print("无法提取MD5值")
+
+# 询问用户是否要复制文件到目标目录
+user_input = input("\n是否要将app.asar和app.asar.unpacked复制到目标目录？(y/n): ")
+if user_input.lower() == 'y':
+    try:
+        # 从配置文件读取目标目录
+        target_dir = config_data.get("target_directory", "")
+        if not target_dir:
+            print("配置文件中未找到目标目录路径")
+        else:
+            target_path = Path(target_dir)
+            if not target_path.exists():
+                print(f"目标目录不存在: {target_path}")
+            else:
+                # 复制app.asar文件
+                source_asar = Path(__file__).parent / "app.asar"
+                target_asar = target_path / "app.asar"
+                if source_asar.exists():
+                    shutil.copy2(source_asar, target_asar)
+                    print(f"已复制 app.asar 到 {target_asar}")
+                else:
+                    print("源文件 app.asar 不存在")
+                
+                # 复制app.asar.unpacked目录
+                source_unpacked = Path(__file__).parent / "app.asar.unpacked"
+                target_unpacked = target_path / "app.asar.unpacked"
+                if source_unpacked.exists():
+                    if target_unpacked.exists():
+                        shutil.rmtree(target_unpacked)
+                    shutil.copytree(source_unpacked, target_unpacked)
+                    print(f"已复制 app.asar.unpacked 到 {target_unpacked}")
+                else:
+                    print("源目录 app.asar.unpacked 不存在")
+                
+                print("\n文件复制完成！")
+    except Exception as e:
+        print(f"\n复制文件时出错: {e}")
+else:
+    print("跳过文件复制")
 
 

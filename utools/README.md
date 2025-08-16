@@ -162,3 +162,8 @@ https://www.bejson.com/convert/ox2str/
 
 修改 newestVersionURL 即可修改新版本的url文件
 
+## 修改添加 添加本地快捷方式的api接口
+
+修改的代码在main.json中
+
+以 `自定义添加 start`注释行标记
