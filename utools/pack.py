@@ -93,10 +93,10 @@ if md5_match:
             print(f"在位置 {pos} 处替换了完整的32字节MD5编码")
             
             # 保存新的MD5到配置文件
-            config_data["original_md5"] = new_md5
-            with open(config_file, "w", encoding="utf-8") as f:
-                json.dump(config_data, f, indent=2, ensure_ascii=False)
-            print(f"已保存新的MD5到配置文件: {new_md5}")
+            # config_data["original_md5"] = new_md5
+            # with open(config_file, "w", encoding="utf-8") as f:
+            #     json.dump(config_data, f, indent=2, ensure_ascii=False)
+            # print(f"已保存新的MD5到配置文件: {new_md5}")
         else:
             # 尝试分别查找前16字节和后16字节
             orig_first_half = bytes(orig_encoded_md5[0:16])
@@ -124,11 +124,11 @@ if md5_match:
                     f.write(file_data)
                 print(f"成功修改 {node_file_path}")
                 
-                # 保存新的MD5到配置文件
-                config_data["original_md5"] = new_md5
-                with open(config_file, "w", encoding="utf-8") as f:
-                    json.dump(config_data, f, indent=2, ensure_ascii=False)
-                print(f"已保存新的MD5到配置文件: {new_md5}")
+                # # 保存新的MD5到配置文件
+                # config_data["original_md5"] = new_md5
+                # with open(config_file, "w", encoding="utf-8") as f:
+                #     json.dump(config_data, f, indent=2, ensure_ascii=False)
+                # print(f"已保存新的MD5到配置文件: {new_md5}")
             else:
                 print(f"\n在 {node_file_path} 中未找到原始MD5编码（完整或分段）")
                 # 显示文件大小和一些调试信息
