@@ -4,6 +4,7 @@
 import subprocess
 from pathlib import Path
 from typing import Tuple, Optional
+import re
 
 
 def _cmd_module_dir(module_name: str) -> Path:
@@ -98,49 +99,55 @@ def enable_cmd_autoload_macros(module_name: str):
     """为当前用户启用在每次启动 CMD 时自动加载宏（设置 AutoRun）。
 
     使用 REG_EXPAND_SZ 并引用 %USERPROFILE% 以保证用户路径的可移植性。
-    如果已有 AutoRun，则在末尾追加 doskey /macrofile 指令；若已包含则不重复追加。
+    如果已有 AutoRun，则在末尾追加宏加载指令；若已包含则不重复追加。
     返回 (success: bool, message: str)
     """
     try:
-        # 目标宏文件的环境变量路径（随用户变化）
-        macro_rel_path = f"%USERPROFILE%\\Documents\\CMDMacros\\{module_name}\\{module_name}.macros"
-        # 在自动加载时，先切换到 UTF-8 代码页，再加载 UTF-8 宏文件
-        macro_cmd = f"chcp 65001 >nul & doskey /macrofile=\"{macro_rel_path}\""
+        # 通过调用 load.cmd 来加载宏（load.cmd 内部已包含 chcp 65001 切换）
+        load_rel_path = f"%USERPROFILE%\\Documents\\CMDMacros\\{module_name}\\load.cmd"
+        macro_cmd = f"if exist \"{load_rel_path}\" call \"{load_rel_path}\""
 
-        # 查询现有 AutoRun
-        query = subprocess.run([
-            "REG", "QUERY", '"HKCU\\Software\\Microsoft\\Command Processor"',
-            "/v", "AutoRun"
-        ], capture_output=True, text=True)
+        # 通过 PowerShell 获取现有 AutoRun 值（ExpandString 更准确）
+        ps_get = [
+            "powershell", "-NoProfile", "-Command",
+            "(Get-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -ErrorAction SilentlyContinue).AutoRun"
+        ]
+        query = subprocess.run(ps_get, capture_output=True, text=True)
+        current_value = (query.stdout or "").strip() if query.returncode == 0 else None
 
-        current_value = None
-        if query.returncode == 0:
-            # 输出格式通常包含一行：AutoRun    REG_EXPAND_SZ    <value>
-            for line in (query.stdout or "").splitlines():
-                if "AutoRun" in line and "REG_" in line:
-                    parts = [p for p in line.strip().split("    ") if p]
-                    if len(parts) >= 3:
-                        current_value = parts[-1]
-                        break
-        
         # 组装新的 AutoRun 值
         if current_value:
             if macro_cmd in current_value:
-                return True, "AutoRun 已包含宏加载指令，无需修改"
+                return True, "AutoRun already contains macro loader, no change"
             new_value = f"{current_value} & {macro_cmd}"
         else:
             new_value = macro_cmd
 
-        add = subprocess.run([
-            "REG", "ADD", '"HKCU\\Software\\Microsoft\\Command Processor"',
-            "/v", "AutoRun", 
-            "/t", "REG_EXPAND_SZ", 
-            "/d", new_value, 
-            "/f"
+        # 确保未禁用 AutoRun
+        subprocess.run([
+            "powershell", "-NoProfile", "-Command",
+            "Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name DisableAutoRun -Type DWord -Value 0"
         ], capture_output=True, text=True)
 
+        # 使用 PowerShell 设置 ExpandString，避免 & 和引号在 REG 中的语法问题
+        safe_value = new_value.replace("'", "''")  # PowerShell 单引号转义
+        ps_set = [
+            "powershell", "-NoProfile", "-Command",
+            f"Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -Type ExpandString -Value '{safe_value}'"
+        ]
+        add = subprocess.run(ps_set, capture_output=True, text=True)
+
         if add.returncode != 0:
-            return False, (add.stderr or add.stdout or "设置 AutoRun 失败")
+            # 兜底：尝试使用 REG ADD（非交互、无 shell，尽量避免解析问题）
+            add_reg = subprocess.run([
+                "REG", "ADD", '"HKCU\\Software\\Microsoft\\Command Processor"',
+                "/v", "AutoRun",
+                "/t", "REG_EXPAND_SZ",
+                "/d", new_value,
+                "/f"
+            ], capture_output=True, text=True)
+            if add_reg.returncode != 0:
+                return False, (add.stderr or add.stdout or add_reg.stderr or add_reg.stdout or "设置 AutoRun 失败")
 
         return True, "已设置 CMD 自动加载宏 (AutoRun)"
     except Exception as e:
