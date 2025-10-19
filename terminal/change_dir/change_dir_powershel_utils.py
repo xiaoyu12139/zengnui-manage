@@ -79,27 +79,27 @@ def create_powershell_module(module_name: str, directories: dict, aliases: dict)
     if (Test-Path $TargetDir) {{
         $OldDir = Get-Location
         Set-Location $TargetDir
-        Write-Host "✓ 已切换到 {desc}: $TargetDir" -ForegroundColor Green
-        Write-Host "  (从: $OldDir)" -ForegroundColor Gray
+        Write-Host "✓ Switched to {alias_name}: $TargetDir" -ForegroundColor Green
+        Write-Host "  (from: $OldDir)" -ForegroundColor Gray
     }} else {{
-        Write-Error "{desc}不存在: $TargetDir"
+        Write-Error "{alias_name} not found: $TargetDir"
     }}
 }}"""
             functions.append(func_code)
             alias_lines.append(f'Set-Alias -Name "{alias_name}" -Value "{func_name}"')
-            help_lines.append(f'    Write-Host "  {func_name}  (别名: {alias_name})  - 切换到 {desc}" -ForegroundColor Green')
+            help_lines.append(f'    Write-Host "  {func_name}  (alias: {alias_name})  - Switch to {alias_name}" -ForegroundColor Green')
             export_functions.append(func_name)
             export_aliases.append(alias_name)
         
         # 生成帮助函数
         help_alias = aliases.get('help', 'ds-help')
         help_func = f"""function Show-{module_name}Help {{
-    Write-Host "{module_name} 模块命令:" -ForegroundColor Cyan
+    Write-Host "{module_name} commands:" -ForegroundColor Cyan
 {chr(10).join(help_lines)}
-    Write-Host "  Show-{module_name}Help (别名: {help_alias}) - 显示此帮助信息" -ForegroundColor Yellow
+    Write-Host "  Show-{module_name}Help (alias: {help_alias}) - Show this help" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "配置信息:" -ForegroundColor Cyan
-{chr(10).join([f'    Write-Host "  {config["desc"]}: {config["path"]}" -ForegroundColor White' for config in directories.values()])}
+    Write-Host "Config:" -ForegroundColor Cyan
+{chr(10).join([f'    Write-Host "  {aliases.get(key, key)}: {config["path"]}" -ForegroundColor White' for key, config in directories.items()])}
 }}"""
         functions.append(help_func)
         alias_lines.append(f'Set-Alias -Name "{help_alias}" -Value "Show-{module_name}Help"')
@@ -118,7 +118,7 @@ def create_powershell_module(module_name: str, directories: dict, aliases: dict)
 # 导出函数和别名
 Export-ModuleMember -Function {', '.join(export_functions)} -Alias {', '.join(export_aliases)}
 
-Write-Host "{module_name} 模块已加载! 输入 '{help_alias}' 查看帮助" -ForegroundColor Yellow
+Write-Host "{module_name} module loaded! Type '{help_alias}' to see help" -ForegroundColor Yellow
 """
         
         # 写入文件

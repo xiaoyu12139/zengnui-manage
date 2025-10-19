@@ -42,8 +42,8 @@ def create_cmd_macros(module_name: str, directories: dict, aliases: dict) -> Tup
             path = raw_path.replace('/', '\\')
             desc = cfg.get('desc', key)
             # 宏：切换目录并输出提示；使用 $T 作为命令分隔符，避免 & 转义带来的解析问题
-            macro_lines.append(f"{alias}=cd /d \"{path}\" $T echo Switched to {path}")
-            help_lines.append(f"echo  {alias} - Switch to {desc}")
+            macro_lines.append(f"{alias}=cd /d \"{path}\" $T echo Switched to {alias}: {path}")
+            help_lines.append(f"echo  {alias} - Switch to {alias}")
 
         # 帮助宏：输出可用命令
         help_macro = f"{help_alias}=echo {module_name} commands:"
