@@ -1,0 +1,12 @@
+{
+  "directories": {
+    "xiaoyu": {
+      "path": "C:/Users/xiaoyu",
+      "desc": "xiaoyu用户目录"
+    },
+    "yxtools": {
+      "path": "D:/yxtools", 
+      "desc": "yxtools普通文件目录"
+    }
+  }
+}

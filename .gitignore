@@ -1,3 +1,5 @@
 # 忽略utools目录下的打包文件
 utools/app.asar
 utools/app.asar.unpacked/
+terminal/**/__pycache__
+terminal/zengnui_cli.egg-info
