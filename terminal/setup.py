@@ -13,6 +13,7 @@ setup(
     entry_points={
         "console_scripts": [
             "update-change-dir=change_dir.main:main",
+            "clash-proxy=clash.terminal_proxy:cli_proxy",
         ],
     },
 )

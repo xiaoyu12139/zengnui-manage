@@ -1,0 +1,1 @@
+from .alias_manager import set_terminal_alias
