@@ -66,7 +66,8 @@ def main():
         # operator = f"set current_path=%CD% & cd {value.get(LABEL_PATH)} & echo Switched to {value.get(LABEL_PATH)}: & echo. & echo (from: %current_path%)"
         # operator = f"cd /d {value.get(LABEL_PATH)} $T echo Switched to {value.get(LABEL_PATH)}"
         label_path = value.get(LABEL_PATH).replace("\\", "/")
-        operator = 'cd /d "{}" $T echo Switched to "{}" $T echo. $T echo (from: %%CD%%)'.format(label_path, label_path)
+        operator = 'cd /d "{}" $T echo Switched to "{}" $T echo (from: %%CD%%)'.format(label_path, label_path)
+        # operator = f'cd /d "{label_path}" $T @echo off &  echo Switched to "{label_path}" $T echo. $T echo (from: %%CD%%) $T echo on'
         error_state, error_msg = set_terminal_alias(key, operator, "cmd")
         if error_state:
             SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换.{error_msg}" )
