@@ -85,7 +85,8 @@ class CmdAliasManager(BaseAliasManager):
                 # pattern = re.compile(r'(?:cmd\s*/c|call)\s*(?:"[^"]*cmd_aliases\\.cmd"|[^\s&]*cmd_aliases\\.cmd)', re.IGNORECASE)
                 # pattern = re.compile(r'(?:if\s+exist\s+)?(?:cmd\s*/c|call)\s*(?:"[^"]*cmd_aliases\.cmd"|[^\s&]*cmd_aliases\.cmd)(?=\s*(?:>nul|2>&1|$))', re.IGNORECASE)
                 pattern = re.compile(r'(?:call)\s*(?:"[^"]*cmd_aliases\.cmd"|[^\s&]*cmd_aliases\.cmd)', re.IGNORECASE)
-
+                # 经测试，如果已经包含了会走到这里，但sub时会报错就不走下面的逻辑了，所以正常运行
+                # 如果不存在则会一直执行
                 if pattern.search(current_value):
                     new_value = pattern.sub(macro_cmd, current_value)
                 else:
@@ -113,7 +114,8 @@ class CmdAliasManager(BaseAliasManager):
                     "/f"
                 ], capture_output=True, text=True)
         except Exception as e:
-            print(f"设置 CMD AutoRun 失败: {e}")
+            # print(f"设置 CMD AutoRun 失败: {e}")
+            pass
 
     def set_alias(self, alias_name: str, command: str) -> Tuple[bool, str]:
         alias = self.sanitize_alias_name(alias_name)
