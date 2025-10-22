@@ -63,10 +63,13 @@ def main():
     INFO("更新 cmd 目录切换...")
     for key, value in directories.items():
         # operator = f"cd {value.get(LABEL_PATH)}"
-        operator = f"set current_path=%cd% & cd {value.get(LABEL_PATH)} & echo ✓ Switched to {value.get(LABEL_PATH)}: && echo. & echo (from: %current_path%)"
+        # operator = f"set current_path=%CD% & cd {value.get(LABEL_PATH)} & echo Switched to {value.get(LABEL_PATH)}: & echo. & echo (from: %current_path%)"
+        # operator = f"cd /d {value.get(LABEL_PATH)} $T echo Switched to {value.get(LABEL_PATH)}"
+        label_path = value.get(LABEL_PATH).replace("\\", "/")
+        operator = 'cd /d "{}" $T echo Switched to "{}" $T echo. $T echo (from: %%CD%%)'.format(label_path, label_path)
         error_state, error_msg = set_terminal_alias(key, operator, "cmd")
         if error_state:
-            SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换. {error_msg}")
+            SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换.{error_msg}" )
     # 5.创建 git bash 目录切换
     INFO("更新 git bash 目录切换...")
     for key, value in directories.items():
