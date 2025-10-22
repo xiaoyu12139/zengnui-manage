@@ -1,1 +1,1 @@
-from .alias_manager import set_terminal_alias
+from .alias_manager import set_terminal_alias, reset_all_terminal_aliases

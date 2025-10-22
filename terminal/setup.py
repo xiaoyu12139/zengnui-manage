@@ -12,6 +12,7 @@ setup(
     install_requires=["click", "questionary"],
     entry_points={
         "console_scripts": [
+            "clear-all-alias=public.alias_manager:reset_all_terminal_aliases",
             "update-change-dir=change_dir.main:main",
             "clash-proxy=clash.terminal_proxy:cli_proxy",
         ],

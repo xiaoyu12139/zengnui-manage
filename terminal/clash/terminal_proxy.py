@@ -14,7 +14,7 @@ def cli_proxy():
     set_terminal_alias('clash', 'echo 1234', 'cmd')
     set_terminal_alias('clash', 'echo 1234', 'powershell')
     set_terminal_alias('clash', 'echo 1234', 'bash')
-    
+
 
 
 if __name__ == '__main__':
