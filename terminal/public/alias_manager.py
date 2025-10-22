@@ -164,6 +164,30 @@ class CmdAliasManager(BaseAliasManager):
                 file_path.unlink()
                 removed_file = True
             
+            # 删除 AutoRun 中的调用
+            user_home = str(Path.home())
+            fp = str(file_path)
+            if fp.lower().startswith(user_home.lower()):
+                rel_fp = fp.replace(user_home, "%USERPROFILE%")
+            else:
+                rel_fp = fp
+            macro_cmd = f'if exist "{rel_fp}" call "{rel_fp}" >nul 2>&1'
+
+            ps_get = [
+                "powershell", "-NoProfile", "-Command",
+                "(Get-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -ErrorAction SilentlyContinue).AutoRun"
+            ]
+            query = subprocess.run(ps_get, capture_output=True, text=True)
+            current_value = (query.stdout or "").strip() if query.returncode == 0 else None
+            # 获取环境变量并替换
+            resolved_value = os.path.expandvars(macro_cmd)
+            current_value = current_value.replace(resolved_value, "")
+            ps_set = [
+                "powershell", "-NoProfile", "-Command",
+                f"Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -Type ExpandString -Value '{resolved_value_rpl}'"
+            ]
+            subprocess.run(ps_set, capture_output=True, text=True)
+            
             # 如果是 aggressive 模式，清理注册表中的 AutoRun 设置
             if aggressive:
                 try:
@@ -518,11 +542,11 @@ def reset_all_terminal_aliases(aggressive: bool = False) -> Tuple[bool, str]:
 
 
 if __name__ == "__main__":
-    set_terminal_alias('clash1', 'echo 1234', 'cmd')
+    # set_terminal_alias('clash1', 'echo 1234', 'cmd')
     # set_terminal_alias('clash2', 'echo 12341234', 'bash')
     # set_terminal_alias('clash1', 'echo 12341234', 'bash')
     # set_terminal_alias('clash1', 'echo 12341234', 'bash')
     # set_terminal_alias('clash1', 'echo 12341234', 'bash')
     # set_terminal_alias('clash1', 'echo 12341234', 'bash')
     # set_terminal_alias('clash1', 'echo 12341234last', 'bash')
-    # reset_terminal_aliases('bash')
+    reset_terminal_aliases('cmd')
