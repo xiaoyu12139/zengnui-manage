@@ -82,7 +82,10 @@ class CmdAliasManager(BaseAliasManager):
             current_value = (query.stdout or "").strip() if query.returncode == 0 else None
 
             if current_value:
-                pattern = re.compile(r'(?:cmd\s*/c|call)\s*(?:"[^"]*cmd_aliases\\.cmd"|[^\s&]*cmd_aliases\\.cmd)', re.IGNORECASE)
+                # pattern = re.compile(r'(?:cmd\s*/c|call)\s*(?:"[^"]*cmd_aliases\\.cmd"|[^\s&]*cmd_aliases\\.cmd)', re.IGNORECASE)
+                # pattern = re.compile(r'(?:if\s+exist\s+)?(?:cmd\s*/c|call)\s*(?:"[^"]*cmd_aliases\.cmd"|[^\s&]*cmd_aliases\.cmd)(?=\s*(?:>nul|2>&1|$))', re.IGNORECASE)
+                pattern = re.compile(r'(?:call)\s*(?:"[^"]*cmd_aliases\.cmd"|[^\s&]*cmd_aliases\.cmd)', re.IGNORECASE)
+
                 if pattern.search(current_value):
                     new_value = pattern.sub(macro_cmd, current_value)
                 else:
@@ -109,8 +112,8 @@ class CmdAliasManager(BaseAliasManager):
                     "/d", new_value,
                     "/f"
                 ], capture_output=True, text=True)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"设置 CMD AutoRun 失败: {e}")
 
     def set_alias(self, alias_name: str, command: str) -> Tuple[bool, str]:
         alias = self.sanitize_alias_name(alias_name)
@@ -515,7 +518,7 @@ def reset_all_terminal_aliases(aggressive: bool = False) -> Tuple[bool, str]:
 
 
 if __name__ == "__main__":
-    set_terminal_alias('clash1', 'echo 1234', 'bash')
+    set_terminal_alias('clash1', 'echo 1234', 'cmd')
     # set_terminal_alias('clash2', 'echo 12341234', 'bash')
     # set_terminal_alias('clash1', 'echo 12341234', 'bash')
     # set_terminal_alias('clash1', 'echo 12341234', 'bash')
