@@ -92,17 +92,12 @@ def get_terminal_type():
     """获取当前终端类型：Windows 下识别 cmd / PowerShell / Git Bash；其他系统为 posix"""
     shell = _detect_shell_on_windows() if os.name == 'nt' else 'posix'
     if shell == 'powershell':
-        INFO("当前环境为powershell")
         return 'powershell'
     elif shell == 'cmd':
-        INFO("当前环境为cmd")
         return 'cmd'
     elif shell == 'bash':
-        INFO("当前环境为git bash")
         return 'bash'
     elif shell == 'posix':
-        INFO("当前环境为posix")
         return 'posix'
     else:
-        INFO(f"当前环境为{shell}")
         return shell
