@@ -26,7 +26,7 @@ def ERROR(msg: str) -> None:
     Args:
         msg (str): 需要打印的字符串
     """
-    click.secho(msg, fg="blue")
+    click.secho(msg, fg="red")
 
 
 def SUCCESS(msg: str) -> None:
