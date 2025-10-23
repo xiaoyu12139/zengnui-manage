@@ -102,7 +102,6 @@ def reset_terminal_aliases(shell: Optional[str] = None, aggressive: bool = False
     """
     return TerminalAliasService().reset_terminal_aliases(shell, aggressive)
 
-@click.command()
 def reset_all_terminal_aliases(aggressive: bool = False) -> Tuple[bool, str]:
     """重置所有终端的别名配置
     
@@ -126,6 +125,10 @@ def print_aliases_config(shell: Optional[str] = None) -> None:
     mgr.print_aliases()
 
 ########################################### 命令定义 ###########################################
+@click.command()
+def reset_all():
+    reset_all_terminal_aliases()
+
 @click.command()
 @click.option('-s', 'shell', type=click.Choice(['cmd', 'ps', 'bash']),required=True,help='指定终端类型：cmd / ps / bash')
 @click.option('-p', 'do_print', is_flag=True, help='打印别名配置')

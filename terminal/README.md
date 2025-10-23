@@ -16,5 +16,7 @@ python版本dev：3.12.7
 |               | alias -p -s [cmd \| ps \| bash] ：打印指定终端别名相关配置   |                  |
 |               | alias -d -s [cmd \| ps \| bash] : 删除指定终端别名相关配置   | bashps           |
 |               | clear-all-alias: 删除所有终端别名相关配置                    |                  |
+| update_config | 更新项目相关的配置                                           |                  |
+|               | update-all-config: 更新所有相关的配置                        |                  |
 
 > 对涉及别名操作的功能，如果频繁操作修改导致配置文件紊乱的，建议清楚所有的终端别名配置后，在对应功能进行update, 后续考虑加载一键update的所有设置别名操作的功能

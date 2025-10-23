@@ -14,7 +14,7 @@ setup(
         "console_scripts": [
             # command_alias 中的命令
             "alias=command_alias.main:cli",
-            "clear-all-alias=command_alias.main:reset_all_terminal_aliases",
+            "clear-all-alias=command_alias.main:reset_all",
             # change_dir 中的命令
             "update-change-dir=change_dir.main:main",
             # clash中的命令

@@ -5,14 +5,25 @@ from pathlib import Path
 import subprocess
 import click
 import sys
+import locale
 from typing import Tuple, List
 
 # Windows 下阻止新窗口弹出（如不需要可删）
 if sys.platform.startswith("win"):
     CREATE_NO_WINDOW = 0x08000000
-    RUN_KWARGS = {"creationflags": CREATE_NO_WINDOW}
+    RUN_KWARGS = {
+        "creationflags": CREATE_NO_WINDOW,
+        # 使用系统首选编码以避免控制台输出的乱码和解码错误
+        "encoding": locale.getpreferredencoding(False),
+        # 容错处理，避免 UnicodeDecodeError 导致线程异常
+        "errors": "replace",
+    }
 else:
-    RUN_KWARGS = {}
+    RUN_KWARGS = {
+        # 非 Windows 默认使用 UTF-8（大多数 POSIX 系统）
+        "encoding": "utf-8",
+        "errors": "replace",
+    }
 
 
 def run_command(command: List[str], cwd: Path) -> Tuple[int, str]:
@@ -35,11 +46,10 @@ def run_command(command: List[str], cwd: Path) -> Tuple[int, str]:
             capture_output=True,
             text=True,
             shell=True,
-            encoding="utf-8",
             **RUN_KWARGS,
         )
         result.check_returncode()
-        result_out = result.stdout.strip()
+        result_out = (result.stdout or "").strip()
         click.secho(f"✔ command: {' '.join(command)} @ {cwd}", fg="green")
         return 0, result_out
     except Exception as e:
