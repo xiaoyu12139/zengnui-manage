@@ -1,10 +1,9 @@
+# 内部导包
+from public import *
+from command_alias import set_terminal_alias
+# 外部导包
 from pathlib import Path
-from public.logger import *
-from public.public_operation import *
-from public.alias_manager import set_terminal_alias
 import json
-from .change_dir_powershel_utils import *
-from .change_dir_cmd_utils import *
 import click
 
 # 脚本文件所在目录
@@ -65,7 +64,7 @@ def main():
         operator = f'cd /d "{value.get(LABEL_PATH)}" $T echo Switched to "{value.get(LABEL_PATH)}"'
         error_state, error_msg = set_terminal_alias(key, operator, "cmd")
         if error_state:
-            SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换.{error_msg}" )
+            SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换." )
     # 5.创建 git bash 目录切换
     INFO("更新 git bash 目录切换...")
     for key, value in directories.items():
