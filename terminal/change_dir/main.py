@@ -62,8 +62,7 @@ def main():
     # 4.创建 cmd 目录切换
     INFO("更新 cmd 目录切换...")
     for key, value in directories.items():
-        label_path = value.get(LABEL_PATH).replace("\\", "/")
-        operator = 'cmd /c "@echo off & cd /d "{}" & echo Switched to "{}" & echo. & echo (from: %CD%)"'.format(label_path, label_path)
+        operator = f'cd /d "{value.get(LABEL_PATH)}" $T echo Switched to "{value.get(LABEL_PATH)}"'
         error_state, error_msg = set_terminal_alias(key, operator, "cmd")
         if error_state:
             SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换.{error_msg}" )
