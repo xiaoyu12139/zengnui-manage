@@ -12,10 +12,14 @@ setup(
     install_requires=["click", "questionary"],
     entry_points={
         "console_scripts": [
+            # command_alias 中的命令
             "alias=command_alias.main:cli",
-            "clear-all-alias=public.alias_manager:reset_all_terminal_aliases",
+            "clear-all-alias=command_alias.main:reset_all_terminal_aliases",
+            # change_dir 中的命令
             "update-change-dir=change_dir.main:main",
-            "clash-proxy=clash.terminal_proxy:cli_proxy",
+            # clash中的命令
+            "update-clash-proxy=clash.terminal_proxy:cli_proxy_config",
+            "proxy=clash.terminal_proxy:cli_proxy",
         ],
     },
 )

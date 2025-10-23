@@ -74,4 +74,6 @@ def main():
         error_state, error_msg = set_terminal_alias(key, operator, "bash")
         if error_state:
             SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换.")
-   
+    # 6. 提示用户重新打开终端
+    WARNING("请重新打开终端窗口，使配置生效")
+  

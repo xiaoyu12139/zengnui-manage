@@ -160,19 +160,19 @@ class CmdAliasManager(BaseAliasManager):
         alias_file = self.alias_file()
         if not alias_file.exists():
             ERROR("未找到 cmd_aliases.cmd 文件")
-            return
-        # 打印配置文件的路径
-        INFO(f"当前 CMD 别名配置文件路径:")
-        SUCCESS(alias_file)
-        content = alias_file.read_text(encoding="utf-8", errors="ignore")
-        alias_pattern = re.compile(r"^\s*doskey\s+([A-Za-z0-9_-]+)\s*=.*$", re.MULTILINE)
-        matches = alias_pattern.findall(content)
-        if matches:
-            INFO("当前 CMD 别名配置：")
-            for alias in sorted(matches):
-                SUCCESS(f"  {alias}")
         else:
-            ERROR("当前 CMD 没有定义别名")
+            # 打印配置文件的路径
+            INFO(f"当前 CMD 别名配置文件路径:")
+            SUCCESS(alias_file)
+            content = alias_file.read_text(encoding="utf-8", errors="ignore")
+            alias_pattern = re.compile(r"^\s*doskey\s+([A-Za-z0-9_-]+)\s*=.*$", re.MULTILINE)
+            matches = alias_pattern.findall(content)
+            if matches:
+                INFO("当前 CMD 别名配置：")
+                for alias in sorted(matches):
+                    SUCCESS(f"  {alias}")
+            else:
+                ERROR("当前 CMD 没有定义别名")
         # 打印autorun中的内容
         INFO("当前 AutoRun 配置：")
         ps_get = [
@@ -182,3 +182,4 @@ class CmdAliasManager(BaseAliasManager):
         query = subprocess.run(ps_get, capture_output=True, text=True)
         current_value = (query.stdout or "").strip() if query.returncode == 0 else None
         SUCCESS(f"  {current_value}")
+        WARNING("注册表配置：计算机\HKEY_CURRENT_USER\Software\Microsoft\Command Processor")

@@ -4,6 +4,7 @@ import click
 from .bash_alias import BashAliasManager
 from .cmd_alias import CmdAliasManager
 from .powershell_alias import PowerShellAliasManager
+from public import *
 
 try:
     # Reuse existing terminal detection if available
@@ -101,6 +102,7 @@ def reset_terminal_aliases(shell: Optional[str] = None, aggressive: bool = False
     """
     return TerminalAliasService().reset_terminal_aliases(shell, aggressive)
 
+@click.command()
 def reset_all_terminal_aliases(aggressive: bool = False) -> Tuple[bool, str]:
     """重置所有终端的别名配置
     
@@ -110,7 +112,13 @@ def reset_all_terminal_aliases(aggressive: bool = False) -> Tuple[bool, str]:
     Returns:
         (success, message): 操作结果和消息
     """
-    return TerminalAliasService().reset_all_terminal_aliases(aggressive)
+    success, message = TerminalAliasService().reset_all_terminal_aliases(aggressive)
+    if success:
+        SUCCESS(message)
+    else:
+        ERROR(message)
+    
+    return success, message
 
 
 def print_aliases_config(shell: Optional[str] = None) -> None:
