@@ -73,7 +73,7 @@ class CmdAliasManager(BaseAliasManager):
             else:
                 rel_fp = fp
             macro_cmd = f'if exist "{rel_fp}" call "{rel_fp}" >nul 2>&1'
-
+            # powershell -NoProfile -Command (Get-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -ErrorAction SilentlyContinue).AutoRun
             ps_get = [
                 "powershell", "-NoProfile", "-Command",
                 "(Get-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -ErrorAction SilentlyContinue).AutoRun"
@@ -186,7 +186,7 @@ class CmdAliasManager(BaseAliasManager):
             current_value = current_value.replace(resolved_value, "")
             ps_set = [
                 "powershell", "-NoProfile", "-Command",
-                f"Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -Type ExpandString -Value '{resolved_value_rpl}'"
+                f"Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -Type ExpandString -Value '{current_value}'"
             ]
             subprocess.run(ps_set, capture_output=True, text=True)
             
