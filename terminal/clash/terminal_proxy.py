@@ -12,8 +12,8 @@ def cli_proxy_config():
     """
     # 配置开启代理配置
     cmd_str = """
-    set http_proxy=http://127.0.0.1:7890 $T
-    set https_proxy=http://127.0.0.1:7890 $T
+    set http_proxy=http://127.0.0.1:7890$T
+    set https_proxy=http://127.0.0.1:7890$T
     echo "Proxy configured successfully."
     """.replace("\n", " ")
     ps_str = """
