@@ -25,8 +25,7 @@ class MainWindowPlugin(Plugin, MainWindowVMBuilder):
         """
         组装插件
         """
-        self._vm = self.create_main_window_vm_instance(context)
-        self.main_window_cmd_handle.assemble_cmd(self._vm)
+        self.main_window_cmd_handle.assemble_cmd(self.create_main_window_vm_instance(context))
     
     @cmd("f64715b7-8a60-4f78-b42b-6b935b63a32c", "startup")
     def load_support_plugins(self, *args):

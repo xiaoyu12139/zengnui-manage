@@ -1,5 +1,5 @@
 from utils.meta_class import SingletonMeta
-
+from utils import logger
 
 class CommandManager(metaclass=SingletonMeta):
     """
@@ -15,6 +15,9 @@ class CommandManager(metaclass=SingletonMeta):
         注册命令
         """
         for key, value in commands.items():
+            if key in self.__commands:
+                logger.error(f"命令 {key} 已存在")
+                continue
             self.__commands[key] = value
             self.__command_names.append(value.cmd_terminal)
             self.__name_to_key_map[value.cmd_terminal] = key
