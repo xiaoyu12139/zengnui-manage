@@ -1,32 +1,38 @@
 
 from utils import SingletonMeta
-from .plugin_controller import PluginController
-from .command_controller import CommandController
+from .plugin_manager import PluginManager
+from .command_manager import CommandManager
 from .message_queue import MessageQueue
+from .views_manager import ViewsManager
 
 class Global(metaclass=SingletonMeta):
     """
     全局管理类
     """
     def __init__(self):
-        self._plugin_controller = PluginController()
-        self._command_controller = CommandController()
+        self._plugin_manager = PluginManager()
+        self._command_manager = CommandManager()
         self._message_queue = MessageQueue()
+        self._views_manager = ViewsManager()
     
     def load_core(self):
         """
         加载app需要的基础核心组件
         """
-        self._plugin_controller.load_core()
+        self._plugin_manager.load_core()
     
     @property
-    def plugin_controller(self):
-        return self._plugin_controller
+    def plugin_manager(self):
+        return self._plugin_manager
     
     @property
-    def command_controller(self):
-        return self._command_controller
+    def command_manager(self):
+        return self._command_manager
     
     @property
     def message_queue(self):
         return self._message_queue
+    
+    @property
+    def views_manager(self):
+        return self._views_manager

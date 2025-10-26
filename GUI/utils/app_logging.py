@@ -22,5 +22,11 @@ class AppLogging(metaclass=SingletonMeta):
         记录INFO级别的日志
         """
         self._logger.info(msg)
+    
+    def error(self, msg: str):
+        """
+        记录ERROR级别的日志
+        """
+        self._logger.error(msg)
 
 __logger = AppLogging()
