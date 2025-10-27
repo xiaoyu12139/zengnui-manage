@@ -1,6 +1,6 @@
 from core import cmd, Global
 from utils import logger
-from ..views.top_bar_view import TopBarView
+from ...views import TopBarView
 
 class TopBarCmdHandler:
     """

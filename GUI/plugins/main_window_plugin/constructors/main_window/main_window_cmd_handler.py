@@ -1,6 +1,6 @@
 from core import cmd, Global
 from utils import logger
-from ..views.main_window_view import MainWindowView
+from ...views import MainWindowView
 
 class MainWindowCommandHandler:
     """
