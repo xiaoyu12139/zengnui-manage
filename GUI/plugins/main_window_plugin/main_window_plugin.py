@@ -1,7 +1,7 @@
 from core import Global, Plugin, Context, cmd
-from plugins.main_window_plugin.views import MainWindowView
-from plugins.main_window_plugin.viewmodels import MainWindowViewModel
-from plugins.main_window_plugin.constructors import MainWindowVMBuilder, MainWindowCommandHandler
+from .views import MainWindowView
+from .viewmodels import MainWindowViewModel
+from .constructors import MainWindowVMBuilder, MainWindowCommandHandler
 
 def instance():
     return MainWindowPlugin()
@@ -19,7 +19,7 @@ class MainWindowPlugin(Plugin, MainWindowVMBuilder):
         """
         初始化插件
         """
-        Global().views_manager.register_view("main_window", MainWindowView)
+        Global().views_manager.register_view(str(hash(MainWindowView)), MainWindowView)
     
     def assembled(self, context):
         """
