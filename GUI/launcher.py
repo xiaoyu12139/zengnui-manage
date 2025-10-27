@@ -3,6 +3,8 @@ from utils import logger
 from pathlib import Path
 import sys
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QPalette, QColor
+
 
 def make_dark_palette(app: QApplication):
     pal = QPalette()

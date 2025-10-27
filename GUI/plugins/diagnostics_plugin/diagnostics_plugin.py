@@ -1,5 +1,9 @@
-from core import Plugin
+from core import Plugin, Global
 from .constructors import DiagnosticsVMBuilder, DiagnosticsCmdHandler
+from .views import DiagnosticsView
+
+def instance():
+    return DiagnosticsPlugin()
 
 class DiagnosticsPlugin(Plugin, DiagnosticsVMBuilder):
 
@@ -8,8 +12,8 @@ class DiagnosticsPlugin(Plugin, DiagnosticsVMBuilder):
         self.diagnostics_cmd_handler = DiagnosticsCmdHandler()
     
     def initialize(self):
-        self.diagnostics_cmd_handler.assemble_cmd(self.create_diagnostics_vm_instance)  
-        
+        Global().views_manager.register_view("DiagnosticsView", DiagnosticsView)
+
     def assembled(self, context):
         self.diagnostics_cmd_handler.assemble_cmd(self.create_diagnostics_vm_instance(context))
         

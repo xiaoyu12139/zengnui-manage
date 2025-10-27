@@ -1,5 +1,9 @@
-from core import Plugin
+from core import Plugin, Global
 from .constructors import StatusBarVMBuilder, StatusBarCmdHandler
+from .views import StatusBarView
+
+def instance():
+    return StatusBarPlugin()
 
 class StatusBarPlugin(Plugin, StatusBarVMBuilder):
 
@@ -8,7 +12,7 @@ class StatusBarPlugin(Plugin, StatusBarVMBuilder):
         self.status_bar_cmd_handler = StatusBarCmdHandler()
     
     def initialize(self):
-        self.status_bar_cmd_handler.assemble_cmd(self.create_status_bar_vm_instance)
+        Global().views_manager.register_view("StatusBarView", StatusBarView)
     
     def assembled(self, context):
         self.status_bar_cmd_handler.assemble_cmd(self.create_status_bar_vm_instance(context))

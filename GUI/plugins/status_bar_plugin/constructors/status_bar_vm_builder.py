@@ -1,3 +1,6 @@
+from ..viewmodels import StatusBarViewModel
+from typing import Callable
+
 class StatusBarVMBuilder:
     """
     状态栏视图模型构建器类

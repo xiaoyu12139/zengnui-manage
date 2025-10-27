@@ -44,6 +44,10 @@ class PluginManager(metaclass=SingletonMeta):
         for plugin_dir in self._plugin_base_path.iterdir():
             if plugin_dir.is_dir():
                 # 加载插件
+                module_py = plugin_dir / f"{plugin_dir.name}.py"
+                if not module_py.exists():
+                    # 跳过非插件目录（例如 ui_widget 等资源目录）
+                    continue
                 try:
                     self.load_plugin(plugin_dir.name)
                 except Exception as e:

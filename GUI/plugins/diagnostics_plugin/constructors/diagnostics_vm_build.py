@@ -1,3 +1,6 @@
+from ..viewmodels import DiagnosticsViewModel
+from typing import Callable
+
 class DiagnosticsVMBuilder:
     """
     诊断视图模型构建器类

@@ -20,12 +20,12 @@ class MainWindowCommandHandler:
             # 主窗口容器
             main_win_id = Global().views_manager.instance_view(str(hash(MainWindowView)), vm_creator())
             # top 组件
-            top_win_id = Global().views_manager.instance_view(str(hash(MainWindowTopWidget)), vm_creator())
+            top_win_id = Global().views_manager.instance_view("TopBarView", vm_creator())
             Global().views_manager.fill_widget_with_execution(main_win_id, top_win_id, "set_top_widget")
             # 诊断组件
-            diagnostic_win_id = Global().views_manager.instance_view(str(hash(MainWindowDiagnosticWidget)), vm_creator())
+            diagnostic_win_id = Global().views_manager.instance_view("DiagnosticsView", vm_creator())
             Global().views_manager.fill_widget_with_execution(main_win_id, diagnostic_win_id, "set_diagnostic_widget")
-            # status bar组件
-            status_bar_win_id = Global().views_manager.instance_view(str(hash(MainWindowStatusBarWidget)), vm_creator())
+            # # status bar组件
+            status_bar_win_id = Global().views_manager.instance_view("StatusBarView", vm_creator())
             Global().views_manager.fill_widget_with_execution(main_win_id, status_bar_win_id, "set_status_bar_widget")
             Global().views_manager.show(main_win_id)

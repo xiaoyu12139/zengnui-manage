@@ -116,15 +116,24 @@ class ViewsManager:
         """
         用模态窗口填充外部窗口
         """
-        if exec_func:
-            outer_widget = self.__window_objs.get(outer_win_id)
-            if outer_widget is None:
-                logger.error(f"View type {outer_win_id} not found")
+        if not exec_func:
+            return
+        outer_widget = self.__window_objs.get(outer_win_id)
+        if outer_widget is None:
+            logger.error(f"View type {outer_win_id} not found")
+            return
+        inner_widget = self.__window_objs.get(inner_win_id)
+        if inner_widget is None:
+            logger.error(f"View type {inner_win_id} not found")
+            return
+        # 支持传入方法名字符串或可调用对象
+        if isinstance(exec_func, str):
+            method = getattr(outer_widget, exec_func, None)
+            if not callable(method):
+                logger.error(f"Method {exec_func} not found on view {outer_win_id}")
                 return
-            inner_widget = self.__window_objs.get(inner_win_id)
-            if inner_widget is None:
-                logger.error(f"View type {inner_win_id} not found")
-                return
+            method(inner_widget, *args, **kwargs)
+        else:
             exec_func(inner_widget, *args, **kwargs)
 
         

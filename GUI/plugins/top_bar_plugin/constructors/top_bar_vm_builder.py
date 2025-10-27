@@ -1,3 +1,6 @@
+from ..viewmodels import TopBarViewModel
+from typing import Callable
+
 class TopBarVMBuilder:
     """
     顶部栏视图模型构建器类

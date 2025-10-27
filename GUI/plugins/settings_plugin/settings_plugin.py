@@ -1,5 +1,9 @@
-from core import Plugin
+from core import Plugin, Global
 from .constructors import SettingsViewModelBuilder, SettingsCmdHandler
+from .views import SettingsView
+
+def instance():
+    return SettingsPlugin()
 
 class SettingsPlugin(Plugin, SettingsViewModelBuilder):
 
@@ -8,7 +12,7 @@ class SettingsPlugin(Plugin, SettingsViewModelBuilder):
         self.settings_cmd_handler = SettingsCmdHandler()
     
     def initialize(self):
-        self.settings_cmd_handler.assemble_cmd(self.create_settings_vm_instance)  
+        Global().views_manager.register_view(str(hash(SettingsView)), SettingsView)
         
     def assembled(self, context):
         self.settings_cmd_handler.assemble_cmd(self.create_settings_vm_instance(context))
