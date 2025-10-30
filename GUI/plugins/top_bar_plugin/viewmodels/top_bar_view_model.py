@@ -2,8 +2,9 @@ class TopBarViewModel:
     """
     顶部栏视图模型类
     """
-    def __init__(self):
+    def __init__(self, context):
         super().__init__()
+        self._context = context
     
     def set_window_id(self, win_id: str, view_id):
         """

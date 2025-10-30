@@ -1,7 +1,7 @@
 from core import Global
 from utils import logger
-from pathlib import Path
 import sys
+import os
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QPalette, QColor
 
@@ -28,6 +28,17 @@ def main():
     """
     # 创建应用实例
     app = QApplication(sys.argv)
+    # 加载全局样式（QSS），如存在 default.css 则应用
+    try:
+        css_path = os.path.join(os.path.dirname(__file__), "resource", "css", "default.css")
+        if os.path.exists(css_path):
+            with open(css_path, "r", encoding="utf-8") as f:
+                app.setStyleSheet(f.read())
+            logger.info(f"加载全局样式: {css_path}")
+        else:
+            logger.info("未找到全局样式文件: resource/css/default.css")
+    except Exception as e:
+        logger.error(f"加载全局样式失败: {e}")
     # 加载主窗口插件
     plugin_manager = Global().plugin_manager
     plugin_manager.load_plugin("main_window_plugin")

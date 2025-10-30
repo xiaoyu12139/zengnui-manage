@@ -11,8 +11,10 @@ class StatusBarCmdHandler:
         """
         组装状态栏命令
         """
-        def activate_status_bar():
+        @cmd("cdec7d58-7551-411f-847b-6285e8eb52c2", "")
+        def activate_status_bar(parent_widget_id):
             """
-            测试方法
+            激活状态栏
             """
-            ...
+            status_bar_win_id = Global().views_manager.instance_view("StatusBarView", vm_creator())
+            Global().views_manager.fill_widget_with_execution(parent_widget_id, status_bar_win_id, "set_status_bar_widget")

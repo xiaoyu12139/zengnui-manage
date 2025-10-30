@@ -14,18 +14,15 @@ class MainWindowCommandHandler:
         @cmd("ed23f387-7767-41bd-a8dc-29bc9025e2b0", "activate_main_window")
         def activate_main_window():
             """
-            测试方法
+            激活主窗口
             """
             logger.info("activate_main_window")
             # 主窗口容器
             main_win_id = Global().views_manager.instance_view(str(hash(MainWindowView)), vm_creator())
             # top 组件
-            top_win_id = Global().views_manager.instance_view("TopBarView", vm_creator())
-            Global().views_manager.fill_widget_with_execution(main_win_id, top_win_id, "set_top_widget")
+            Global().command_manager.cmd("d56194f5-4ab5-44d6-a65c-7d3161b7764a", main_win_id)
             # 诊断组件
-            diagnostic_win_id = Global().views_manager.instance_view("DiagnosticsView", vm_creator())
-            Global().views_manager.fill_widget_with_execution(main_win_id, diagnostic_win_id, "set_diagnostic_widget")
+            Global().command_manager.cmd("8ba404a6-6cb6-4804-a719-c82163773eb2", main_win_id)
             # # status bar组件
-            status_bar_win_id = Global().views_manager.instance_view("StatusBarView", vm_creator())
-            Global().views_manager.fill_widget_with_execution(main_win_id, status_bar_win_id, "set_status_bar_widget")
+            Global().command_manager.cmd("cdec7d58-7551-411f-847b-6285e8eb52c2", main_win_id)
             Global().views_manager.show(main_win_id)

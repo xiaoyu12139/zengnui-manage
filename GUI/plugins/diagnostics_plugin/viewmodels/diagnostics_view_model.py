@@ -4,6 +4,7 @@ class DiagnosticsViewModel:
     """
     def __init__(self, context):
         super().__init__()
+        self._context = context
     
     def set_window_id(self, win_id: str, view_id):
         """

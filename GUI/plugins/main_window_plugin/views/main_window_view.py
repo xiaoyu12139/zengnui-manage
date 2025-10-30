@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QWidget, QDockWidget
-from plugins.ui_widget.main_window import Ui_MainWindow
+from PySide6.QtWidgets import QMainWindow, QWidget, QDockWidget, QHBoxLayout, QLabel
+from ...ui_widget.main_window_plugin import Ui_MainWindow
 
 class MainWindowView(QMainWindow):
     """
@@ -16,12 +16,18 @@ class MainWindowView(QMainWindow):
         """
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setWindowTitle("ZengNUI Manage")
+        self.resize(1200, 800)
+        self.setWindowFlag(Qt.FramelessWindowHint, True)
 
     def set_top_widget(self, widget: QWidget):
         """
         设置顶部栏（使用 QMainWindow 的菜单栏区域）
         """
-        self.setMenuWidget(widget)
+        top_layout = QHBoxLayout(self.ui.top_widget)
+        top_layout.setContentsMargins(0, 0, 0, 0)
+        top_layout.setSpacing(0)
+        top_layout.addWidget(widget)
 
     def set_diagnostic_widget(self, widget: QWidget):
         """
@@ -36,7 +42,10 @@ class MainWindowView(QMainWindow):
         """
         将状态栏视图加入到 QStatusBar 的永久区域
         """
-        self.statusBar().addPermanentWidget(widget)
+        bottom_layout = QHBoxLayout(self.ui.bottom_widget)
+        bottom_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_layout.setSpacing(0)
+        bottom_layout.addWidget(widget)
 
     def set_view_model(self, vm):
         """
