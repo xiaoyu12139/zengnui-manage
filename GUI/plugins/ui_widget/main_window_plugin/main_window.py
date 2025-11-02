@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.2
+## Created by: Qt User Interface Compiler version 6.10.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -26,10 +26,12 @@ class Ui_MainWindow(object):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.top_widget = QWidget(self.centralwidget)
         self.top_widget.setObjectName(u"top_widget")
-        self.top_widget.setMinimumSize(QSize(0, 50))
+        self.top_widget.setMinimumSize(QSize(0, 10))
         self.top_widget.setMaximumSize(QSize(16777215, 50))
 
         self.verticalLayout.addWidget(self.top_widget)

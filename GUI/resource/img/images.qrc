@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main_window_plugin/minimize.svg</file>
+        <file>top_bar_plugin/close.svg</file>
+        <file>top_bar_plugin/maximize.svg</file>
+        <file>top_bar_plugin/minimize.svg</file>
+        <file>top_bar_plugin/bell.svg</file>
+        <file>top_bar_plugin/restore.svg</file>
+        <file>top_bar_plugin/theme.svg</file>
+    </qresource>
+</RCC>

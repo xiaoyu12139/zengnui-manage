@@ -26,3 +26,11 @@ class MainWindowCommandHandler:
             # # status bar组件
             Global().command_manager.cmd("cdec7d58-7551-411f-847b-6285e8eb52c2", main_win_id)
             Global().views_manager.show(main_win_id)
+        
+        @cmd("ef8555d2-17c1-4b60-9ddb-98d255788ed4", "close_main_window")
+        def close_main_window():
+            """
+            关闭主窗口
+            """
+            logger.info("close_main_window")
+            vm_creator().close_main_window()

@@ -28,6 +28,7 @@ class MainWindowView(QMainWindow):
         top_layout.setContentsMargins(0, 0, 0, 0)
         top_layout.setSpacing(0)
         top_layout.addWidget(widget)
+        self.ui.top_widget.setStyleSheet("background-color: #363232;")
 
     def set_diagnostic_widget(self, widget: QWidget):
         """

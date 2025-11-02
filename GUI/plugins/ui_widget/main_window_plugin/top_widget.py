@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'top_widget.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.2
+## Created by: Qt User Interface Compiler version 6.10.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,15 +16,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QLineEdit,
-    QSizePolicy, QVBoxLayout, QWidget)
+    QSizePolicy, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_TopWidget(object):
     def setupUi(self, TopWidget):
         if not TopWidget.objectName():
             TopWidget.setObjectName(u"TopWidget")
-        TopWidget.resize(719, 54)
+        TopWidget.resize(700, 24)
         self.verticalLayout = QVBoxLayout(TopWidget)
+        self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.top_theme = QLabel(TopWidget)
@@ -40,31 +42,33 @@ class Ui_TopWidget(object):
         self.icon_widget = QWidget(TopWidget)
         self.icon_widget.setObjectName(u"icon_widget")
         self.horizontalLayout = QHBoxLayout(self.icon_widget)
+        self.horizontalLayout.setSpacing(5)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.icon_night = QLabel(self.icon_widget)
-        self.icon_night.setObjectName(u"icon_night")
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.btn_night = QToolButton(self.icon_widget)
+        self.btn_night.setObjectName(u"btn_night")
 
-        self.horizontalLayout.addWidget(self.icon_night)
+        self.horizontalLayout.addWidget(self.btn_night)
 
-        self.icon_diaginostics = QLabel(self.icon_widget)
-        self.icon_diaginostics.setObjectName(u"icon_diaginostics")
+        self.btn_diaginostics = QToolButton(self.icon_widget)
+        self.btn_diaginostics.setObjectName(u"btn_diaginostics")
 
-        self.horizontalLayout.addWidget(self.icon_diaginostics)
+        self.horizontalLayout.addWidget(self.btn_diaginostics)
 
-        self.icon_min = QLabel(self.icon_widget)
-        self.icon_min.setObjectName(u"icon_min")
+        self.btn_min = QToolButton(self.icon_widget)
+        self.btn_min.setObjectName(u"btn_min")
 
-        self.horizontalLayout.addWidget(self.icon_min)
+        self.horizontalLayout.addWidget(self.btn_min)
 
-        self.icon_max = QLabel(self.icon_widget)
-        self.icon_max.setObjectName(u"icon_max")
+        self.btn_max = QToolButton(self.icon_widget)
+        self.btn_max.setObjectName(u"btn_max")
 
-        self.horizontalLayout.addWidget(self.icon_max)
+        self.horizontalLayout.addWidget(self.btn_max)
 
-        self.icon_close = QLabel(self.icon_widget)
-        self.icon_close.setObjectName(u"icon_close")
+        self.btn_close = QToolButton(self.icon_widget)
+        self.btn_close.setObjectName(u"btn_close")
 
-        self.horizontalLayout.addWidget(self.icon_close)
+        self.horizontalLayout.addWidget(self.btn_close)
 
 
         self.horizontalLayout_2.addWidget(self.icon_widget)
@@ -81,10 +85,10 @@ class Ui_TopWidget(object):
     def retranslateUi(self, TopWidget):
         TopWidget.setWindowTitle(QCoreApplication.translate("TopWidget", u"Form", None))
         self.top_theme.setText(QCoreApplication.translate("TopWidget", u"Zengnui Manage", None))
-        self.icon_night.setText(QCoreApplication.translate("TopWidget", u"night", None))
-        self.icon_diaginostics.setText(QCoreApplication.translate("TopWidget", u"diaginostics", None))
-        self.icon_min.setText(QCoreApplication.translate("TopWidget", u"min", None))
-        self.icon_max.setText(QCoreApplication.translate("TopWidget", u"max", None))
-        self.icon_close.setText(QCoreApplication.translate("TopWidget", u"close", None))
+        self.btn_night.setText(QCoreApplication.translate("TopWidget", u"night", None))
+        self.btn_diaginostics.setText(QCoreApplication.translate("TopWidget", u"diaginostics", None))
+        self.btn_min.setText(QCoreApplication.translate("TopWidget", u"min", None))
+        self.btn_max.setText(QCoreApplication.translate("TopWidget", u"max", None))
+        self.btn_close.setText(QCoreApplication.translate("TopWidget", u"close", None))
     # retranslateUi
 

@@ -1,12 +1,12 @@
 import logging
-from .meta_class import SingletonMeta
 
-class AppLogging(metaclass=SingletonMeta):
+class AppLogging(object):
     """
     应用日志类
     """
-    def __init__(self):
-        self._logger = logging.getLogger(__name__)
+    def __init__(self, name: str):
+        name_str = name if name else __name__
+        self._logger = logging.getLogger(name_str)
         self._logger.setLevel(logging.DEBUG)
         # 创建控制台处理器
         console_handler = logging.StreamHandler()
@@ -29,4 +29,11 @@ class AppLogging(metaclass=SingletonMeta):
         """
         self._logger.error(msg)
 
-__logger = AppLogging()
+__logger = AppLogging(None)
+
+def get_logger(name: str) -> logging.Logger:
+    """
+    获取日志记录器
+    """
+    tmp_logger = AppLogging(name)
+    return tmp_logger

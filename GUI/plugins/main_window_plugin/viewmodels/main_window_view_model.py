@@ -1,3 +1,8 @@
+from core import Global
+from utils import get_logger
+
+logger = get_logger("MainWindowViewModel")
+
 class MainWindowViewModel:
     """
     主窗口视图模型类
@@ -13,3 +18,10 @@ class MainWindowViewModel:
         """
         self._win_id = win_id
         self._view_id = view_id
+    
+    def close_main_window(self):
+        """
+        关闭主窗口
+        """
+        logger.info("close_main_window")
+        Global().views_manager.close(self._win_id)
