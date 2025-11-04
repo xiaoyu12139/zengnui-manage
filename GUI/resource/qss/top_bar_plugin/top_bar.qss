@@ -1,5 +1,82 @@
 /* 顶部栏样式 */
 
+/* 顶部搜索输入框（美化） */
 QLineEdit {
-    border: 1px solid #7B7B7B;
+    background: qlineargradient(x1:0,y1:0,x2:0,y2:1,
+        stop:0 #161a20, stop:1 #121519);
+    color: #eaeef3;
+    border: 1px solid #2a2f38;
+    /* border-radius: 10px; */
+    padding: 6px 12px;
+    selection-background-color: #0D99FF;
+    selection-color: #ffffff;
 }
+
+/* 悬停与聚焦反馈 */
+QLineEdit:hover {
+    border-color: #3a3f48;
+}
+QLineEdit:focus {
+    border-color: #4455aa;
+    background: #0f1216;
+}
+
+/* 占位符颜色（Qt6支持） */
+QLineEdit::placeholder {
+    color: #7B7B7B;
+}
+
+/* 只读态更暗、不可编辑提示 */
+QLineEdit[readOnly="true"] {
+    color: #b8c0cc;
+    background: #14171c;
+    border-color: #2a2f38;
+}
+
+/* 清除按钮（需要启用 clearButtonEnabled） */
+QLineEdit::clear-button {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    width: 14px; height: 14px;
+    image: url(:/top_bar_plugin/close.svg);
+}
+
+/* 右上角的按钮样式 */
+/* 窗口控制按钮：最小化、最大化/还原、关闭（两套命名均支持） */
+QToolButton#btn_diaginostics,
+QToolButton#btn_night,
+QToolButton#btn_min,
+QToolButton#btn_max,
+QToolButton#btn_close {
+    background-color: transparent;
+    border: none;
+    padding: 6px;            /* 增加可点击面积 */
+    qproperty-iconSize: 18px 18px; /* 统一图标尺寸 */
+}
+
+/* 悬停与按下反馈（最小化、最大化/还原） */
+QToolButton#btn_diaginostics:hover,
+QToolButton#btn_night:hover,
+QToolButton#btn_min:hover,
+QToolButton#btn_max:hover {
+    background-color: #3a3f48;   /* 暗色高亮 */
+}
+
+QToolButton#btn_diaginostics:pressed,
+QToolButton#btn_night:pressed,
+QToolButton#btn_min:pressed,
+QToolButton#btn_max:pressed {
+    background-color: #4455aa;   /* 按下更深一点 */
+}
+
+/* 关闭按钮与危险态强调 */
+QToolButton#btn_close:hover {
+    background-color: #cf3b46;   /* 红色提示 */
+    color: #ffffff;
+}
+
+QToolButton#btn_close:pressed {
+    background-color: #b7323a;   /* 按下更深的红色 */
+    color: #ffffff;
+}
+

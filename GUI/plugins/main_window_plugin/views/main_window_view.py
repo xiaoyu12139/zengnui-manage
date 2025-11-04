@@ -1,12 +1,14 @@
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QDockWidget, QHBoxLayout, QLabel,
-    QSplitter, QScrollArea, QVBoxLayout
+    QSplitter, QScrollArea, QVBoxLayout, QGraphicsDropShadowEffect
 )
 from ...ui_widget.main_window_plugin import Ui_MainWindow
-from PySide6.QtCore import QPoint, Slot
+from PySide6.QtCore import QPoint, Slot, QEvent, QTimer
 from ..viewmodels import MainWindowViewModel
-from utils import get_logger
+from utils import get_logger, set_style_sheet
+from ..build.rc_qss import *
 
 logger = get_logger("MainWindowView")
 
@@ -17,6 +19,7 @@ class MainWindowView(QMainWindow):
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
         self.setup_widget()
+        set_style_sheet(self, ":/qss/main_window_plugin/main_window.qss")
         
     def setup_widget(self):
         """
@@ -27,6 +30,20 @@ class MainWindowView(QMainWindow):
         self.setWindowTitle("ZengNUI Manage")
         self.resize(1200, 800)
         self.setWindowFlag(Qt.FramelessWindowHint, True)
+
+        # 透明背景 + 阴影
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
+        try:
+            self.setContentsMargins(12, 12, 12, 12)
+        except Exception:
+            pass
+        self._apply_shadow()
+        # 监听屏幕变化，跨屏时重建阴影并刷新
+        try:
+            if self.windowHandle() is not None:
+                self.windowHandle().screenChanged.connect(self._on_screen_changed)
+        except Exception:
+            pass
 
         # 中心区域：左右分栏，左侧可滚动列表，右侧内容区
         # 水平分隔器
@@ -85,6 +102,37 @@ class MainWindowView(QMainWindow):
         color: #FFFFFF;
         border: none;
         """)
+
+    def _apply_shadow(self):
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(24)
+        shadow.setOffset(0, 8)
+        shadow.setColor(QColor(0, 0, 0, 160))
+        self.setGraphicsEffect(None)
+        self.ui.centralwidget.setGraphicsEffect(shadow)
+
+    def _on_screen_changed(self, screen):
+        # 屏幕变化后重建阴影并刷新，防止跨屏出现未重绘区域
+        self._apply_shadow()
+        self.ui.centralwidget.update()
+        self.repaint()
+
+    def changeEvent(self, event):
+        # 捕获内部屏幕变化事件，延时重绘保证稳定
+        if event.type() == QEvent.ScreenChangeInternal:
+            QTimer.singleShot(0, lambda: (
+                self._apply_shadow(),
+                self.ui.centralwidget.update()
+            ))
+        return super().changeEvent(event)
+
+    def moveEvent(self, event):
+        # 移动时触发更新，减轻边缘透明区域的遗漏重绘
+        try:
+            self.ui.centralwidget.update()
+        except Exception:
+            pass
+        return super().moveEvent(event)
         
     def set_top_widget(self, widget: QWidget):
         """

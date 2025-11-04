@@ -1,0 +1,29 @@
+/* 主窗口阴影承载：窗口透明，内容容器拥有背景与圆角 */
+QMainWindow {
+    background-color: transparent;
+}
+
+QWidget#centralwidget {
+    background: qlineargradient(x1:0,y1:0,x2:0,y2:1,
+        stop:0 #1a1d22,
+        stop:1 #171a1f);
+    color: #EAEFF3;
+    border: 1px solid #0f1115;
+    border-radius: 12px;
+}
+
+/* 分隔器与滚动区域基础色，避免穿透 */
+QSplitter#centerSplitter {
+    background-color: transparent;
+}
+QScrollArea#leftScroll {
+    background-color: #2f3339;
+    border: none;
+}
+
+/* 顶部与底部栏与中央容器视觉一致 */
+QWidget#top_widget, QWidget#bottom_widget {
+    background-color: #2C2C2C;
+    color: #FFFFFF;
+    border: none;
+}

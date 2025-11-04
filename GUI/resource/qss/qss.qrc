@@ -2,5 +2,6 @@
     <qresource prefix="/qss">
         <file>default.qss</file>
         <file>top_bar_plugin/top_bar.qss</file>
+        <file>main_window_plugin/main_window.qss</file>
     </qresource>
 </RCC>
