@@ -1,0 +1,52 @@
+/* 滚动条样式（垂直与水平），包括滑块与箭头按钮 */
+/* 垂直滚动条轨道 */
+QScrollBar:vertical {
+    background: #3B3B3B;            /* 轨道背景 */
+    width: 12px;                    /* 轨道宽度 */
+    margin: 12px 0 12px 0;          /* 预留上下箭头按钮空间 */
+    border: none;
+}
+/* 垂直滑块（thumb/handle） */
+QScrollBar::handle:vertical {
+    background-color: #535353;      /* 使用 background-color 更明确 */
+    border: 0px solid transparent;  /* 避免样式引擎使用调色板中间色 */
+    min-height: 24px;
+    border-radius: 0px; /* 方角 */
+}
+QScrollBar::handle:vertical:hover {
+    background-color: #535353;
+}
+QScrollBar::handle:vertical:pressed {
+    background-color: #0D99FF;
+}
+/* 垂直箭头按钮区域 */
+QScrollBar::sub-line:vertical {
+    height: 12px;
+    subcontrol-origin: margin;
+    subcontrol-position: top;
+    border: 1px solid #2a2f38;
+}
+QScrollBar::add-line:vertical {
+    height: 12px;
+    subcontrol-origin: margin;
+    subcontrol-position: bottom;
+    border: 1px solid #2a2f38;
+}
+/* 垂直箭头图标 */
+QScrollBar::up-arrow:vertical {
+    background-color: #3B3B3B;
+    image: url(:/default/arrow_up.svg);
+    width: 12px; height: 12px;
+    border: 1px solid #3B3B3B;
+}
+QScrollBar::down-arrow:vertical {
+    background-color: #3B3B3B;
+    image: url(:/default/arrow_down.svg);
+    width: 12px; height: 12px;
+    border: 1px solid #3B3B3B;
+}
+/* 垂直滚动条剩余区域（避免默认颜色块） */
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}

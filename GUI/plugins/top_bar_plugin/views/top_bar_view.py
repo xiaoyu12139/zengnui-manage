@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QWidget
 from ...ui_widget.main_window_plugin import Ui_TopWidget
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QPixmap
 from ..build.rc_icon import *
 from PySide6.QtCore import Slot
 from core import Global
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt,QEvent
 
 
 
@@ -15,6 +15,9 @@ class TopBarView(QWidget):
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
         self.setup_widget()
+        self._top_widget = self
+        self._dragging = False
+        self._drag_pos = None
         
     def setup_widget(self):
         """
@@ -52,12 +55,51 @@ class TopBarView(QWidget):
         self.ui.btn_diaginostics.setToolTip("诊断")
         self.ui.btn_diaginostics.clicked.connect(self.on_btn_diaginostics_click)
 
-    
+        # 设置logo并按高度缩放
+        self._logo_pix = QPixmap(":/top_bar_plugin/logo.png")
+        self._update_logo_size()
+
+        # 安装事件过滤器
+        self.installEventFilter(self)
+
     def set_view_model(self, vm):
         """
         注入视图模型，供 ViewsManager 调用
         """
         self.view_model = vm
+
+    def resizeEvent(self, event):
+        # 顶部栏尺寸变化时，按高度重新缩放 logo
+        self._update_logo_size()
+        return super().resizeEvent(event)
+
+    def _update_logo_size(self):
+        # 将 logo 按 top_bar 内可用高度进行等比缩放
+        if hasattr(self, "_logo_pix") and not self._logo_pix.isNull():
+            target_h = self.ui.top_theme.height() or self.height()
+            if target_h and target_h > 0:
+                scaled = self._logo_pix.scaledToHeight(int(target_h - 10), Qt.SmoothTransformation)
+                self.ui.top_theme.setPixmap(scaled)
+    
+    def eventFilter(self, obj, event):
+        if obj is getattr(self, "_top_widget"):
+            if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
+                self._drag_pos = event.globalPosition().toPoint()
+                self._dragging = True
+                return True
+            elif event.type() == QEvent.MouseMove and getattr(self, "_dragging", False):
+                delta = event.globalPosition().toPoint() - self._drag_pos
+                Global().command_manager.execute_command("move_main_window", delta)
+                self._drag_pos = event.globalPosition().toPoint()
+                return True
+            elif event.type() == QEvent.MouseButtonRelease:
+                self._dragging = False
+                return True
+            elif event.type() == QEvent.MouseButtonDblClick:
+                # 顶栏双击最大化/还原
+                # self._toggle_max_restore()
+                return True
+        return super().eventFilter(obj, event)
     
     @Slot()
     def on_btn_close_click(self):
@@ -85,13 +127,13 @@ class TopBarView(QWidget):
         """
         切换主题按钮点击事件
         """
-        Global().command_manager.execute_command("toggle_theme")
+        Global().command_manager.execute_command("toggle_main_window_theme")
     
     @Slot()
     def on_btn_diaginostics_click(self):
         """
         诊断按钮点击事件
         """
-        Global().command_manager.execute_command("diagnostics")
+        Global().command_manager.execute_command("diagnostics_main_window")
     
     

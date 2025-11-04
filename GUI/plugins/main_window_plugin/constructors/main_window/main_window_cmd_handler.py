@@ -34,3 +34,43 @@ class MainWindowCommandHandler:
             """
             logger.info("close_main_window")
             vm_creator().close_main_window()
+        
+        @cmd("b5a0cd84-ea94-455c-9454-159b16c19047", "move_main_window")
+        def move_main_window(pos):
+            """
+            移动主窗口
+            """
+            # logger.info(f"move_main_window: {pos}")
+            vm_creator().move_main_window(pos)
+        
+        @cmd("baf41145-9615-467d-8c0c-45532548b6bd", "minimize_main_window")
+        def minimize_main_window():
+            """
+            最小化主窗口
+            """
+            logger.info("minimize_main_window")
+            vm_creator().minimize_main_window()
+
+        @cmd("0ab1b41d-8ca3-473f-b407-7c0f3995eeab", "maximize_main_window")
+        def maximize_main_window():
+            """
+            最大化主窗口
+            """
+            logger.info("maximize_main_window")
+            vm_creator().maximize_main_window() 
+        
+        @cmd("d38d98cc-626c-4c93-a0fa-fb03ba2b7ae2", "diagnostics_main_window")
+        def diagnostics_main_window():
+            """
+            诊断主窗口
+            """
+            logger.info("diagnostics_main_window")
+            vm_creator().diagnostics_main_window()
+        
+        @cmd("182a810e-69b2-4a5d-9ff4-496e08e01b20", "toggle_main_window_theme")
+        def toggle_main_window_theme():
+            """
+            切换主窗口主题
+            """
+            logger.info("toggle_main_window_theme")
+            vm_creator().toggle_main_window_theme()
