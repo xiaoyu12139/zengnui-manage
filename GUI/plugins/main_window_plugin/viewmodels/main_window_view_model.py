@@ -10,6 +10,10 @@ class MainWindowViewModel(QObject):
     """
 
     sig_move_main_window = Signal(object)
+    sig_min_main_window = Signal()
+    sig_max_main_window = Signal(bool)
+    sig_diagnostics_main_window = Signal()
+    sig_toggle_main_window_theme = Signal()
 
     def __init__(self, context):
         super().__init__()
@@ -43,21 +47,25 @@ class MainWindowViewModel(QObject):
         切换主窗口主题
         """
         logger.info("toggle_main_window_theme")
+        self.sig_toggle_main_window_theme.emit()
     
     def diagnostics_main_window(self):
         """
         诊断主窗口
         """
         logger.info("diagnostics_main_window")
+        self.sig_diagnostics_main_window.emit()
     
     def minimize_main_window(self):
         """
         最小化主窗口
         """
         logger.info("minimize_main_window")
+        self.sig_min_main_window.emit()
     
-    def maximize_main_window(self):
+    def maximize_main_window(self, maximize: bool):
         """
         最大化主窗口
         """
         logger.info("maximize_main_window")
+        self.sig_max_main_window.emit(maximize)

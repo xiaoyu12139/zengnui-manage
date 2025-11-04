@@ -52,12 +52,12 @@ class MainWindowCommandHandler:
             vm_creator().minimize_main_window()
 
         @cmd("0ab1b41d-8ca3-473f-b407-7c0f3995eeab", "maximize_main_window")
-        def maximize_main_window():
+        def maximize_main_window(maximize: bool):
             """
             最大化主窗口
             """
             logger.info("maximize_main_window")
-            vm_creator().maximize_main_window() 
+            vm_creator().maximize_main_window(maximize) 
         
         @cmd("d38d98cc-626c-4c93-a0fa-fb03ba2b7ae2", "diagnostics_main_window")
         def diagnostics_main_window():

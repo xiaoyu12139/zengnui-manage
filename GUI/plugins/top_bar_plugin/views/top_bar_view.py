@@ -5,6 +5,8 @@ from ..build.rc_icon import *
 from PySide6.QtCore import Slot
 from core import Global
 from PySide6.QtCore import Qt,QEvent
+from ..build.rc_qss import *
+from utils import set_style_sheet
 
 
 
@@ -18,7 +20,9 @@ class TopBarView(QWidget):
         self._top_widget = self
         self._dragging = False
         self._drag_pos = None
-        
+        self._max_button_state = True
+        set_style_sheet(self, ":/qss/top_bar_plugin/top_bar.qss")
+    
     def setup_widget(self):
         """
         初始化UI组件
@@ -113,7 +117,16 @@ class TopBarView(QWidget):
         """
         最大化窗口按钮点击事件
         """
-        Global().command_manager.execute_command("maximize_main_window")
+        
+        if not self._max_button_state:
+            self.ui.btn_max.setIcon(QIcon(":/top_bar_plugin/maximize.svg"))
+            self.ui.btn_max.setToolTip("最大化窗口")
+            Global().command_manager.execute_command("maximize_main_window", self._max_button_state)
+        else:
+            self.ui.btn_max.setIcon(QIcon(":/top_bar_plugin/restore.svg"))
+            self.ui.btn_max.setToolTip("还原窗口")
+            Global().command_manager.execute_command("maximize_main_window", self._max_button_state)
+        self._max_button_state = not self._max_button_state
     
     @Slot()
     def on_btn_min_click(self):

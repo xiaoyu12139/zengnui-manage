@@ -137,6 +137,41 @@ class MainWindowView(QMainWindow):
         创建视图模型信号连接
         """
         self.view_model.sig_move_main_window.connect(self.on_sig_move_main_window)
+        self.view_model.sig_min_main_window.connect(self.on_sig_min_main_window)
+        self.view_model.sig_max_main_window.connect(self.on_sig_max_main_window)
+        self.view_model.sig_diagnostics_main_window.connect(self.on_sig_diagnostics_main_window)
+        self.view_model.sig_toggle_main_window_theme.connect(self.on_sig_toggle_main_window_theme)
+    
+    @Slot()
+    def on_sig_min_main_window(self):
+        """
+        最小化主窗口槽函数
+        """
+        self.showMinimized()
+
+    @Slot(bool)
+    def on_sig_max_main_window(self, maximize: bool):
+        """
+        最大化主窗口槽函数
+        """
+        if maximize:
+            self.showMaximized()
+        else:
+            self.showNormal()
+    
+    @Slot()
+    def on_sig_diagnostics_main_window(self):
+        """
+        诊断主窗口槽函数
+        """
+        logger.info("on_sig_diagnostics_main_window")
+    
+    @Slot()
+    def on_sig_toggle_main_window_theme(self):
+        """
+        切换主窗口主题槽函数
+        """
+        logger.info("on_sig_toggle_main_window_theme")
     
     @Slot(object)
     def on_sig_move_main_window(self, pos: QPoint):
