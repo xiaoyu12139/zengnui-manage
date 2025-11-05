@@ -38,7 +38,7 @@ QLineEdit::clear-button {
     subcontrol-origin: padding;
     subcontrol-position: center right;
     width: 14px; height: 14px;
-    image: url(:/top_bar_plugin/close.svg);
+    image: url(:/img/top_bar_plugin/close.svg);
 }
 
 /* 右上角的按钮样式 */

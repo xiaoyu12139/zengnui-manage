@@ -1,6 +1,7 @@
 from core import Global
 from utils import get_logger
 from PySide6.QtCore import Signal, QPoint, QObject
+from PySide6.QtWidgets import QWidget
 
 logger = get_logger("MainWindowViewModel")
 
@@ -14,6 +15,7 @@ class MainWindowViewModel(QObject):
     sig_max_main_window = Signal(bool)
     sig_diagnostics_main_window = Signal()
     sig_toggle_main_window_theme = Signal()
+    sig_register_menu_pane = Signal(object)
 
     def __init__(self, context):
         super().__init__()
@@ -69,3 +71,10 @@ class MainWindowViewModel(QObject):
         """
         logger.info("maximize_main_window")
         self.sig_max_main_window.emit(maximize)
+    
+    def register_menu_pane(self, menu_pane: QWidget):
+        """
+        注册主窗口菜单面板
+        """
+        logger.info("register_menu_pane")
+        self.sig_register_menu_pane.emit(menu_pane)

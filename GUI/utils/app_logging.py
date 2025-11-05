@@ -23,6 +23,12 @@ class AppLogging(object):
         """
         self._logger.info(msg)
     
+    def warning(self, msg: str):
+        """
+        记录WARNING级别的日志
+        """
+        self._logger.warning(msg)
+    
     def error(self, msg: str):
         """
         记录ERROR级别的日志

@@ -1,1 +1,1 @@
-from .dashboard import Ui_Dashboard
+from .ui_dashboard import Ui_Dashboard

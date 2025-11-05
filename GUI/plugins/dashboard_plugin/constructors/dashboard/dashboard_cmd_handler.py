@@ -1,5 +1,4 @@
 from core import cmd, Global
-from utils import logger
 from ...views import DashboardView
 
 class DashboardCmdHandler:
@@ -11,8 +10,13 @@ class DashboardCmdHandler:
         """
         组装仪表盘命令
         """
+
+        @cmd("be226367-b4c3-4ca3-b36e-10a5aed58ecf", "activate_dashboard")
         def activate_dashboard():
             """
-            测试方法
+            激活仪表盘插件
             """
-            ...
+            view_id = Global().views_manager.instance_view(str(hash(DashboardView)), vm_creator())
+            instance = Global().views_manager.get_view_instance(view_id)
+            # 注册插件到主界面
+            Global().command_manager.execute_command("register_menu_pane", instance)

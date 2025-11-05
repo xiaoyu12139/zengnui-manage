@@ -1,3 +1,6 @@
+from core import Global,cmd
+from ...views.settings_view import SettingsView
+
 class SettingsCmdHandler:
     """
     设置命令处理类
@@ -7,8 +10,14 @@ class SettingsCmdHandler:
         """
         组装仪表盘命令
         """
-        def activate_dashboard():
+
+        @cmd("60525ba9-3f53-4661-9077-7d987c5e13a4", "activate_settings")
+        def activate_settings():
             """
-            测试方法
+            激活设置插件
             """
-            ...
+            view_id = Global().views_manager.instance_view(str(hash(SettingsView)), vm_creator())
+            instance = Global().views_manager.get_view_instance(view_id)
+            # 注册插件到主界面
+            Global().command_manager.execute_command("register_menu_pane", instance)
+            

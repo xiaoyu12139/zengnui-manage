@@ -1,1 +1,1 @@
-from .diagnostics import Ui_Diagnostics
+from .ui_diagnostics import Ui_Diagnostics

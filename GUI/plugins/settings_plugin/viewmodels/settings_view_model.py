@@ -1,9 +1,12 @@
-class SettingsViewModel:
+from PySide6.QtCore import QObject
+
+class SettingsViewModel(QObject):
     """
     设置视图模型类
     """
-    def __init__(self):
+    def __init__(self, context):
         super().__init__()
+        self._context = context
     
     def set_window_id(self, win_id: str, view_id):
         """

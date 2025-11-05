@@ -25,6 +25,10 @@ class MainWindowCommandHandler:
             Global().command_manager.cmd("8ba404a6-6cb6-4804-a719-c82163773eb2", main_win_id)
             # # status bar组件
             Global().command_manager.cmd("cdec7d58-7551-411f-847b-6285e8eb52c2", main_win_id)
+            # 激活菜单栏相关插件
+            Global().command_manager.execute_command("activate_dashboard")
+            Global().command_manager.execute_command("activate_settings")
+            # 显示主窗口
             Global().views_manager.show(main_win_id)
         
         @cmd("ef8555d2-17c1-4b60-9ddb-98d255788ed4", "close_main_window")
@@ -74,3 +78,11 @@ class MainWindowCommandHandler:
             """
             logger.info("toggle_main_window_theme")
             vm_creator().toggle_main_window_theme()
+        
+        @cmd("eb8dc82d-2a9b-4256-a2d4-cdba41cb7131", "register_menu_pane")
+        def register_menu_pane(menu_pane):
+            """
+            注册主窗口菜单面板
+            """
+            logger.info("register_menu_pane")
+            vm_creator().register_menu_pane(menu_pane)

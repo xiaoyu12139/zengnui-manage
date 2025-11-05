@@ -16,6 +16,12 @@ class ViewsManager:
         """
         self.__window_types[view_id] = view
     
+    def get_view_instance(self, view_id: str) -> any:
+        """
+        获取主窗口实例
+        """
+        return self.__window_objs.get(view_id)
+    
     def instance_view(self, view_id: str, view_model: any, parent: str = "", force_new: bool = False, **kwargs) -> str:
         """
         获取主窗口实例

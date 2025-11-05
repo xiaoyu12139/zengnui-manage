@@ -35,13 +35,13 @@ QScrollBar::add-line:vertical {
 /* 垂直箭头图标 */
 QScrollBar::up-arrow:vertical {
     background-color: #3B3B3B;
-    image: url(:/default/arrow_up.svg);
+    image: url(:/img/default/arrow_up.svg);
     width: 12px; height: 12px;
     border: 1px solid #3B3B3B;
 }
 QScrollBar::down-arrow:vertical {
     background-color: #3B3B3B;
-    image: url(:/default/arrow_down.svg);
+    image: url(:/img/default/arrow_down.svg);
     width: 12px; height: 12px;
     border: 1px solid #3B3B3B;
 }

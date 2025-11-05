@@ -9,8 +9,20 @@ from PySide6.QtCore import QPoint, Slot, QEvent, QTimer
 from ..viewmodels import MainWindowViewModel
 from utils import get_logger, set_style_sheet
 from ..build.rc_qss import *
+from ..build.rc_xml import *
+from utils.xml_ops import get_menu_list
 
 logger = get_logger("MainWindowView")
+
+class MenuItemWidget(QWidget):
+
+    def __init__(self, menu_name: str, parent: QWidget = None):
+        super().__init__(parent)
+        self.setObjectName(f"leftItem{menu_name}")
+        item_layout = QHBoxLayout(self)
+        item_layout.setContentsMargins(8, 6, 8, 6)
+        item_layout.setSpacing(6)
+        item_layout.addWidget(QLabel(menu_name))
 
 class MainWindowView(QMainWindow):
     """
@@ -18,8 +30,11 @@ class MainWindowView(QMainWindow):
     """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
+        self.menu_list = get_menu_list(":/xml/menu.xml")
+        self.menu_list = []
         self.setup_widget()
         set_style_sheet(self, ":/qss/main_window_plugin/main_window.qss")
+        
         
     def setup_widget(self):
         """
@@ -63,14 +78,10 @@ class MainWindowView(QMainWindow):
         left_vbox.setAlignment(Qt.AlignTop)
 
         # 暂时加入一些占位项示例（可移除或替换为真实项）
-        for i in range(30):
-            item = QWidget()
-            item.setObjectName(f"leftItem{i}")
-            item_layout = QHBoxLayout(item)
-            item_layout.setContentsMargins(8, 6, 8, 6)
-            item_layout.setSpacing(6)
-            item_layout.addWidget(QLabel(f"项目 {i+1}"))
-            left_vbox.addWidget(item)
+        if self.menu_list:
+            for menu_name in self.menu_list:
+                item = MenuItemWidget(menu_name)
+                left_vbox.addWidget(item)
 
         left_scroll.setWidget(left_container)
 
@@ -189,6 +200,18 @@ class MainWindowView(QMainWindow):
         self.view_model.sig_max_main_window.connect(self.on_sig_max_main_window)
         self.view_model.sig_diagnostics_main_window.connect(self.on_sig_diagnostics_main_window)
         self.view_model.sig_toggle_main_window_theme.connect(self.on_sig_toggle_main_window_theme)
+        self.view_model.sig_register_menu_pane.connect(self.on_sig_register_menu_pane)
+    
+    @Slot(object)
+    def on_sig_register_menu_pane(self, menu_pane: QWidget):
+        """
+        注册主窗口菜单面板槽函数    
+        """
+        logger.info("on_sig_register_menu_pane")
+        if not self.menu_list:
+            if hasattr(menu_pane, "get_menu_name"):
+                menu_name = menu_pane.get_menu_name()
+                self._left_vbox.addWidget(MenuItemWidget(menu_name))
     
     @Slot()
     def on_sig_min_main_window(self):

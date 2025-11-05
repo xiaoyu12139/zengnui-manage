@@ -12,3 +12,6 @@ class DashboardView(QWidget):
         注入视图模型，供 ViewsManager 调用
         """
         self.view_model = vm
+    
+    def get_menu_name(self) -> str:
+        return "Dashboard"

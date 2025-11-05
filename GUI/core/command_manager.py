@@ -1,5 +1,7 @@
 from utils.meta_class import SingletonMeta
-from utils import logger
+from utils import get_logger
+
+logger = get_logger("CommandManager")
 
 class CommandManager(metaclass=SingletonMeta):
     """
@@ -26,14 +28,22 @@ class CommandManager(metaclass=SingletonMeta):
         """
         执行命令
         """
-        if cmd_id in self.__commands:
-            self.__commands[cmd_id].exec(*args, **kwargs)
-        else:
-            print(f"命令 {cmd_id} 不存在")
+        try:
+            if cmd_id in self.__commands:
+                self.__commands[cmd_id].exec(*args, **kwargs)
+            else:
+                logger.error(f"命令 {cmd_id} 不存在")
+        except Exception as e:
+            logger.error(f"执行命令 {cmd_id} 时出错：{e}")
     
     def execute_command(self, name: str, *args, **kwargs):
         """
         执行命令
         """
-        key = self.__name_to_key_map[name]
-        self.cmd(key, *args, **kwargs)
+        try:
+            key = self.__name_to_key_map[name]
+            self.cmd(key, *args, **kwargs)
+        except KeyError:
+            logger.error(f"命令 {name} 不存在")
+        except Exception as e:
+            logger.error(f"执行命令 {name} 时出错：{e}")

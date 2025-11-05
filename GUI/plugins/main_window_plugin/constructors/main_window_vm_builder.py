@@ -16,3 +16,4 @@ class MainWindowVMBuilder:
                 main_window_vm = MainWindowViewModel(context)
             return main_window_vm
         return _create_main_window_vm
+    

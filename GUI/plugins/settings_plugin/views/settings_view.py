@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QWidget
+from core import Global
 
 class SettingsView(QWidget):
     """
@@ -12,3 +13,6 @@ class SettingsView(QWidget):
         注入视图模型，供 ViewsManager 调用
         """
         self.view_model = vm
+        
+    def get_menu_name(self) -> str:
+        return "Settings"
