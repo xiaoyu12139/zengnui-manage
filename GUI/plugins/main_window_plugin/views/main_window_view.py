@@ -24,6 +24,7 @@ class MenuItemWidget(QWidget):
 
     def __init__(self, menu_name: str, view_id: str, main_window_view_id: str, parent: QWidget = None):
         super().__init__(parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)
         item_layout = QHBoxLayout(self)
         item_layout.setContentsMargins(0, 0, 0, 0)
         item_widget = QWidget(self)
@@ -132,7 +133,6 @@ class MainWindowView(QMainWindow):
         right_vbox.setContentsMargins(0, 0, 0, 0)
         right_vbox.setSpacing(0)
         right_vbox.addWidget(QLabel("内容区（占位）"))
-        right_content.setStyleSheet("background-color: white;")
 
         # 将分隔器放入 center_widget 的已有布局中（由 UI 定义）
         center_layout = self.ui.horizontalLayout

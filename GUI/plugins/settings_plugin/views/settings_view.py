@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QSizePolicy
+from PySide6.QtCore import Qt
 from core import Global
 from ...ui_widget.settings_plugin import Ui_SettingsWidget
 
@@ -8,6 +9,8 @@ class SettingsView(QWidget):
     """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
+        # 允许 QWidget 绘制样式表背景
+        self.setAttribute(Qt.WA_StyledBackground, True)
         self.setup_widget()
     
     def setup_widget(self):
@@ -16,7 +19,7 @@ class SettingsView(QWidget):
         """
         self.ui = Ui_SettingsWidget()
         self.ui.setupUi(self)
-        self.setStyleSheet("background-color: red;")
+        # self.setStyleSheet("background-color: red;")
         
     
     def set_view_model(self, vm):
