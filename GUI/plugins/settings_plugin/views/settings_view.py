@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QWidget
 from core import Global
+from ...ui_widget.settings_plugin import Ui_SettingsWidget
 
 class SettingsView(QWidget):
     """
@@ -7,6 +8,16 @@ class SettingsView(QWidget):
     """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
+        self.setup_widget()
+    
+    def setup_widget(self):
+        """
+        设置用户界面
+        """
+        self.ui = Ui_SettingsWidget()
+        self.ui.setupUi(self)
+        self.setStyleSheet("background-color: red;")
+        
     
     def set_view_model(self, vm):
         """

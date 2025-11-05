@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QWidget
+from ...ui_widget.dashboard_plugin import Ui_DashboardWidget
 
 class DashboardView(QWidget):
     """
@@ -6,6 +7,15 @@ class DashboardView(QWidget):
     """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
+        self.setup_widget()
+    
+    def setup_widget(self):
+        """
+        设置用户界面
+        """
+        self.ui = Ui_DashboardWidget()
+        self.ui.setupUi(self)
+        self.setStyleSheet("background-color: #FFFFFF;")
     
     def set_view_model(self, vm):
         """

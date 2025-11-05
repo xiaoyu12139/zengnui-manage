@@ -1,28 +1,67 @@
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor
+from PySide6.QtCore import Qt, QPoint, Slot, QEvent, QTimer
+from PySide6.QtGui import QColor, QMouseEvent
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QDockWidget, QHBoxLayout, QLabel,
     QSplitter, QScrollArea, QVBoxLayout, QGraphicsDropShadowEffect
 )
 from ...ui_widget.main_window_plugin import Ui_MainWindow
-from PySide6.QtCore import QPoint, Slot, QEvent, QTimer
 from ..viewmodels import MainWindowViewModel
 from utils import get_logger, set_style_sheet
 from ..build.rc_qss import *
 from ..build.rc_xml import *
 from utils.xml_ops import get_menu_list
+from core import Global
+
+
 
 logger = get_logger("MainWindowView")
 
 class MenuItemWidget(QWidget):
+    """
+    左侧菜单项小部件
+    """
+    current_selected_item = None
 
-    def __init__(self, menu_name: str, parent: QWidget = None):
+    def __init__(self, menu_name: str, view_id: str, main_window_view_id: str, parent: QWidget = None):
         super().__init__(parent)
-        self.setObjectName(f"leftItem{menu_name}")
         item_layout = QHBoxLayout(self)
-        item_layout.setContentsMargins(8, 6, 8, 6)
-        item_layout.setSpacing(6)
-        item_layout.addWidget(QLabel(menu_name))
+        item_layout.setContentsMargins(0, 0, 0, 0)
+        item_widget = QWidget(self)
+        item_layout.addWidget(item_widget)
+        inner_layout = QHBoxLayout(item_widget)
+        inner_layout.setContentsMargins(8, 10, 8, 10)
+        inner_layout.addWidget(QLabel(menu_name), 0, Qt.AlignmentFlag.AlignCenter)
+        self.setStyleSheet("""
+            font-size: 14px;
+            font-weight: bold;
+        """.format(menu_name))
+        self.view_widget_id = view_id
+        self.main_window_view_id = main_window_view_id
+    
+    def set_select(self, is_select: bool):
+        """
+        设置选中状态
+        """
+        if is_select:
+            self.setStyleSheet("""
+                background-color: #191c21;
+                font-size: 14px;
+                font-weight: bold;
+            """)
+            Global().views_manager.fill_widget_with_execution(self.main_window_view_id, self.view_widget_id, "show_menu_pane")
+        else:
+            self.setStyleSheet("""
+                font-size: 14px;
+                font-weight: bold;
+            """)
+    
+    # 点击事件
+    def mousePressEvent(self, event: QMouseEvent):
+        if event.button() == Qt.LeftButton:
+            if MenuItemWidget.current_selected_item is not None:
+                MenuItemWidget.current_selected_item.set_select(False)
+            MenuItemWidget.current_selected_item = self
+            self.set_select(True)
 
 class MainWindowView(QMainWindow):
     """
@@ -34,7 +73,7 @@ class MainWindowView(QMainWindow):
         self.menu_list = []
         self.setup_widget()
         set_style_sheet(self, ":/qss/main_window_plugin/main_window.qss")
-        
+        self.menu_widget_list = []
         
     def setup_widget(self):
         """
@@ -69,12 +108,13 @@ class MainWindowView(QMainWindow):
         left_scroll = QScrollArea(splitter)
         left_scroll.setWidgetResizable(True)
         left_scroll.setObjectName("leftScroll")
+        left_scroll.setMinimumWidth(123)
 
         left_container = QWidget()
         left_container.setObjectName("leftContainer")
         left_vbox = QVBoxLayout(left_container)
-        left_vbox.setContentsMargins(0, 0, 0, 0)
-        left_vbox.setSpacing(6)
+        left_vbox.setContentsMargins(0, 10, 0, 0)
+        left_vbox.setSpacing(0)
         left_vbox.setAlignment(Qt.AlignTop)
 
         # 暂时加入一些占位项示例（可移除或替换为真实项）
@@ -92,6 +132,7 @@ class MainWindowView(QMainWindow):
         right_vbox.setContentsMargins(0, 0, 0, 0)
         right_vbox.setSpacing(0)
         right_vbox.addWidget(QLabel("内容区（占位）"))
+        right_content.setStyleSheet("background-color: white;")
 
         # 将分隔器放入 center_widget 的已有布局中（由 UI 定义）
         center_layout = self.ui.horizontalLayout
@@ -100,7 +141,7 @@ class MainWindowView(QMainWindow):
         center_layout.addWidget(splitter)
 
         # 初始分配比例：左侧 1，右侧 3
-        splitter.setSizes([300, 900])
+        splitter.setSizes([123, 1200-123])
 
         # 保存引用以便后续动态添加列表项
         self._left_container = left_container
@@ -176,7 +217,21 @@ class MainWindowView(QMainWindow):
         background-color: #2C2C2C;
         color: #FFFFFF;
         """)
-
+    
+    def show_menu_pane(self, pane_widget: QWidget):
+        """
+        显示菜单项对应的面板到右侧内容区域
+        """
+        # 清空右侧内容区域, 将box中的控件移除但不删除
+        for i in reversed(range(self._right_vbox.count())): 
+            widget = self._right_vbox.itemAt(i).widget()
+            if widget:
+                self._right_vbox.removeWidget(widget)
+                widget.hide()
+        # 添加新面板
+        self._right_vbox.addWidget(pane_widget)
+        pane_widget.show()
+        
     def set_view_model(self, vm: MainWindowViewModel):
         """
         注入视图模型，供 ViewsManager 调用
@@ -184,13 +239,6 @@ class MainWindowView(QMainWindow):
         self.view_model = vm
         self.create_vm_sig_connect()
 
-    def add_left_item(self, widget: QWidget):
-        """
-        在左侧滚动列表中新增一个 QWidget 项
-        """
-        if hasattr(self, "_left_vbox"):
-            self._left_vbox.addWidget(widget)
-    
     def create_vm_sig_connect(self):
         """
         创建视图模型信号连接
@@ -201,9 +249,18 @@ class MainWindowView(QMainWindow):
         self.view_model.sig_diagnostics_main_window.connect(self.on_sig_diagnostics_main_window)
         self.view_model.sig_toggle_main_window_theme.connect(self.on_sig_toggle_main_window_theme)
         self.view_model.sig_register_menu_pane.connect(self.on_sig_register_menu_pane)
+        self.view_model.sig_init_main_window.connect(self.on_sig_init_main_window)
     
-    @Slot(object)
-    def on_sig_register_menu_pane(self, menu_pane: QWidget):
+    @Slot()
+    def on_sig_init_main_window(self):
+        """
+        初始化主窗口槽函数
+        """
+        logger.info("on_sig_init_main_window")
+        self.menu_widget_list[0].set_select(True)
+
+    @Slot(object, str)
+    def on_sig_register_menu_pane(self, menu_pane: QWidget, pane_view_id: str):
         """
         注册主窗口菜单面板槽函数    
         """
@@ -211,7 +268,9 @@ class MainWindowView(QMainWindow):
         if not self.menu_list:
             if hasattr(menu_pane, "get_menu_name"):
                 menu_name = menu_pane.get_menu_name()
-                self._left_vbox.addWidget(MenuItemWidget(menu_name))
+                menu_item_widget = MenuItemWidget(menu_name, pane_view_id, self.view_model._win_id)
+                self._left_vbox.addWidget(menu_item_widget)
+                self.menu_widget_list.append(menu_item_widget)
     
     @Slot()
     def on_sig_min_main_window(self):

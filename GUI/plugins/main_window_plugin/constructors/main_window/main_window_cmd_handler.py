@@ -29,6 +29,7 @@ class MainWindowCommandHandler:
             Global().command_manager.execute_command("activate_dashboard")
             Global().command_manager.execute_command("activate_settings")
             # 显示主窗口
+            vm_creator().init_main_window()
             Global().views_manager.show(main_win_id)
         
         @cmd("ef8555d2-17c1-4b60-9ddb-98d255788ed4", "close_main_window")
@@ -80,9 +81,9 @@ class MainWindowCommandHandler:
             vm_creator().toggle_main_window_theme()
         
         @cmd("eb8dc82d-2a9b-4256-a2d4-cdba41cb7131", "register_menu_pane")
-        def register_menu_pane(menu_pane):
+        def register_menu_pane(menu_pane, view_id: str):
             """
             注册主窗口菜单面板
             """
             logger.info("register_menu_pane")
-            vm_creator().register_menu_pane(menu_pane)
+            vm_creator().register_menu_pane(menu_pane, view_id)

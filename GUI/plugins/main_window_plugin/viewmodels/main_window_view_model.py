@@ -15,7 +15,8 @@ class MainWindowViewModel(QObject):
     sig_max_main_window = Signal(bool)
     sig_diagnostics_main_window = Signal()
     sig_toggle_main_window_theme = Signal()
-    sig_register_menu_pane = Signal(object)
+    sig_register_menu_pane = Signal(object, str)
+    sig_init_main_window = Signal()
 
     def __init__(self, context):
         super().__init__()
@@ -72,9 +73,16 @@ class MainWindowViewModel(QObject):
         logger.info("maximize_main_window")
         self.sig_max_main_window.emit(maximize)
     
-    def register_menu_pane(self, menu_pane: QWidget):
+    def register_menu_pane(self, menu_pane: QWidget, view_id: str):
         """
         注册主窗口菜单面板
         """
         logger.info("register_menu_pane")
-        self.sig_register_menu_pane.emit(menu_pane)
+        self.sig_register_menu_pane.emit(menu_pane, view_id)
+    
+    def init_main_window(self):
+        """
+        初始化主窗口
+        """
+        logger.info("init_main_window")
+        self.sig_init_main_window.emit()

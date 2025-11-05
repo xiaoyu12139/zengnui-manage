@@ -1,1 +1,1 @@
-from .ui_dashboard import Ui_Dashboard
+from .ui_dashboard_widget import Ui_DashboardWidget
