@@ -3,10 +3,14 @@ QMainWindow {
     background-color: transparent;
 }
 
+QWidget#leftContainer {
+    background-color: #18181B;
+    color: #FFFFFF;
+    border: 1px solid #27272A;
+}
+
 QWidget#centralwidget {
-    background: qlineargradient(x1:0,y1:0,x2:0,y2:1,
-        stop:0 #1a1d22,
-        stop:1 #171a1f);
+    background-color: #09090B;
     color: #EAEFF3;
     border: 1px solid #0f1115;
     border-radius: 12px;

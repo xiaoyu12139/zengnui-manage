@@ -1,0 +1,43 @@
+/* Dashboard 专用样式 */
+
+/* 根容器与标题 */
+QWidget#DashboardWidget { background: transparent; }
+QLabel#titleLabel { font-size: 18px; font-weight: 600; color: #eaeef3; }
+QLabel#subtitleLabel { font-size: 12px; color: #8b93a6; }
+
+/* 统计卡片（按对象名统一样式） */
+QFrame#card1, QFrame#card2, QFrame#card3, QFrame#card4 {
+    background-color: #18181B;
+    border: 1px solid #27272A;
+    border-radius: 8px;
+}
+QLabel#card1Value, QLabel#card2Value, QLabel#card3Value, QLabel#card4Value {
+    font-size: 22px;
+    font-weight: 600;
+    color: #eaeef3;
+}
+QLabel#card1Label, QLabel#card2Label, QLabel#card3Label, QLabel#card4Label {
+    color: #b8c0cc;
+}
+QLabel#card1Delta, QLabel#card2Delta, QLabel#card4Delta { color: #20c997; font-size: 11px; }
+QLabel#card3Delta { color: #e25555; font-size: 11px; }
+QLabel#card1Icon, QLabel#card2Icon, QLabel#card3Icon, QLabel#card4Icon {
+    color: #cbd5e1; background: #23272f; padding: 4px 8px; border-radius: 6px; font-size: 12px;
+}
+
+/* 内容区：两张图表卡片 */
+QFrame#chartFrame1, QFrame#chartFrame2 {
+    background-color: #2b2f36;
+    border: 1px solid #2a2f38;
+    border-radius: 8px;
+}
+QLabel#chartPlaceholder1, QLabel#chartPlaceholder2 { color: #b8c0cc; }
+
+/* 分隔条（可拖拽调整左右比例） */
+QSplitter::handle {
+    background-color: #2a2f38;
+    width: 6px;
+}
+QSplitter::handle:hover {
+    background-color: #3a3f48;
+}

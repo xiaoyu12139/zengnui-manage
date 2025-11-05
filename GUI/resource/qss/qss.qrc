@@ -3,5 +3,6 @@
         <file>default.qss</file>
         <file>top_bar_plugin/top_bar.qss</file>
         <file>main_window_plugin/main_window.qss</file>
+        <file>dashboard_plugin/dashboard.qss</file>
     </qresource>
 </RCC>

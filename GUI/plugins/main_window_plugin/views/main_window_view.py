@@ -28,7 +28,7 @@ class MenuItemWidget(QWidget):
         super().__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)
         item_layout = QHBoxLayout(self)
-        item_layout.setContentsMargins(0, 0, 0, 0)
+        item_layout.setContentsMargins(10, 5, 10, 5)
         item_widget = QWidget(self)
         item_layout.addWidget(item_widget)
         inner_layout = QHBoxLayout(item_widget)
@@ -40,20 +40,23 @@ class MenuItemWidget(QWidget):
         """.format(menu_name))
         self.view_widget_id = view_id
         self.main_window_view_id = main_window_view_id
+
+        self._item_widget = item_widget
     
     def set_select(self, is_select: bool):
         """
         设置选中状态
         """
         if is_select:
-            self.setStyleSheet("""
-                background-color: #191c21;
+            self._item_widget.setStyleSheet("""
+                background-color: #7F22FE;
                 font-size: 14px;
                 font-weight: bold;
             """)
+            MenuItemWidget.current_selected_item = self
             Global().views_manager.fill_widget_with_execution(self.main_window_view_id, self.view_widget_id, "show_menu_pane")
         else:
-            self.setStyleSheet("""
+            self._item_widget.setStyleSheet("""
                 font-size: 14px;
                 font-weight: bold;
             """)
@@ -163,11 +166,11 @@ class MainWindowView(QMainWindow):
         self._right_content = right_content
         self._right_vbox = right_vbox
 
-        left_scroll.setStyleSheet("""
-        background-color: #3B3B3B;
-        color: #FFFFFF;
-        border: none;
-        """)
+        # left_scroll.setStyleSheet("""
+        # background-color: #18181B;
+        # color: #FFFFFF;
+        # border: none;
+        # """)
 
         
 
