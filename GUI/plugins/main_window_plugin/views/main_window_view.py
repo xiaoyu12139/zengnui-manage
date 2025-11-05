@@ -1,8 +1,10 @@
 from PySide6.QtCore import Qt, QPoint, Slot, QEvent, QTimer
-from PySide6.QtGui import QColor, QMouseEvent
+from PySide6.QtGui import QColor, QMouseEvent, QCursor
+from typing import Optional
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QDockWidget, QHBoxLayout, QLabel,
-    QSplitter, QScrollArea, QVBoxLayout, QGraphicsDropShadowEffect
+    QSplitter, QScrollArea, QVBoxLayout, QGraphicsDropShadowEffect,
+    QSizeGrip
 )
 from ...ui_widget.main_window_plugin import Ui_MainWindow
 from ..viewmodels import MainWindowViewModel
@@ -155,6 +157,34 @@ class MainWindowView(QMainWindow):
         border: none;
         """)
 
+        # 在右下角添加拖拽尺寸控件，使无边框窗口可通过拖拽调整大小
+        try:
+            bottom_layout = self.ui.bottom_widget.layout()
+            if bottom_layout is None:
+                bottom_layout = QHBoxLayout(self.ui.bottom_widget)
+                bottom_layout.setContentsMargins(0, 0, 0, 0)
+                bottom_layout.setSpacing(0)
+            size_grip = QSizeGrip(self)
+            size_grip.setToolTip("拖动调整窗口大小")
+            bottom_layout.addStretch()
+            bottom_layout.addWidget(size_grip, 0, Qt.AlignRight | Qt.AlignBottom)
+        except Exception:
+            pass
+
+        # 初始化自定义边缘拖拽缩放行为
+        self._resize_margin = 8
+        self._resizing = False
+        self._resize_dir = None  # 'left','right','top','bottom','tl','tr','bl','br'
+        self._press_pos_global = QPoint()
+        self._start_geom = self.geometry()
+        try:
+            self.ui.centralwidget.setMouseTracking(True)
+            self.ui.centralwidget.installEventFilter(self)
+            # 同时在主窗口层面启用鼠标跟踪，保证边缘（含内容边距区域）可命中
+            self.setMouseTracking(True)
+        except Exception:
+            pass
+
     def _apply_shadow(self):
         shadow = QGraphicsDropShadowEffect(self)
         shadow.setBlurRadius(24)
@@ -185,6 +215,174 @@ class MainWindowView(QMainWindow):
         except Exception:
             pass
         return super().moveEvent(event)
+    
+    # 命中检测：判断当前位置靠近哪条边/角
+    def _hit_test(self, pos: QPoint):
+        r = self.ui.centralwidget.rect()
+        m = self._resize_margin
+        left = pos.x() <= m
+        right = pos.x() >= r.width() - m
+        top = pos.y() <= m
+        bottom = pos.y() >= r.height() - m
+        if left and top:
+            return 'tl'
+        if right and top:
+            return 'tr'
+        if left and bottom:
+            return 'bl'
+        if right and bottom:
+            return 'br'
+        if left:
+            return 'left'
+        if right:
+            return 'right'
+        if top:
+            return 'top'
+        if bottom:
+            return 'bottom'
+        return None
+
+    # 主窗口层面的命中检测（相对于 QMainWindow 自身坐标）
+    def _hit_test_window(self, pos: QPoint):
+        r = self.rect()
+        m = self._resize_margin
+        left = pos.x() <= m
+        right = pos.x() >= r.width() - m
+        top = pos.y() <= m
+        bottom = pos.y() >= r.height() - m
+        if left and top:
+            return 'tl'
+        if right and top:
+            return 'tr'
+        if left and bottom:
+            return 'bl'
+        if right and bottom:
+            return 'br'
+        if left:
+            return 'left'
+        if right:
+            return 'right'
+        if top:
+            return 'top'
+        if bottom:
+            return 'bottom'
+        return None
+
+    # 根据命中更新鼠标样式
+    def _update_cursor(self, edge: Optional[str]):
+        if edge in ('left', 'right'):
+            self.ui.centralwidget.setCursor(QCursor(Qt.SizeHorCursor))
+        elif edge in ('top', 'bottom'):
+            self.ui.centralwidget.setCursor(QCursor(Qt.SizeVerCursor))
+        elif edge in ('tl', 'br'):
+            self.ui.centralwidget.setCursor(QCursor(Qt.SizeFDiagCursor))
+        elif edge in ('tr', 'bl'):
+            self.ui.centralwidget.setCursor(QCursor(Qt.SizeBDiagCursor))
+        else:
+            self.ui.centralwidget.setCursor(QCursor(Qt.ArrowCursor))
+
+    def _update_cursor_window(self, edge: Optional[str]):
+        if edge in ('left', 'right'):
+            self.setCursor(QCursor(Qt.SizeHorCursor))
+        elif edge in ('top', 'bottom'):
+            self.setCursor(QCursor(Qt.SizeVerCursor))
+        elif edge in ('tl', 'br'):
+            self.setCursor(QCursor(Qt.SizeFDiagCursor))
+        elif edge in ('tr', 'bl'):
+            self.setCursor(QCursor(Qt.SizeBDiagCursor))
+        else:
+            self.setCursor(QCursor(Qt.ArrowCursor))
+
+    # 执行缩放
+    def _perform_resize(self, global_pos: QPoint):
+        if not self._resizing or self.isMaximized():
+            return
+        delta = global_pos - self._press_pos_global
+        g = self._start_geom
+        min_w = max(1, self.minimumSize().width())
+        min_h = max(1, self.minimumSize().height())
+
+        new_x, new_y = g.x(), g.y()
+        new_w, new_h = g.width(), g.height()
+
+        if self._resize_dir in ('left', 'tl', 'bl'):
+            new_w = max(min_w, g.width() - delta.x())
+            new_x = g.x() + (g.width() - new_w)
+        if self._resize_dir in ('right', 'tr', 'br'):
+            new_w = max(min_w, g.width() + delta.x())
+        if self._resize_dir in ('top', 'tl', 'tr'):
+            new_h = max(min_h, g.height() - delta.y())
+            new_y = g.y() + (g.height() - new_h)
+        if self._resize_dir in ('bottom', 'bl', 'br'):
+            new_h = max(min_h, g.height() + delta.y())
+
+        self.setGeometry(new_x, new_y, new_w, new_h)
+
+    # 事件过滤器：在 centralwidget 上实现边缘缩放
+    def eventFilter(self, obj, event):
+        try:
+            if obj is self.ui.centralwidget:
+                if event.type() == QEvent.MouseMove:
+                    pos = event.position().toPoint()
+                    if self._resizing:
+                        self._perform_resize(event.globalPosition().toPoint())
+                    else:
+                        edge = self._hit_test(pos)
+                        self._update_cursor(edge)
+                elif event.type() == QEvent.MouseButtonPress:
+                    if event.button() == Qt.LeftButton and not self.isMaximized():
+                        pos = event.position().toPoint()
+                        edge = self._hit_test(pos)
+                        if edge:
+                            self._resizing = True
+                            self._resize_dir = edge
+                            self._press_pos_global = event.globalPosition().toPoint()
+                            self._start_geom = self.geometry()
+                            return True
+                elif event.type() == QEvent.MouseButtonRelease:
+                    if event.button() == Qt.LeftButton and self._resizing:
+                        self._resizing = False
+                        self._resize_dir = None
+                        return True
+        except Exception:
+            pass
+        return super().eventFilter(obj, event)
+
+    # 主窗口层面的鼠标事件：保证边缘（包括内容边距区域）也能缩放
+    def mouseMoveEvent(self, event: QMouseEvent):
+        try:
+            if self._resizing:
+                self._perform_resize(event.globalPosition().toPoint())
+            else:
+                edge = self._hit_test_window(event.position().toPoint())
+                self._update_cursor_window(edge)
+        except Exception:
+            pass
+        return super().mouseMoveEvent(event)
+
+    def mousePressEvent(self, event: QMouseEvent):
+        try:
+            if event.button() == Qt.LeftButton and not self.isMaximized():
+                edge = self._hit_test_window(event.position().toPoint())
+                if edge:
+                    self._resizing = True
+                    self._resize_dir = edge
+                    self._press_pos_global = event.globalPosition().toPoint()
+                    self._start_geom = self.geometry()
+                    return
+        except Exception:
+            pass
+        return super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event: QMouseEvent):
+        try:
+            if event.button() == Qt.LeftButton and self._resizing:
+                self._resizing = False
+                self._resize_dir = None
+                return
+        except Exception:
+            pass
+        return super().mouseReleaseEvent(event)
         
     def set_top_widget(self, widget: QWidget):
         """
@@ -209,9 +407,11 @@ class MainWindowView(QMainWindow):
         """
         将状态栏视图加入到 QStatusBar 的永久区域
         """
-        bottom_layout = QHBoxLayout(self.ui.bottom_widget)
-        bottom_layout.setContentsMargins(0, 0, 0, 0)
-        bottom_layout.setSpacing(0)
+        bottom_layout = self.ui.bottom_widget.layout()
+        if bottom_layout is None:
+            bottom_layout = QHBoxLayout(self.ui.bottom_widget)
+            bottom_layout.setContentsMargins(0, 0, 0, 0)
+            bottom_layout.setSpacing(0)
         bottom_layout.addWidget(widget)
         self.ui.bottom_widget.setStyleSheet("""
         background-color: #2C2C2C;
