@@ -73,6 +73,9 @@ class MainWindowView(QMainWindow):
     """
     主窗口视图类
     """
+    WINDOW_WIDTH = 1000
+    WINDOW_HEIGHT = 600
+
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
         self.menu_list = get_menu_list(":/xml/menu.xml")
@@ -100,7 +103,7 @@ class MainWindowView(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setWindowTitle("ZengNUI Manage")
-        self.resize(1200, 800)
+        self.resize(MainWindowView.WINDOW_WIDTH, MainWindowView.WINDOW_HEIGHT)
         self.setWindowFlag(Qt.FramelessWindowHint, True)
 
         # 透明背景 + 阴影
@@ -144,12 +147,18 @@ class MainWindowView(QMainWindow):
         left_scroll.setWidget(left_container)
 
         # 右侧：内容占位
-        right_content = QWidget(splitter)
+        right_scroll = QScrollArea(splitter)
+        right_scroll.setWidgetResizable(True)
+        right_scroll.setObjectName("rightScroll")
+
+        right_content = QWidget()
         right_content.setObjectName("rightContent")
         right_vbox = QVBoxLayout(right_content)
         right_vbox.setContentsMargins(0, 0, 0, 0)
         right_vbox.setSpacing(0)
         right_vbox.addWidget(QLabel("内容区（占位）"))
+
+        right_scroll.setWidget(right_content)
 
         # 将分隔器放入 center_widget 的已有布局中（由 UI 定义）
         center_layout = self.ui.horizontalLayout
@@ -158,21 +167,13 @@ class MainWindowView(QMainWindow):
         center_layout.addWidget(splitter)
 
         # 初始分配比例：左侧 1，右侧 3
-        splitter.setSizes([123, 1200-123])
+        splitter.setSizes([123, MainWindowView.WINDOW_WIDTH-123])
 
         # 保存引用以便后续动态添加列表项
         self._left_container = left_container
         self._left_vbox = left_vbox
         self._right_content = right_content
         self._right_vbox = right_vbox
-
-        # left_scroll.setStyleSheet("""
-        # background-color: #18181B;
-        # color: #FFFFFF;
-        # border: none;
-        # """)
-
-        
 
     def _apply_shadow(self):
         shadow = QGraphicsDropShadowEffect(self)

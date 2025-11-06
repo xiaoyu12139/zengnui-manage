@@ -50,3 +50,55 @@ QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical {
     background: none;
 }
+
+/* 水平滚动条轨道 */
+QScrollBar:horizontal {
+    background: #3B3B3B;            /* 轨道背景 */
+    height: 12px;                   /* 轨道高度 */
+    margin: 0 12px 0 12px;          /* 预留左右箭头按钮空间 */
+    border: none;
+}
+/* 水平滑块（thumb/handle） */
+QScrollBar::handle:horizontal {
+    background-color: #535353;      /* 使用 background-color 更明确 */
+    border: 0px solid transparent;  /* 避免样式引擎使用调色板中间色 */
+    min-width: 24px;
+    border-radius: 0px; /* 方角 */
+}
+QScrollBar::handle:horizontal:hover {
+    background-color: #535353;
+}
+QScrollBar::handle:horizontal:pressed {
+    background-color: #0D99FF;
+}
+/* 水平箭头按钮区域 */
+QScrollBar::sub-line:horizontal {
+    width: 12px;
+    subcontrol-origin: margin;
+    subcontrol-position: left;
+    border: 1px solid #2a2f38;
+}
+QScrollBar::add-line:horizontal {
+    width: 12px;
+    subcontrol-origin: margin;
+    subcontrol-position: right;
+    border: 1px solid #2a2f38;
+}
+/* 水平箭头图标 */
+QScrollBar::left-arrow:horizontal {
+    background-color: #3B3B3B;
+    image: url(:/img/default/arrow_left.svg);
+    width: 12px; height: 12px;
+    border: 1px solid #3B3B3B;
+}
+QScrollBar::right-arrow:horizontal {
+    background-color: #3B3B3B;
+    image: url(:/img/default/arrow_right.svg);
+    width: 12px; height: 12px;
+    border: 1px solid #3B3B3B;
+}
+/* 水平滚动条剩余区域（避免默认颜色块） */
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal {
+    background: none;
+}
