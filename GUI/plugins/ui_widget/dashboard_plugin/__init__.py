@@ -1,6 +1,0 @@
-from .ui_card_config_widget import Ui_CardConfigWidget
-from .ui_card_demo01_widget import Ui_CardDemo01Widget
-from .ui_card_demo02_widget import Ui_CardDemo02Widget
-from .ui_card_quick_option_widget import Ui_CardQuickOptionWidget
-from .ui_card_resource_widget import Ui_CardResourceWidget
-from .ui_dashboard_widget import Ui_DashboardWidget
