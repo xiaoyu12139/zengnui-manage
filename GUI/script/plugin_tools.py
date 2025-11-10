@@ -124,12 +124,12 @@ def plugin_add(plugin_name: str, plugin_view: str):
     plugin_constructors_dir.mkdir(parents=True, exist_ok=True)
     plugin_view_constructor_dir.mkdir(parents=True, exist_ok=True)
 
-    # 上下文
+    # 上下文 plugin_name为蛇形小写，PluginName为大驼峰
     ctx = {
         "plugin_name": plugin_name,
-        "PluginName": plugin_name.title(),
+        "PluginName": ''.join(word.capitalize() for word in plugin_name.split('_')),
         "plugin_view": plugin_view,
-        "PluginView": plugin_view.title(),
+        "PluginView": ''.join(word.capitalize() for word in plugin_view.split('_')),
     }
 
     # 视图文件与 __init__

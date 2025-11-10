@@ -6,5 +6,6 @@
         <file>dashboard_plugin/dashboard.qss</file>
         <file>dashboard_plugin/card_quick_option.qss</file>
         <file>dashboard_plugin/card_config.qss</file>
+        <file>settings_plugin/settings_widget.qss</file>
     </qresource>
 </RCC>

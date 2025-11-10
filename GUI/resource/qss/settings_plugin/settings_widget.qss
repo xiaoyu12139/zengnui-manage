@@ -1,0 +1,36 @@
+QLabel#pageTitle {
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+}
+QLabel#pageDesc {
+    color: #71717B;
+}
+
+/* 分段Tab容器样式 */
+QWidget#tabSegment {
+    background-color: #15181d;
+    border: 1px solid #2a2f38;
+    border-radius: 15px;
+    padding: 2px;
+}
+
+/* 分段按钮通用样式（使用动态属性 seg=true） */
+QPushButton[seg="true"] {
+    background-color: transparent;
+    color: #A1A1AA;
+    border: none;
+    border-radius: 14px;
+    padding: 6px 14px;
+    qproperty-iconSize: 14px 14px;
+}
+QPushButton[seg="true"]:hover {
+    background-color: rgba(124, 58, 237, 0.20);
+    color: #D4D4D8;
+}
+QPushButton[seg="true"]:checked {
+    background-color: #7C3AED;
+    color: #ffffff;
+}
+QPushButton[seg="true"]:disabled {
+    color: #575757;
+}
