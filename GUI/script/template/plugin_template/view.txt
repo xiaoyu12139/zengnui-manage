@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget
-from ...ui_widget.{{ plugin_name }}_plugin import Ui_{{ PluginView }}Widget
+from ...ui_widget.{{ plugin_name }}_plugin import Ui_{{ PluginView }}
 from PySide6.QtCore import Qt
 from utils import set_style_sheet
 from ..build.rc_qss import *
@@ -25,7 +25,7 @@ class {{ PluginView }}View(QWidget):
         设置用户界面
         """
         try:
-            self.ui = Ui_{{ PluginView }}Widget()
+            self.ui = Ui_{{ PluginView }}()
             self.ui.setupUi(self)
         except Exception as e:
             logger.error(f"Error setting up widget: {e}")
