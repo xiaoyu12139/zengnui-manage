@@ -283,7 +283,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
         modified = False
 
         # 1) 导入视图与处理器
-        view_import_line = f"from .views import {PluginView}"
+        view_import_line = f"from .views import {PluginView}View"
         handler_import_line = f"from .constructors import {PluginView}CmdHandler"
         pending_imports = []
         if view_import_line not in code:
@@ -312,7 +312,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
                 modified = True
 
         # 3) initialize 中注册新视图
-        register_line = f"        Global().views_manager.register_view(str(hash({PluginView})), {PluginView})"
+        register_line = f"        Global().views_manager.register_view(str(hash({PluginView}View)), {PluginView}View)"
         if register_line not in code:
             init_sig = "def initialize(self):"
             init_idx = code.find(init_sig)
