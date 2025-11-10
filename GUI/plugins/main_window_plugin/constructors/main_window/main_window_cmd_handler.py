@@ -1,6 +1,8 @@
 from core import cmd, Global
-from utils import logger
+from utils import get_logger
 from ...views import MainWindowView
+
+logger = get_logger("MainWindowCommandHandler")
 
 class MainWindowCommandHandler:
     """

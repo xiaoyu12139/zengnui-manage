@@ -16,6 +16,6 @@ class CardQuickOptionCmdHandler:
             """
             激活卡片快捷操作视图
             """
-            win_id = Global().views_manager.instance_view(str(hash(CardQuickOptionView)))
+            win_id = Global().views_manager.instance_view(str(hash(CardQuickOptionView)), vm_creator())
             instance = Global().views_manager.get_view_instance(win_id)
             return instance

@@ -1,9 +1,12 @@
 from PySide6.QtWidgets import QWidget
 from ...ui_widget.dashboard_plugin import Ui_DashboardWidget
 from PySide6.QtCore import Qt
-from utils import set_style_sheet
+from utils import set_style_sheet, get_logger
 from ..build.rc_qss import *
 from core import Global
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
+
+logger = get_logger("DashboardView")
 
 class DashboardView(QWidget):
     """
@@ -40,6 +43,20 @@ class DashboardView(QWidget):
         """
         装配视图，将 UI 元素与视图模型绑定
         """
-        card_quick_option_view = Global().execute_command("activate_card_quick_option_view")
-        card_config_view = Global().execute_command("activate_card_config_view")
+        card_quick_option_view = Global().command_manager.execute_command("activate_card_quick_option_view")
+        card_config_view = Global().command_manager.execute_command("activate_card_config_view")
+        vlayout = QVBoxLayout(self.ui.contentWidget)
+        vlayout.setContentsMargins(0, 0, 0, 0)
+        # 第1行
+        hlayout_1 = QHBoxLayout()
+        hlayout_1.addWidget(card_quick_option_view)
+        hlayout_1.addStretch()
         
+        # 第2行
+        hlayout_2 = QHBoxLayout()
+        hlayout_2.addWidget(card_config_view)
+
+        vlayout.addLayout(hlayout_1)
+        vlayout.addLayout(hlayout_2)
+        # 添加 Spacer 占用剩余空间
+        vlayout.addStretch()

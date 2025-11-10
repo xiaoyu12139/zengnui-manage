@@ -30,7 +30,7 @@ class CommandManager(metaclass=SingletonMeta):
         """
         try:
             if cmd_id in self.__commands:
-                self.__commands[cmd_id].exec(*args, **kwargs)
+                return self.__commands[cmd_id].exec(*args, **kwargs)
             else:
                 logger.error(f"命令 {cmd_id} 不存在")
         except Exception as e:
@@ -42,7 +42,7 @@ class CommandManager(metaclass=SingletonMeta):
         """
         try:
             key = self.__name_to_key_map[name]
-            self.cmd(key, *args, **kwargs)
+            return self.cmd(key, *args, **kwargs)
         except KeyError:
             logger.error(f"命令 {name} 不存在")
         except Exception as e:

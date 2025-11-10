@@ -16,6 +16,6 @@ class CardConfigCmdHandler:
             """
             激活卡片配置视图
             """
-            win_id = Global().views_manager.instance_view(str(hash(CardConfigView)))
+            win_id = Global().views_manager.instance_view(str(hash(CardConfigView)), vm_creator())
             instance = Global().views_manager.get_view_instance(win_id)
             return instance

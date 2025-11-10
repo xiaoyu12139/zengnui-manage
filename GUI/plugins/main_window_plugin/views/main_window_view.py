@@ -23,6 +23,7 @@ class MenuItemWidget(QWidget):
     左侧菜单项小部件
     """
     current_selected_item = None
+    current_hover_item = None
 
     def __init__(self, menu_name: str, view_id: str, main_window_view_id: str, parent: QWidget = None):
         super().__init__(parent)
@@ -68,6 +69,23 @@ class MenuItemWidget(QWidget):
                 MenuItemWidget.current_selected_item.set_select(False)
             MenuItemWidget.current_selected_item = self
             self.set_select(True)
+    
+    def mouseMoveEvent(self, event: QMouseEvent):
+        if event.buttons() == Qt.LeftButton:
+            if MenuItemWidget.current_selected_item is not self:
+                if MenuItemWidget.current_hover_item is not None:
+                    MenuItemWidget.current_hover_item.set_select(False)
+                    MenuItemWidget.current_hover_item.setStyleSheet("""
+                        font-size: 14px;
+                        font-weight: bold;
+                    """)
+                MenuItemWidget.current_hover_item = self
+                self._item_widget.setStyleSheet("""
+                    font-size: 14px;
+                    font-weight: bold;
+                    background-color: #27272A;
+                """)
+
 
 class MainWindowView(QMainWindow):
     """

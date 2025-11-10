@@ -8,3 +8,4 @@ terminal/zengnui_cli.egg-info
 GUI/**/__pycache__
 GUI/**/build/
 GUI/plugins/ui_widget/*_plugin/*
+.vscode/

@@ -15,6 +15,7 @@ class CardQuickOptionView(QWidget):
         self.setup_widget()
         # 应用 CardQuickOption 专用样式
         set_style_sheet(self, ":/qss/dashboard_plugin/card_quick_option.qss")
+        self.setFixedWidth(230)
     
     def setup_widget(self):
         """
