@@ -8,7 +8,6 @@ QWidget#leftContainer {
     color: #FFFFFF;
     border: 1px solid #27272A;
 }
-
 QWidget#centralwidget {
     background-color: #09090B;
     color: #EAEFF3;
@@ -42,7 +41,16 @@ QWidget#menuItem {
 QWidget#menuItem:hover {
     background-color: #27272A;
 }
+/* 鼠标在标签区域内时也应用悬停文字颜色 */
+QWidget#menuItem QLabel#menuItemLabel:hover {
+    color: #EAEFF3;
+}
 QWidget#menuItem[selected="true"] {
     background-color: #7F22FE;
     color: #FFFFFF;
 }
+
+/* 明确指定标签对象名，保证颜色匹配生效 */
+QLabel#menuItemLabel { color: #A1A1AA; }
+QWidget#menuItem:hover QLabel#menuItemLabel { color: #EAEFF3; }
+QWidget#menuItem[selected="true"] QLabel#menuItemLabel { color: #FFFFFF; }

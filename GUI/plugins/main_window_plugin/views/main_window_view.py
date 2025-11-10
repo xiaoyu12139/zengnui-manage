@@ -14,8 +14,6 @@ from ..build.rc_xml import *
 from utils.xml_ops import get_menu_list
 from core import Global
 
-
-
 logger = get_logger("MainWindowView")
 
 class MenuItemWidget(QWidget):
@@ -34,33 +32,58 @@ class MenuItemWidget(QWidget):
         # 用于 QSS 选择器与 :hover 的对象名与属性
         item_widget.setObjectName("menuItem")
         item_widget.setAttribute(Qt.WA_Hover, True)
+        item_widget.setAttribute(Qt.WA_StyledBackground, True)
         item_widget.setMouseTracking(True)
         item_layout.addWidget(item_widget)
         inner_layout = QHBoxLayout(item_widget)
         inner_layout.setContentsMargins(8, 10, 8, 10)
-        inner_layout.addWidget(QLabel(menu_name), 0, Qt.AlignmentFlag.AlignCenter)
-        # 初始样式由 QSS 控制，避免内联覆盖
+        label = QLabel(menu_name)
+        label.setObjectName("menuItemLabel")
+        label.setAttribute(Qt.WA_StyledBackground, True)
+        # 使标签本身可以响应 :hover 选择器
+        label.setAttribute(Qt.WA_Hover, True)
+        label.setMouseTracking(True)
+        inner_layout.addWidget(label, 0, Qt.AlignmentFlag.AlignCenter)
+        # 颜色改为代码控制：基础、悬停、选中
+        self._base_color = "#A1A1AA"
+        self._hover_color = "#EAEFF3"
+        self._selected_color = "#FFFFFF"
+        # 默认未选中时使用基础颜色
+        label.setStyleSheet(f"color: {self._base_color};")
+
         item_widget.setProperty("selected", False)
         self.view_widget_id = view_id
         self.main_window_view_id = main_window_view_id
 
         self._item_widget = item_widget
+        self._label = label
+        # 安装事件过滤器以处理悬停与离开
+        self._item_widget.installEventFilter(self)
+        self._label.installEventFilter(self)
+        self._is_selected = False
     
     def set_select(self, is_select: bool):
         """
         设置选中状态
         """
+        self._is_selected = bool(is_select)
         if is_select:
+            # 标记选中并将文字改为选中颜色
             self._item_widget.setProperty("selected", True)
-            # 触发 QSS 重新应用
             self._item_widget.style().unpolish(self._item_widget)
             self._item_widget.style().polish(self._item_widget)
+            self._label.setStyleSheet(f"color: {self._selected_color};")
             MenuItemWidget.current_selected_item = self
-            Global().views_manager.fill_widget_with_execution(self.main_window_view_id, self.view_widget_id, "show_menu_pane")
+            try:
+                Global().views_manager.fill_widget_with_execution(self.main_window_view_id, self.view_widget_id, "show_menu_pane")
+            except Exception:
+                pass
         else:
+            # 取消选中恢复为基础颜色
             self._item_widget.setProperty("selected", False)
             self._item_widget.style().unpolish(self._item_widget)
             self._item_widget.style().polish(self._item_widget)
+            self._label.setStyleSheet(f"color: {self._base_color};")
     
     # 点击事件
     def mousePressEvent(self, event: QMouseEvent):
@@ -71,8 +94,20 @@ class MenuItemWidget(QWidget):
             self.set_select(True)
     
     def mouseMoveEvent(self, event: QMouseEvent):
-        # 悬停效果交由 QSS :hover 控制，移动事件不做处理
+        # 悬停颜色在事件过滤器里处理，这里保持默认
         return super().mouseMoveEvent(event)
+
+    def eventFilter(self, obj, event):
+        # 通过事件过滤器处理悬停颜色切换
+        if obj is self._item_widget or obj is self._label:
+            et = event.type()
+            if et in (QEvent.Enter, QEvent.HoverEnter):
+                if not self._is_selected:
+                    self._label.setStyleSheet(f"color: {self._hover_color};")
+            elif et in (QEvent.Leave, QEvent.HoverLeave):
+                if not self._is_selected:
+                    self._label.setStyleSheet(f"color: {self._base_color};")
+        return super().eventFilter(obj, event)
 
 
 class MainWindowView(QMainWindow):
