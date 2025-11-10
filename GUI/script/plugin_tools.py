@@ -35,11 +35,13 @@ def plugin_create(plugin_name: str, plugin_view: str):
     plugin_view_constructor_dir.mkdir(parents=True, exist_ok=True)
 
     # 创建ctx
+    PluginName = ''.join(word.capitalize() for word in plugin_name.split('_'))
+    PluginView = ''.join(word.capitalize() for word in plugin_view.split('_'))
     ctx = {
         "plugin_name": plugin_name,
-        "PluginName": plugin_name.title(),
+        "PluginName": PluginName,
         "plugin_view": plugin_view,
-        "PluginView": plugin_view.title(),
+        "PluginView": PluginView,
     }
 
     # 创建plugin文件
@@ -58,7 +60,7 @@ def plugin_create(plugin_name: str, plugin_view: str):
     out = tpl.render(**ctx)
     plugin_view_file.write_text(out, encoding='utf-8')
     # 写入init
-    plugin_view_init_file.write_text(f"from .{plugin_view}_view import {plugin_view.title()}View", encoding='utf-8')
+    plugin_view_init_file.write_text(f"from .{plugin_view}_view import {PluginView}View", encoding='utf-8')
 
     # 创建viewmodel文件
     plugin_viewmodel_file = plugin_viewmodels_dir / f"{plugin_view}_view_model.py"
@@ -69,7 +71,7 @@ def plugin_create(plugin_name: str, plugin_view: str):
     out = tpl.render(**ctx)
     plugin_viewmodel_file.write_text(out, encoding='utf-8')
     # 写入init
-    plugin_viewmodel_init_file.write_text(f"from .{plugin_view}_view_model import {plugin_view.title()}ViewModel", encoding='utf-8')
+    plugin_viewmodel_init_file.write_text(f"from .{plugin_view}_view_model import {PluginView}ViewModel", encoding='utf-8')
 
     # 创建constructor文件
     plugin_constructor_file = plugin_constructors_dir / f"{plugin_view}_vm_build.py"
@@ -80,11 +82,11 @@ def plugin_create(plugin_name: str, plugin_view: str):
     out = tpl.render(**ctx)
     plugin_constructor_file.write_text(out, encoding='utf-8')
     # 写入init
-    plugin_constructor_init_file.write_text(f"from .{plugin_view}_vm_build import {plugin_view.title()}ViewModelBuilder", encoding='utf-8')
+    plugin_constructor_init_file.write_text(f"from .{plugin_view}_vm_build import {PluginView}ViewModelBuilder", encoding='utf-8')
     # 追加导入使用普通文件追加方式，Path 无 append_text 方法
     with open(plugin_constructor_init_file, 'a', encoding='utf-8') as f:
         # 统一从子包导出视图级 CmdHandler，类名按视图名
-        f.write(f"\nfrom .{plugin_view} import {plugin_view.title()}CmdHandler")
+        f.write(f"\nfrom .{plugin_view} import {PluginView}CmdHandler")
 
     # 创建constructor view文件
     plugin_view_constructor_file = plugin_view_constructor_dir / f"{plugin_view}_cmd_handler.py"
@@ -95,7 +97,7 @@ def plugin_create(plugin_name: str, plugin_view: str):
     out = tpl.render(**ctx)
     plugin_view_constructor_file.write_text(out, encoding='utf-8')
     # 写入init
-    plugin_view_constructor_init_file.write_text(f"from .{plugin_view}_cmd_handler import {plugin_view.title()}CmdHandler", encoding='utf-8')
+    plugin_view_constructor_init_file.write_text(f"from .{plugin_view}_cmd_handler import {PluginView}CmdHandler", encoding='utf-8')
     
 def plugin_add(plugin_name: str, plugin_view: str):
     """
@@ -125,13 +127,15 @@ def plugin_add(plugin_name: str, plugin_view: str):
     plugin_view_constructor_dir.mkdir(parents=True, exist_ok=True)
 
     # 上下文 plugin_name为蛇形小写，PluginName为大驼峰
+    PluginName = ''.join(word.capitalize() for word in plugin_name.split('_'))
+    PluginView = ''.join(word.capitalize() for word in plugin_view.split('_'))
     ctx = {
         "plugin_name": plugin_name,
-        "PluginName": ''.join(word.capitalize() for word in plugin_name.split('_')),
+        "PluginName": PluginName,
         "plugin_view": plugin_view,
-        "PluginView": ''.join(word.capitalize() for word in plugin_view.split('_')),
+        "PluginView": PluginView,
     }
-
+    print(ctx)
     # 视图文件与 __init__
     plugin_view_file = plugin_views_dir / f"{plugin_view}_view.py"
     tpl = env.get_template('view.txt')
@@ -140,7 +144,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
         plugin_view_file.write_text(out, encoding='utf-8')
     plugin_view_init_file = plugin_views_dir / '__init__.py'
     plugin_view_init_file.touch(exist_ok=True)
-    view_import_line = f"from .{plugin_view}_view import {plugin_view.title()}View"
+    view_import_line = f"from .{plugin_view}_view import {PluginView}View"
     current = plugin_view_init_file.read_text(encoding='utf-8') if plugin_view_init_file.exists() else ""
     if view_import_line not in current:
         with open(plugin_view_init_file, 'a', encoding='utf-8') as f:
@@ -154,7 +158,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
         plugin_viewmodel_file.write_text(out, encoding='utf-8')
     plugin_viewmodel_init_file = plugin_viewmodels_dir / '__init__.py'
     plugin_viewmodel_init_file.touch(exist_ok=True)
-    vm_import_line = f"from .{plugin_view}_view_model import {plugin_view.title()}ViewModel"
+    vm_import_line = f"from .{plugin_view}_view_model import {PluginView}ViewModel"
     current = plugin_viewmodel_init_file.read_text(encoding='utf-8') if plugin_viewmodel_init_file.exists() else ""
     if vm_import_line not in current:
         with open(plugin_viewmodel_init_file, 'a', encoding='utf-8') as f:
@@ -177,7 +181,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
 
     builder_code = builder_file.read_text(encoding='utf-8')
     # 补齐 import：将新 ViewModel 合并到 import 列表中
-    vm_import_name = f"{plugin_view.title()}ViewModel"
+    vm_import_name = f"{PluginView}ViewModel"
     if f"from ..viewmodels import" in builder_code and vm_import_name not in builder_code:
         # 合并到首个 import 行
         import_lines = builder_code.splitlines()
@@ -196,7 +200,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
     # 追加新的工厂方法 create_<view>_vm_instance，如果不存在的话
     new_method_signature = f"def create_{plugin_view}_vm_instance(self, context)"
     if new_method_signature not in builder_code:
-        method_block = f"\n\n    def create_{plugin_view}_vm_instance(self, context) -> Callable[[], {plugin_view.title()}ViewModel]:\n        \"\"\n        创建{plugin_name.title()}视图模型实例\n        \"\"\n        {plugin_view}_vm = None\n        def _create_{plugin_view}_vm() -> {plugin_view.title()}ViewModel:\n            nonlocal {plugin_view}_vm\n            if {plugin_view}_vm is None:\n                {plugin_view}_vm = {plugin_view.title()}ViewModel(context)\n            return {plugin_view}_vm\n        return _create_{plugin_view}_vm\n"
+        method_block = f"\n\n    def create_{plugin_view}_vm_instance(self, context) -> Callable[[], {PluginView}ViewModel]:\n        \"\"\"\n        创建{PluginName}视图模型实例\n        \"\"\"\n        {plugin_view}_vm = None\n        def _create_{plugin_view}_vm() -> {PluginView}ViewModel:\n            nonlocal {plugin_view}_vm\n            if {plugin_view}_vm is None:\n                {plugin_view}_vm = {PluginView}ViewModel(context)\n            return {plugin_view}_vm\n        return _create_{plugin_view}_vm\n"
         # 简单策略：追加到类定义末尾
         builder_code += method_block
         builder_file.write_text(builder_code, encoding='utf-8')
@@ -205,8 +209,8 @@ def plugin_add(plugin_name: str, plugin_view: str):
         builder_file.write_text(builder_code, encoding='utf-8')
 
     # constructors/__init__.py 保持仅导出一次插件级 builder 与新增视图的 CmdHandler
-    builder_import_line = f"from .{builder_file.stem} import {plugin_name.title()}ViewModelBuilder"
-    cmd_handler_pkg_import_line = f"from .{plugin_view} import {plugin_view.title()}CmdHandler"
+    builder_import_line = f"from .{builder_file.stem} import {PluginName}ViewModelBuilder"
+    cmd_handler_pkg_import_line = f"from .{plugin_view} import {PluginView}CmdHandler"
     current = plugin_constructor_init_file.read_text(encoding='utf-8') if plugin_constructor_init_file.exists() else ""
     to_append = []
     if builder_import_line not in current:
@@ -223,7 +227,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
     init_lines = plugin_constructor_init_file.read_text(encoding='utf-8').splitlines()
     normalized = []
     seen = set()
-    desired_builder_line = f"from .{builder_file.stem} import {plugin_name.title()}ViewModelBuilder"
+    desired_builder_line = f"from .{builder_file.stem} import {PluginName}ViewModelBuilder"
     for line in init_lines:
         line = line.strip()
         if not line:
@@ -246,7 +250,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
                     view_pkg = view_part[1:]
                 else:
                     view_pkg = view_part
-                if imported_name == f"{plugin_name.title()}CmdHandler" and view_pkg != plugin_name:
+                if imported_name == f"{PluginName}CmdHandler" and view_pkg != PluginName:
                     # 跳过旧的错误导出
                     continue
             except Exception:
@@ -269,7 +273,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
     plugin_view_constructor_file.write_text(out, encoding='utf-8')
     plugin_view_constructor_init_file = plugin_view_constructor_dir / '__init__.py'
     plugin_view_constructor_init_file.touch(exist_ok=True)
-    sub_init_line = f"from .{plugin_view}_cmd_handler import {plugin_view.title()}CmdHandler"
+    sub_init_line = f"from .{plugin_view}_cmd_handler import {PluginView}CmdHandler"
     # 只保留视图级导出，清理旧的插件级同名导出
     plugin_view_constructor_init_file.write_text(sub_init_line + "\n", encoding='utf-8')
 
@@ -279,8 +283,8 @@ def plugin_add(plugin_name: str, plugin_view: str):
         modified = False
 
         # 1) 导入视图与处理器
-        view_import_line = f"from .views import {plugin_view.title()}View"
-        handler_import_line = f"from .constructors import {plugin_view.title()}CmdHandler"
+        view_import_line = f"from .views import {PluginView}"
+        handler_import_line = f"from .constructors import {PluginView}CmdHandler"
         pending_imports = []
         if view_import_line not in code:
             pending_imports.append(view_import_line)
@@ -296,7 +300,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
             modified = True
 
         # 2) __init__ 中新增处理器实例
-        init_attr_line = f"        self.{plugin_view}_cmd_handle = {plugin_view.title()}CmdHandler()"
+        init_attr_line = f"        self.{plugin_view}_cmd_handle = {PluginView}CmdHandler()"
         if init_attr_line not in code:
             init_sig = "def __init__(self):"
             init_idx = code.find(init_sig)
@@ -308,7 +312,7 @@ def plugin_add(plugin_name: str, plugin_view: str):
                 modified = True
 
         # 3) initialize 中注册新视图
-        register_line = f"        Global().views_manager.register_view(str(hash({plugin_view.title()}View)), {plugin_view.title()}View)"
+        register_line = f"        Global().views_manager.register_view(str(hash({PluginView})), {PluginView})"
         if register_line not in code:
             init_sig = "def initialize(self):"
             init_idx = code.find(init_sig)
