@@ -102,3 +102,67 @@ QScrollBar::add-page:horizontal,
 QScrollBar::sub-page:horizontal {
     background: none;
 }
+
+
+/* 设置line edit 样式 */
+QLineEdit {
+    background: qlineargradient(x1:0,y1:0,x2:0,y2:1,
+        stop:0 #161a20, stop:1 #121519);
+    color: #eaeef3;
+    border: 1px solid #2a2f38;
+    border-radius: 5px;
+    padding: 3px 3px;
+    selection-background-color: palette(Highlight);
+    selection-color: palette(HighlightedText);
+}
+QLineEdit:hover {
+    border-color: #3a3f48;
+}
+QLineEdit:focus {
+    border-color: #4455aa;
+    background: #0f1216;
+}
+
+/* 设置QPlainTextEdit通用样式 */
+QPlainTextEdit {
+    background: qlineargradient(x1:0,y1:0,x2:0,y2:1,
+        stop:0 #161a20, stop:1 #121519);
+    color: #eaeef3;
+    border: 1px solid #2a2f38;
+    border-radius: 5px;
+    padding: 3px 3px;
+    selection-background-color: palette(Highlight);
+    selection-color: palette(HighlightedText);
+}
+QPlainTextEdit:hover {
+    border-color: #3a3f48;
+}
+QPlainTextEdit:focus {
+    border-color: #4455aa;
+    background: #0f1216;
+}
+
+/* 按钮通用样式 */
+QPushButton {
+    background-color: #7C3AED;   /* 品牌紫 */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 16px;
+    min-height: 15px;
+}
+QPushButton:hover {
+    background-color: #8B5CF6;   /* 悬停更亮 */
+}
+QPushButton:pressed {
+    background-color: #6D28D9;   /* 按下更暗 */
+}
+QPushButton:disabled {
+    background-color: #2a2f38;
+    color: #7B7B7B;
+}
+/* 默认按钮（有默认属性时） */
+QPushButton:default {
+    background-color: #8B5CF6;
+}
+
