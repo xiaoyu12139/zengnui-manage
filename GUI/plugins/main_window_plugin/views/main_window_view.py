@@ -1,10 +1,10 @@
 from PySide6.QtCore import Qt, QPoint, Slot, QEvent, QTimer
-from PySide6.QtGui import QColor, QMouseEvent, QCursor
+from PySide6.QtGui import QColor, QMouseEvent, QCursor, QIcon, QAction
 from typing import Optional
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QDockWidget, QHBoxLayout, QLabel,
     QSplitter, QScrollArea, QVBoxLayout, QGraphicsDropShadowEffect,
-    QSizeGrip
+    QSizeGrip, QSystemTrayIcon, QMenu
 )
 from ...ui_widget.main_window_plugin import Ui_MainWindow
 from ..viewmodels import MainWindowViewModel
@@ -136,6 +136,23 @@ class MainWindowView(QMainWindow):
             self.setMouseTracking(True)
         except Exception:
             pass
+        # 初始化系统托盘图标与菜单
+        try:
+            self._tray = QSystemTrayIcon(QIcon(":/img/top_bar_plugin/z_logo.svg"), self)
+            self._tray.setToolTip("ZengNUI Manage")
+            tray_menu = QMenu()
+            act_show = QAction("显示窗口", self)
+            act_exit = QAction("退出", self)
+            tray_menu.addAction(act_show)
+            tray_menu.addSeparator()
+            tray_menu.addAction(act_exit)
+            self._tray.setContextMenu(tray_menu)
+            act_show.triggered.connect(self._restore_from_tray)
+            act_exit.triggered.connect(self._exit_app)
+            self._tray.activated.connect(self._on_tray_activated)
+            self._tray.show()
+        except Exception:
+            self._tray = None
         
     def setup_widget(self):
         """
@@ -245,7 +262,47 @@ class MainWindowView(QMainWindow):
             self.ui.centralwidget.update()
         except Exception:
             pass
-        return super().moveEvent(event)
+
+    def _on_tray_activated(self, reason):
+        # 单击或双击托盘图标显示窗口
+        if reason in (QSystemTrayIcon.Trigger, QSystemTrayIcon.DoubleClick):
+            self._restore_from_tray()
+
+    def _restore_from_tray(self):
+        self.showNormal()
+        try:
+            self.activateWindow()
+        except Exception:
+            pass
+
+    def _exit_app(self):
+        # 托盘菜单退出时真正关闭应用
+        try:
+            if self._tray:
+                self._tray.hide()
+        except Exception:
+            pass
+        from PySide6.QtWidgets import QApplication
+        QApplication.instance().quit()
+
+    def closeEvent(self, event):
+        # 点击关闭时，隐藏到系统托盘而不退出
+        if hasattr(self, "_tray") and self._tray is not None:
+            event.ignore()
+            self.hide()
+            try:
+                # 提示气泡（可选）
+                self._tray.showMessage(
+                    "ZengNUI Manage",
+                    "应用已最小化到托盘，右键托盘图标可退出",
+                    QSystemTrayIcon.Information,
+                    3000,
+                )
+            except Exception:
+                pass
+        else:
+            return super().closeEvent(event)
+        return None
     
     # 主窗口层面的命中检测（相对于 QMainWindow 自身坐标）
     def _hit_test_window(self, pos: QPoint):

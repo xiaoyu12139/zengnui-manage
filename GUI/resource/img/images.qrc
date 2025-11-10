@@ -11,5 +11,6 @@
         <file>top_bar_plugin/restore.svg</file>
         <file>top_bar_plugin/theme.svg</file>
         <file>top_bar_plugin/logo.png</file>
+        <file>top_bar_plugin/z_logo.svg</file>
     </qresource>
 </RCC>

@@ -4,3 +4,7 @@ QWidget#CardQuickOptionWidget{
     border: 1px solid #27272A;
     border-radius: 8px;
 }
+QLabel#card1Title{
+    font-size:15px;
+    color: #FFFFFF;
+}
