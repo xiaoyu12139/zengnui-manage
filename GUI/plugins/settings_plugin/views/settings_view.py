@@ -59,6 +59,7 @@ class SettingsView(QWidget):
 
         self._seg_buttons = []
         # 确保至少有与按钮数量匹配的页面；如果不足则创建占位页
+        self.ui.contentStackedWidget.removeWidget(self.ui.contentStackedWidgetPage1)
         while self.ui.contentStackedWidget.count() < len(segments):
             page = QWidget()
             # 简单占位内容
@@ -67,7 +68,11 @@ class SettingsView(QWidget):
             ph.setAlignment(Qt.AlignCenter)
             pageLayout = QHBoxLayout(page)
             pageLayout.addWidget(ph)
-            self.ui.contentStackedWidget.addWidget(page)
+            if self.ui.contentStackedWidget.count() == 0:
+                page = Global().command_manager.execute_command("activate_sub_generate_setting_widget")
+                self.ui.contentStackedWidget.addWidget(page)
+            else:
+                self.ui.contentStackedWidget.addWidget(page)
 
         # 创建互斥的按钮组，保证仅一个处于选中态
         self._seg_group = QButtonGroup(self.segmentBar)
