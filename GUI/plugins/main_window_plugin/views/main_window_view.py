@@ -31,14 +31,16 @@ class MenuItemWidget(QWidget):
         item_layout = QHBoxLayout(self)
         item_layout.setContentsMargins(10, 5, 10, 5)
         item_widget = QWidget(self)
+        # 用于 QSS 选择器与 :hover 的对象名与属性
+        item_widget.setObjectName("menuItem")
+        item_widget.setAttribute(Qt.WA_Hover, True)
+        item_widget.setMouseTracking(True)
         item_layout.addWidget(item_widget)
         inner_layout = QHBoxLayout(item_widget)
         inner_layout.setContentsMargins(8, 10, 8, 10)
         inner_layout.addWidget(QLabel(menu_name), 0, Qt.AlignmentFlag.AlignCenter)
-        self.setStyleSheet("""
-            font-size: 14px;
-            font-weight: bold;
-        """.format(menu_name))
+        # 初始样式由 QSS 控制，避免内联覆盖
+        item_widget.setProperty("selected", False)
         self.view_widget_id = view_id
         self.main_window_view_id = main_window_view_id
 
@@ -49,18 +51,16 @@ class MenuItemWidget(QWidget):
         设置选中状态
         """
         if is_select:
-            self._item_widget.setStyleSheet("""
-                background-color: #7F22FE;
-                font-size: 14px;
-                font-weight: bold;
-            """)
+            self._item_widget.setProperty("selected", True)
+            # 触发 QSS 重新应用
+            self._item_widget.style().unpolish(self._item_widget)
+            self._item_widget.style().polish(self._item_widget)
             MenuItemWidget.current_selected_item = self
             Global().views_manager.fill_widget_with_execution(self.main_window_view_id, self.view_widget_id, "show_menu_pane")
         else:
-            self._item_widget.setStyleSheet("""
-                font-size: 14px;
-                font-weight: bold;
-            """)
+            self._item_widget.setProperty("selected", False)
+            self._item_widget.style().unpolish(self._item_widget)
+            self._item_widget.style().polish(self._item_widget)
     
     # 点击事件
     def mousePressEvent(self, event: QMouseEvent):
@@ -71,20 +71,8 @@ class MenuItemWidget(QWidget):
             self.set_select(True)
     
     def mouseMoveEvent(self, event: QMouseEvent):
-        if event.buttons() == Qt.LeftButton:
-            if MenuItemWidget.current_selected_item is not self:
-                if MenuItemWidget.current_hover_item is not None:
-                    MenuItemWidget.current_hover_item.set_select(False)
-                    MenuItemWidget.current_hover_item.setStyleSheet("""
-                        font-size: 14px;
-                        font-weight: bold;
-                    """)
-                MenuItemWidget.current_hover_item = self
-                self._item_widget.setStyleSheet("""
-                    font-size: 14px;
-                    font-weight: bold;
-                    background-color: #27272A;
-                """)
+        # 悬停效果交由 QSS :hover 控制，移动事件不做处理
+        return super().mouseMoveEvent(event)
 
 
 class MainWindowView(QMainWindow):

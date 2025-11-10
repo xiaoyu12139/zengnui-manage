@@ -31,3 +31,18 @@ QWidget#top_widget, QWidget#bottom_widget {
     color: #FFFFFF;
     border: none;
 }
+
+/* 左侧菜单项：基础、悬停与选中态 */
+QWidget#menuItem {
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 8px 10px;
+}
+QWidget#menuItem:hover {
+    background-color: #27272A;
+}
+QWidget#menuItem[selected="true"] {
+    background-color: #7F22FE;
+    color: #FFFFFF;
+}
