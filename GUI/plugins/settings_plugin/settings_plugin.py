@@ -1,5 +1,3 @@
-from .views import Sub_Generate_Setting_WidgetView
-from .constructors import Sub_Generate_Setting_WidgetCmdHandler
 from core import Plugin, Global
 from .constructors import SettingsViewModelBuilder, SettingsCmdHandler
 from .views import SettingsView
