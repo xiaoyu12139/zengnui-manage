@@ -1,9 +1,17 @@
-######_import_start######
-######_import_end######
+######import_start######
+#constructor_start
+#constructor_end
+#ui_start
+#ui_end
+#view_start
+#view_end
+#viewmodel_start
+#viewmodel_end
+######import_end######
 
-class DashboardViewModel:
+class {{ FeatName }}ViewModel:
     """
-    仪表盘视图模型类
+    {{ FeatName }}视图模型类
     """
     def __init__(self, context):
         super().__init__()

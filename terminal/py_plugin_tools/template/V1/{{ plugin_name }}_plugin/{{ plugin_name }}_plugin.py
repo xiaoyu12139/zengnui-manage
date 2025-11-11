@@ -4,6 +4,8 @@ from core import Plugin, Global
 from .constructors.{{ plugin_name }}_vm_build import {{ PluginName }}ViewModelBuilder
 from .constructors.{{ plugin_name }}_vm_build.{{ feat_name }}.{{ feat_name }}_cmd_handler import {{ FeatName }}CmdHandler
 #constructor_end
+#ui_start
+#ui_end
 #view_start
 from .views import {{ PluginName }}View
 #view_end

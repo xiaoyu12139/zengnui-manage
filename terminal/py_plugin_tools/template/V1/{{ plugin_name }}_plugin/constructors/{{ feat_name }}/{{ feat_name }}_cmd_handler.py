@@ -1,7 +1,15 @@
-######_import_start######
+######import_start######
 from core import cmd, Global
+#constructor_start
+#constructor_end
+#ui_start
+#ui_end
+#view_start
 from ...views import DashboardView
-######_import_end######
+#view_end
+#viewmodel_start
+#viewmodel_end
+######import_end######
 
 class DashboardCmdHandler:
     """

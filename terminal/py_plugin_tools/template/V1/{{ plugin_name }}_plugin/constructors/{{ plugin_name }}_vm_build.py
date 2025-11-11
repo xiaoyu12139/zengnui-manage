@@ -1,20 +1,28 @@
-######_import_start######
-from ..viewmodels import DashboardViewModel
+######import_start######
+#constructor_start
+#constructor_end
+#ui_start
+#ui_end
+#view_start
+#view_end
+#viewmodel_start
+from ..viewmodels.{{ feat_name }}_view_model import {{ feat_name }}ViewModel
+#viewmodel_end
+######import_end######
 from typing import Callable
-######_import_end######
 
-class DashboardViewModelBuilder:
+class {{ FeatName }}ViewModelBuilder:
     """
-    仪表盘视图模型构建类
+    {{ FeatName }}视图模型构建类
     """
-    def create_dashboard_vm_instance(self, context) -> Callable[[], DashboardViewModel]:
+    def create_{{ feat_name }}_vm_instance(self, context) -> Callable[[], {{ FeatName }}ViewModel]:
         """
-        创建仪表盘视图模型实例
+        创建{{ FeatName }}视图模型实例
         """
-        dashboard_vm = None
-        def _create_dashboard_vm() -> DashboardViewModel:
-            nonlocal dashboard_vm
-            if dashboard_vm is None:
-                dashboard_vm = DashboardViewModel(context)
-            return dashboard_vm
-        return _create_dashboard_vm
+        {{ feat_name }}_vm = None
+        def _create_{{ feat_name }}_vm() -> {{ FeatName }}ViewModel:
+            nonlocal {{ feat_name }}_vm
+            if {{ feat_name }}_vm is None:
+                {{ feat_name }}_vm = {{ FeatName }}ViewModel(context)
+            return {{ feat_name }}_vm
+        return _create_{{ feat_name }}_vm

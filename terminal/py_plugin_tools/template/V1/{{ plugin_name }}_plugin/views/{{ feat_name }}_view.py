@@ -1,12 +1,20 @@
-######_import_start######
+######import_start######
+#constructor_start
+#constructor_end
+#ui_start
+from ...ui_widget.{{ feat_name }}_plugin import Ui_{{ FeatName }}
+#ui_end
+#view_start
+#view_end
+#viewmodel_start
+#viewmodel_end
+######import_end######
 from PySide6.QtWidgets import QWidget
-from ...ui_widget.dashboard_plugin import Ui_DashboardWidget
 from PySide6.QtCore import Qt
-######_import_end######
 
-class DashboardView(QWidget):
+class {{ FeatName }}View(QWidget):
     """
-    仪表盘视图类
+    {{ FeatName }}视图类
     """
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
@@ -18,15 +26,16 @@ class DashboardView(QWidget):
         """
         设置用户界面
         """
-        self.ui = Ui_DashboardWidget()
+        self.ui = Ui_{{ FeatName }}()
         self.ui.setupUi(self)
-        # self.setStyleSheet("background-color: red;")
         
     def set_view_model(self, vm):
         """
         注入视图模型，供 ViewsManager 调用
         """
         self.view_model = vm
-    
+
+    ######plugin_main_feat_start######
     def get_menu_name(self) -> str:
-        return "Dashboard"
+        return "{{ FeatName }}"
+    ######plugin_main_feat_end######
