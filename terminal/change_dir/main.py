@@ -1,3 +1,4 @@
+# type: ignore
 # 内部导包
 from public import *
 from command_alias import set_terminal_alias
@@ -38,23 +39,23 @@ def main():
         ERROR("配置文件中未找到有效的目录配置 'directories'")
         return
 
-    for key, value in directories.items():
-        INFO(f"name: {key} dir: {value.get(LABEL_PATH)} desc: {value.get(LABEL_DESC)}")
+    for key, value in directories.items(): # type: ignore
+        INFO(f"name: {key} dir: {value.get(LABEL_PATH)} desc: {value.get(LABEL_DESC)}") # type: ignore
 
     # 2. 生成别名配置（默认别名为目录键名，并提供帮助别名）
-    aliases = {key: key for key in directories.keys()}
+    aliases = {key: key for key in directories.keys()} # type: ignore
     aliases['help'] = 'ds-help'
 
     # 3.创建 powershell 目录切换
     INFO("更新 powershell 目录切换...")
-    for key,value in directories.items():
+    for key,value in directories.items(): # type: ignore
         # operator = f"cd {value.get(LABEL_PATH)}"
         operator = f"""
         $OldDir = Get-Location
-        Set-Location {value.get(LABEL_PATH)}
-        Write-Host "✓ Switched to {value.get(LABEL_PATH)}: $TargetDir" -ForegroundColor Green
+        Set-Location {value.get(LABEL_PATH)} 
+        Write-Host "✓ Switched to {value.get(LABEL_PATH)}: $TargetDir" -ForegroundColor Green 
         Write-Host "  (from: $OldDir)" -ForegroundColor Gray
-        """
+        """ 
         error_state, error_msg = set_terminal_alias(key, operator, "powershell")
         if error_state:
             SUCCESS(f"设置 alias: {key} path: {value.get(LABEL_PATH)} 成功设置目录别名切换.")

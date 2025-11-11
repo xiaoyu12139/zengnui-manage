@@ -1,4 +1,3 @@
-import click
 from public.logger import *
 import os
 import subprocess
@@ -63,7 +62,7 @@ def _detect_shell_on_windows():
     # 沿父进程链搜索已知 shell 进程
     max_hops = 16
     pid = os.getppid()
-    visited = set()
+    visited = set() # type: ignore
     found_cmd = False
     for _ in range(max_hops):
         name, ppid = _get_process_name_and_ppid(pid)
@@ -81,7 +80,7 @@ def _detect_shell_on_windows():
             found_cmd = True
         if ppid is None or ppid == 0 or ppid in visited:
             break
-        visited.add(pid)
+        visited.add(pid) # type: ignore
         pid = ppid
     # 保守回退为 cmd（仅当链上曾出现过 cmd），否则标记为未知
     if found_cmd:

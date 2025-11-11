@@ -1,10 +1,6 @@
-import os
 import re
-import subprocess
 from pathlib import Path
-from typing import Optional, Tuple
-import click
-
+from typing import Tuple
 
 class BaseAliasManager:
     def sanitize_alias_name(self, name: str) -> str:

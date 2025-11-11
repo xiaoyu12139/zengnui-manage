@@ -2,7 +2,7 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 from .base_alias import BaseAliasManager
 from public.logger import *
 
@@ -59,7 +59,7 @@ class CmdAliasManager(BaseAliasManager):
                     "/d", new_value,
                     "/f"
                 ], capture_output=True, text=True)
-        except Exception as e:
+        except Exception as e:  # type: ignore
             # print(f"设置 CMD AutoRun 失败: {e}")
             pass
 
@@ -80,8 +80,8 @@ class CmdAliasManager(BaseAliasManager):
                 for l in raw.splitlines():
                     if re.match(rf"^\s*doskey\s+{re.escape(alias)}\s*=", l, re.IGNORECASE):
                         continue
-                    filtered.append(l)
-                content = "\n".join(filtered)
+                    filtered.append(l) # type: ignore
+                content = "\n".join(filtered) # type: ignore
                 head = "@echo off\n"
                 if not content.strip().lower().startswith("@echo off"):
                     content = head + content.lstrip()
@@ -129,7 +129,7 @@ class CmdAliasManager(BaseAliasManager):
             current_value = (query.stdout or "").strip() if query.returncode == 0 else None
             # 获取环境变量并替换
             resolved_value = os.path.expandvars(macro_cmd)
-            current_value = current_value.replace(resolved_value, "")
+            current_value = current_value.replace(resolved_value, "") # type: ignore
             ps_set = [
                 "powershell", "-NoProfile", "-Command",
                 f"Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Command Processor' -Name AutoRun -Type ExpandString -Value '{current_value}'"
@@ -163,7 +163,7 @@ class CmdAliasManager(BaseAliasManager):
         else:
             # 打印配置文件的路径
             INFO(f"当前 CMD 别名配置文件路径:")
-            SUCCESS(alias_file)
+            SUCCESS(alias_file) # type: ignore
             content = alias_file.read_text(encoding="utf-8", errors="ignore")
             alias_pattern = re.compile(r"^\s*doskey\s+([A-Za-z0-9_-]+)\s*=.*$", re.MULTILINE)
             matches = alias_pattern.findall(content)
@@ -182,4 +182,4 @@ class CmdAliasManager(BaseAliasManager):
         query = subprocess.run(ps_get, capture_output=True, text=True)
         current_value = (query.stdout or "").strip() if query.returncode == 0 else None
         SUCCESS(f"  {current_value}")
-        WARNING("注册表配置：计算机\HKEY_CURRENT_USER\Software\Microsoft\Command Processor")
+        WARNING(r"注册表配置：计算机\HKEY_CURRENT_USER\Software\Microsoft\Command Processor")

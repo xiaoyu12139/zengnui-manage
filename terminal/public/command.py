@@ -6,12 +6,12 @@ import subprocess
 import click
 import sys
 import locale
-from typing import Tuple, List
+from typing import Tuple, List, Dict, Any
 
 # Windows 下阻止新窗口弹出（如不需要可删）
 if sys.platform.startswith("win"):
     CREATE_NO_WINDOW = 0x08000000
-    RUN_KWARGS = {
+    run_kwargs = {
         "creationflags": CREATE_NO_WINDOW,
         # 使用系统首选编码以避免控制台输出的乱码和解码错误
         "encoding": locale.getpreferredencoding(False),
@@ -19,11 +19,12 @@ if sys.platform.startswith("win"):
         "errors": "replace",
     }
 else:
-    RUN_KWARGS = {
+    run_kwargs = {
         # 非 Windows 默认使用 UTF-8（大多数 POSIX 系统）
         "encoding": "utf-8",
         "errors": "replace",
     }
+RUN_KWARGS: Dict[str, Any] = run_kwargs
 
 
 def run_command(command: List[str], cwd: Path) -> Tuple[int, str]:
@@ -39,8 +40,9 @@ def run_command(command: List[str], cwd: Path) -> Tuple[int, str]:
     """
     try:
         result_out = "null"
+        command_str = " ".join(command)
         result = subprocess.run(
-            " ".join(command),
+            command_str,
             cwd=cwd,
             check=True,
             capture_output=True,

@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 from .base_alias import BaseAliasManager
 from public.logger import *
 

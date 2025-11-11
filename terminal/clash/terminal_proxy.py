@@ -2,8 +2,6 @@
 from public import *
 from command_alias import set_terminal_alias
 # 外部导包
-from pathlib import Path
-import json
 import click
 
 @click.command()

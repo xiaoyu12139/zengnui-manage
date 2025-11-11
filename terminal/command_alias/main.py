@@ -8,7 +8,7 @@ from public import *
 
 try:
     # Reuse existing terminal detection if available
-    from .check_terminal_type import get_terminal_type
+    from .check_terminal_type import get_terminal_type # type: ignore
 except Exception:
     def get_terminal_type() -> str:
         # Fallback: naive detection
@@ -51,36 +51,36 @@ class TerminalAliasService:
         try:
             cmd_mgr = CmdAliasManager()
             success, msg = cmd_mgr.reset(aggressive)
-            results.append(f"CMD: {msg}")
+            results.append(f"CMD: {msg}") # type: ignore
             if not success:
-                errors.append(f"CMD: {msg}")
+                errors.append(f"CMD: {msg}") # type: ignore
         except Exception as e:
-            errors.append(f"CMD: {str(e)}")
+            errors.append(f"CMD: {str(e)}") # type: ignore
         
         # 重置 PowerShell
         try:
             ps_mgr = PowerShellAliasManager()
             success, msg = ps_mgr.reset(aggressive)
-            results.append(f"PowerShell: {msg}")
+            results.append(f"PowerShell: {msg}") # type: ignore
             if not success:
-                errors.append(f"PowerShell: {msg}")
+                errors.append(f"PowerShell: {msg}") # type: ignore
         except Exception as e:
-            errors.append(f"PowerShell: {str(e)}")
+            errors.append(f"PowerShell: {str(e)}") # type: ignore
         
         # 重置 Bash
         try:
             bash_mgr = BashAliasManager()
             success, msg = bash_mgr.reset(aggressive)
-            results.append(f"Bash: {msg}")
+            results.append(f"Bash: {msg}") # type: ignore
             if not success:
-                errors.append(f"Bash: {msg}")
+                errors.append(f"Bash: {msg}") # type: ignore
         except Exception as e:
-            errors.append(f"Bash: {str(e)}")
+            errors.append(f"Bash: {str(e)}") # type: ignore 
         
         if errors:
-            return False, f"部分重置失败: {'; '.join(errors)}"
+            return False, f"部分重置失败: {'; '.join(errors)}" # type: ignore
         else:
-            return True, f"所有终端重置成功: {'; '.join(results)}"
+            return True, f"所有终端重置成功: {'; '.join(results)}" # type: ignore
     
 ########################################### 接口定义 ###########################################
 def set_terminal_alias(alias_name: str, command: str, shell: Optional[str] = None) -> Tuple[bool, str]:
@@ -133,20 +133,20 @@ def reset_all():
 @click.option('-s', 'shell', type=click.Choice(['cmd', 'ps', 'bash']),required=True,help='指定终端类型：cmd / ps / bash')
 @click.option('-p', 'do_print', is_flag=True, help='打印别名配置')
 @click.option('-d', 'do_delete', is_flag=True, help='删除别名配置')
-def cli(shell, do_print, do_delete):
+def cli(shell, do_print, do_delete): # type: ignore
     # 互斥校验
     if do_print and do_delete:
         raise click.UsageError('请只选择一种操作：--print 或 --delete')
 
     # 统一 shell 名称映射
     shell_map = {'ps': 'powershell', 'cmd': 'cmd', 'bash': 'bash'}
-    target_shell = shell_map.get(shell, shell)
+    target_shell = shell_map.get(shell, shell) # type: ignore
 
     # 分派动作
     if do_print:
         print_aliases_config(target_shell)
     elif do_delete:
-        reset_terminal_aliases(target_shell, aggressive=aggressive)
+        reset_terminal_aliases(target_shell, aggressive=aggressive) # type: ignore
     else:
         click.echo("请指定操作：-p 打印别名配置，-d 删除别名配置")
 

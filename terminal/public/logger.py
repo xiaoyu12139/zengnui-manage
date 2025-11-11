@@ -1,6 +1,4 @@
 import click
-import questionary
-
 
 def WARNING(msg: str) -> None:
     """打印警告信息
