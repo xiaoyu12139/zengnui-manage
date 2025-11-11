@@ -1,14 +1,14 @@
-######import_start######
-#constructor_start
-#constructor_end
-#ui_start
-#ui_end
-#view_start
-#view_end
-#viewmodel_start
+{{ placeholder_import_start }}
+{{ placeholder_constructor_start }}
 from ..viewmodels.{{ feat_name }}_view_model import {{ feat_name }}ViewModel
-#viewmodel_end
-######import_end######
+{{ placeholder_constructor_end }}
+{{ placeholder_ui_start }}
+{{ placeholder_ui_end }}
+{{ placeholder_view_start }}
+{{ placeholder_view_end }}
+{{ placeholder_viewmodel_start }}
+{{ placeholder_viewmodel_end }}
+{{ placeholder_import_end }}
 from typing import Callable
 
 class {{ FeatName }}ViewModelBuilder:

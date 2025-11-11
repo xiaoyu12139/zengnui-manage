@@ -1,15 +1,15 @@
-######import_start######
+{{ placeholder_import_start }}
 from core import cmd, Global
-#constructor_start
-#constructor_end
-#ui_start
-#ui_end
-#view_start
+{{ placeholder_constructor_start }}
+{{ placeholder_constructor_end }}
+{{ placeholder_ui_start }}
+{{ placeholder_ui_end }}
+{{ placeholder_view_start }}
 from ...views import DashboardView
-#view_end
-#viewmodel_start
-#viewmodel_end
-######import_end######
+{{ placeholder_view_end }}
+{{ placeholder_viewmodel_start }}
+{{ placeholder_viewmodel_end }}
+{{ placeholder_import_end }}
 
 class DashboardCmdHandler:
     """
