@@ -1,0 +1,1 @@
+pyside plugin gui模板 V1版本
