@@ -1,0 +1,8 @@
+{
+  "exclude": [
+    "terminal/py_plugin_tools/template/V1/{{ plugin_name }}_plugin"
+  ],
+  "ignore": [
+    "terminal/py_plugin_tools/template/V1/{{ plugin_name }}_plugin/**"
+  ]
+}
