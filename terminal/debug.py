@@ -15,5 +15,5 @@ def test_add_feat():
     test.add_plugin_feat(plugin_dir, plugin_name, feat_name)
 
 if __name__ == "__main__":
-    # test_create_plugin()
+    test_create_plugin()
     test_add_feat()

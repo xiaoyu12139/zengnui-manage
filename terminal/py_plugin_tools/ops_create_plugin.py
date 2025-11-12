@@ -1,6 +1,6 @@
 # 内部包
 from public import *
-from .config import config_create_plugin
+from .config import *
 # 外部包
 from pathlib import Path
 import re
@@ -97,4 +97,4 @@ def create_plugin(plugin_dir: Path, plugin_name: str, feat_name: str):
                 render_content = file_render(item)
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(render_content)
-    
+    SUCCESS(f"插件 {plugin_name} 创建成功")

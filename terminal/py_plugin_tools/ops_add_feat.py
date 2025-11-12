@@ -96,6 +96,10 @@ def check_plugin_add_feat(plugin_dir: Path, plugin_name: str, feat_name: str, fi
                 rule_assembled = copy.copy(placeholder_plugin_assembled_seq)
                 if not file_rule_match(f, rule_init, placeholder_table) or not file_rule_match(f, rule_initialize, placeholder_table) or not file_rule_match(f, rule_assembled, placeholder_table):
                     return False
+            if f.name == f"{plugin_name}_vm_build.py":
+                rule_vmbuild_method = copy.copy(placeholder_vmbuild_method_seq)
+                if not file_rule_match(f, rule_vmbuild_method, placeholder_table):
+                    return False
             file_placeholder_table[f] = placeholder_table
     return True
 
@@ -157,32 +161,35 @@ def add_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
     lines = plugin_file_path.read_text(encoding="utf-8").splitlines()
     ## 插入import语句
     ### 插入import view
-    import_statement = f"from .views.{feat_name}_view import {context['FeatName']}View\n"
-    import_index = placeholder_table[placeholder_view_end]
+    import_statement = f"from .views.{feat_name}_view import {context['FeatName']}View"
+    import_index = placeholder_table["placeholder_view_end"]
     insert_before(lines, import_index, placeholder_table, import_statement)
     ### 插入import viewmodel
-    import_statement = f"from .viewmodels.{feat_name}_view_model import {context['FeatName']}ViewModel\n"
-    import_index = placeholder_table[placeholder_viewmodel_end]
-    insert_before(lines, import_index, placeholder_table, import_statement)
+    # import_statement = f"from .viewmodels.{feat_name}_viewmodel import {context['FeatName']}ViewModel"
+    # import_index = placeholder_table["placeholder_viewmodel_end"]
+    # insert_before(lines, import_index, placeholder_table, import_statement)
     ### 插入import constructor
-    import_statement = f"from .constructors.{feat_name} import {context['FeatName']}CmdHandler\n"
-    import_index = placeholder_table[placeholder_constructor_end]
+    import_statement = f"from .constructors.{feat_name} import {context['FeatName']}CmdHandler"
+    import_index = placeholder_table["placeholder_constructor_end"]
     insert_before(lines, import_index, placeholder_table, import_statement)
     SUCCESS(f"文件: {plugin_file_path} 插入import语句成功")
     ## 插入init语句
-    init_statement = f"        self.{feat_name}_cmd_handler = {context['FeatName']}CmdHandler()\n"
-    init_index = placeholder_table[placeholder_plugin_init_end]
+    init_statement = f"        self.{feat_name}_cmd_handler = {context['FeatName']}CmdHandler()"
+    init_index = placeholder_table["placeholder_plugin_init_end"]
     insert_before(lines, init_index, placeholder_table, init_statement)
     SUCCESS(f"文件: {plugin_file_path} 插入init语句成功")
     ## 插入 initialize 语句
-    initialize_statement = f"        Global().views_manager.register_view(str(hash({context['FeatName']}View)), {context['FeatName']}View)\n"
-    initialize_index = placeholder_table[placeholder_plugin_initialize_end]
+    initialize_statement = f"        Global().views_manager.register_view(str(hash({context['FeatName']}View)), {context['FeatName']}View)"
+    initialize_index = placeholder_table["placeholder_plugin_initialize_end"]
     insert_before(lines, initialize_index, placeholder_table, initialize_statement)
     SUCCESS(f"文件: {plugin_file_path} 插入initialize语句成功")
     ## 插入 assembled 语句
-    assembled_statement = f"        self.{feat_name}_cmd_handler.assemble_cmd(self.create_{feat_name}_vm_instance(context))\n"
-    assembled_index = placeholder_table[placeholder_plugin_assembled_end]
+    assembled_statement = f"        self.{feat_name}_cmd_handler.assemble_cmd(self.create_{feat_name}_vm_instance(context))"
+    assembled_index = placeholder_table["placeholder_plugin_assembled_end"]
     insert_before(lines, assembled_index, placeholder_table, assembled_statement)
+    # 将lines转换为字符串
+    plugin_file_content = "\n".join(lines)
+    plugin_file_path.write_text(plugin_file_content, encoding="utf-8")
     SUCCESS(f"文件: {plugin_file_path} 插入assembled语句成功")
 
     #3.更新vm_build文件
@@ -191,8 +198,8 @@ def add_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
     lines = vm_build_file_path.read_text(encoding="utf-8").splitlines()
     ## 插入import语句
     ### 插入import viewmodel
-    import_statement = f"from .viewmodels.{feat_name}_view_model import {context['FeatName']}ViewModel\n"
-    import_index = placeholder_table[placeholder_viewmodel_end]
+    import_statement = f"from ..viewmodels.{feat_name}_viewmodel import {context['FeatName']}ViewModel"
+    import_index = placeholder_table["placeholder_viewmodel_end"]
     insert_before(lines, import_index, placeholder_table, import_statement)
     SUCCESS(f"文件: {vm_build_file_path} 插入import语句成功")
     ## 插入create vm instance语句
@@ -207,11 +214,13 @@ def add_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
             if {feat_name}_vm is None:
                 {feat_name}_vm = {context['FeatName']}ViewModel(context)
             return {feat_name}_vm
-        return _create_{feat_name}_vm
-    '''
+        return _create_{feat_name}_vm'''
     for create_vm_instance_statement in create_vm_instance_statements.splitlines():
-        create_vm_instance_index = placeholder_table[placeholder_vmbuild_method_end]
+        create_vm_instance_index = placeholder_table["placeholder_vmbuild_method_end"]
         insert_before(lines, create_vm_instance_index, placeholder_table, create_vm_instance_statement)
+    # 将lines转换为字符串
+    vm_build_file_content = "\n".join(lines)
+    vm_build_file_path.write_text(vm_build_file_content, encoding="utf-8")
     SUCCESS(f"文件: {vm_build_file_path} 插入create vm instance语句成功")
 
 

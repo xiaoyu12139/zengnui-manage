@@ -1,6 +1,6 @@
 {{ placeholder_import_start }}
 {{ placeholder_constructor_start }}
-from ..viewmodels.{{ feat_name }}_view_model import {{ feat_name }}ViewModel
+from ..viewmodels.{{ feat_name }}_view_model import {{ FeatName }}ViewModel
 {{ placeholder_constructor_end }}
 {{ placeholder_ui_start }}
 {{ placeholder_ui_end }}
