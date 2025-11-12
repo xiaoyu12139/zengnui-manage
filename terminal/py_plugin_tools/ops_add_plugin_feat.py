@@ -33,7 +33,7 @@ def check_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
         return False
     return True
 
-def check_plugin_add_feat(plugin_dir: Path, plugin_name: str, feat_name: str, file_placeholder_table: dict):
+def check_plugin_add_feat(plugin_dir: Path, plugin_name: str, feat_name: str, file_placeholder_table: dict, context: dict):
     """
     检查插件是否可以添加特性
     """
@@ -49,7 +49,7 @@ def check_plugin_add_feat(plugin_dir: Path, plugin_name: str, feat_name: str, fi
         if f.exists():
             ERROR(f"插件{plugin_name}已存在{feat_name}\n检查至文件{f}时终止")
             return False
-    return check_plugin_rule(plugin_dir, plugin_name, file_placeholder_table)
+    return check_plugin_rule(plugin_dir, plugin_name, file_placeholder_table, context)
 
 def update_plugin_file(plugin_dir: Path, plugin_name: str, feat_name: str, context: dict, file_placeholder_table: dict):
     """
@@ -136,7 +136,7 @@ def add_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
     # 渲染模板添加plugin feat
     # 0.扫描plugin确认是否存在与feat冲突的部分
     file_placeholder_table = {} # 占位符表，记录每个文件中占位符对应的行号
-    if not check_plugin_add_feat(plugin_dir, plugin_name, feat_name, file_placeholder_table):
+    if not check_plugin_add_feat(plugin_dir, plugin_name, feat_name, file_placeholder_table, context):
         return
     SUCCESS(f"插件{plugin_name}关于{feat_name}的扫描通过，可进行添加")
     # 1.渲染创建feat对应的功能文件
@@ -157,7 +157,7 @@ def add_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
     constructor_file_path.write_text(constructor_file_content, encoding="utf-8")
     SUCCESS(f"渲染创建feat对应的功能文件成功")
     #2.更新plugin文件
-    update_plugin_file(plugin_dir, plugin_name, feat_name, file_placeholder_table, context)
+    update_plugin_file(plugin_dir, plugin_name, feat_name, context, file_placeholder_table)
     #3.更新vm_build文件
     update_vmbuild_file(plugin_dir, plugin_name, feat_name, context, file_placeholder_table)
 

@@ -1,6 +1,7 @@
 # 执行 pip install -e . 后在任意终端都能执行mycli命令
 # setup.py
 # pip install -e .
+# python -m pip install -e . --config-settings editable_mode=compat
 from setuptools import setup,find_packages
 
 # blue 为提示信息，green 为成功信息，red 为error信息，yellow 为警告信息

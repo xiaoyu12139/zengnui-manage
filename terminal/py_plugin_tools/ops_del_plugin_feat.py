@@ -42,10 +42,10 @@ def check_plugin_del_feat(plugin_dir: Path, plugin_name: str, feat_name: str, fi
     check_file_list.append(view_file_path)
     check_file_list.append(viewmodel_file_path)
     check_file_list.append(constructor_file_path)
-    # for f in check_file_list:
-    #     if not f.exists():
-    #         ERROR(f"插件{plugin_name}不存在{feat_name}\n检查至文件{f}时终止")
-    #         return False
+    for f in check_file_list:
+        if not f.exists():
+            ERROR(f"插件{plugin_name}不存在{feat_name}\n检查至文件{f}时终止")
+            return False
     return check_plugin_rule(plugin_dir, plugin_name, file_placeholder_table, context)
 
 def update_plugin_file(plugin_dir: Path, plugin_name: str, feat_name: str, context: dict, file_placeholder_table: dict):
@@ -111,10 +111,10 @@ def del_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
     viewmodel_file_path = plugin_dir / f"{plugin_name}_plugin" / "viewmodels" / f"{feat_name}_viewmodel.py"
     constructor_dir_path = plugin_dir / f"{plugin_name}_plugin" / "constructors" / f"{feat_name}"
     constructor_file_path = constructor_dir_path / f"{feat_name}_cmd_handler.py"
-    # view_file_path.unlink()
-    # viewmodel_file_path.unlink()
-    # constructor_file_path.unlink()
-    # constructor_dir_path.rmdir()
+    view_file_path.unlink()
+    viewmodel_file_path.unlink()
+    constructor_file_path.unlink()
+    constructor_dir_path.rmdir()
     SUCCESS(f"{plugin_name} {feat_name}对应文件删除成功")
     #2.删除plugin文件中feat相关代码
     update_plugin_file(plugin_dir, plugin_name, feat_name, context, file_placeholder_table)
