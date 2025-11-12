@@ -22,6 +22,8 @@ setup(
             "proxy=clash.terminal_proxy:cli_proxy",
             # update_config 中的命令
             "update-all-config=update_config.main:update_all_configurations",
+            # py_plugin_tools 中的命令
+            "py-plugin-tools=py_plugin_tools.main:main",
         ],
     },
 )
