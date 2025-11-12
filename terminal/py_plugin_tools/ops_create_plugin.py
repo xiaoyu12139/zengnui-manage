@@ -17,7 +17,7 @@ def check_plugin(plugin_dir: Path, plugin_name: str, feat_name: str):
         ERROR(f"插件目录 {plugin_dir} 不存在")
         return False
     # 判断plugin_name与feat_name是否是蛇形小写
-    snake_pattern = re.compile(r'^[a-z]+(_[a-z]+)*$')
+    snake_pattern = re.compile(r'^[a-z1-9]+(_[a-z1-9]+)*$')
     if not snake_pattern.match(plugin_name):
         ERROR(f"插件名 {plugin_name} 不是蛇形小写")
         return False

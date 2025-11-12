@@ -7,7 +7,7 @@ from .constructors.{{ plugin_name }}_vm_build.{{ feat_name }}.{{ feat_name }}_cm
 {{ placeholder_ui_start }}
 {{ placeholder_ui_end }}
 {{ placeholder_view_start }}
-from .views import {{ PluginName }}View
+from .views.{{ feat_name }}_view import {{ FeatName }}View
 {{ placeholder_view_end }}
 {{ placeholder_viewmodel_start }}
 {{ placeholder_viewmodel_end }}

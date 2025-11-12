@@ -15,6 +15,7 @@ class {{ FeatName }}ViewModelBuilder:
     """
     {{ FeatName }}视图模型构建类
     """
+    {{ placeholder_vmbuild_method_start }}
     def create_{{ feat_name }}_vm_instance(self, context) -> Callable[[], {{ FeatName }}ViewModel]:
         """
         创建{{ FeatName }}视图模型实例
@@ -26,3 +27,5 @@ class {{ FeatName }}ViewModelBuilder:
                 {{ feat_name }}_vm = {{ FeatName }}ViewModel(context)
             return {{ feat_name }}_vm
         return _create_{{ feat_name }}_vm
+    {{ placeholder_vmbuild_method_end }}
+
