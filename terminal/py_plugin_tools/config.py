@@ -107,3 +107,16 @@ def config_add_feat(plugin_name: str, feat_name: str):
     context["FeatName"] = FeatName
     context["plugin_main_feat"] = False
     return context
+
+def config_del_feat(plugin_name: str, feat_name: str):
+    """
+    配置删除特性
+    """
+    PluginName = ''.join([word.capitalize() for word in plugin_name.split("_")])
+    FeatName = ''.join([word.capitalize() for word in feat_name.split("_")])
+    context["plugin_name"] = plugin_name
+    context["PluginName"] = PluginName
+    context["feat_name"] = feat_name
+    context["FeatName"] = FeatName
+    context["plugin_main_feat"] = False
+    return context

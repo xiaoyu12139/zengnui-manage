@@ -98,3 +98,23 @@ def create_plugin(plugin_dir: Path, plugin_name: str, feat_name: str):
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(render_content)
     SUCCESS(f"插件 {plugin_name} 创建成功")
+
+def insert_before(lines: list, target_index:int,  placeholder_table: dict, statement: str):
+    """
+    在指定索引前插入语句
+    """
+    lines.insert(target_index, statement)
+    # 更新索引序号
+    for key, value in placeholder_table.items():
+        if value >= target_index:
+            placeholder_table[key] += 1
+
+def insert_after(lines: list, target_index:int,  placeholder_table: dict, statement: str):
+    """
+    在指定索引后插入语句
+    """
+    lines.insert(target_index + 1, statement)
+    # 更新索引序号
+    for key, value in placeholder_table.items():
+        if value > target_index:
+            placeholder_table[key] += 1
