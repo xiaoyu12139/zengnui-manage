@@ -56,19 +56,20 @@ def update_plugin_file(plugin_dir: Path, plugin_name: str, feat_name: str, conte
     placeholder_table = file_placeholder_table[plugin_file_path]
     lines = plugin_file_path.read_text(encoding="utf-8").splitlines()
     ## 删除import语句
-    import_statement = rf"^\\s*from\\s*.views.{feat_name}_view\\s*import\\s*{context['FeatName']}View\\s*$"
+    import_statement = rf"^\s*from\s*.views.{feat_name}_view\s*import\s*{context['FeatName']}View\s*$"
     del_line_in_rule(lines, import_statement, "placeholder_import", placeholder_table)
-    import_statement = rf"^\\s*from\\s*.constructors.{feat_name}\\s*import\\s*{context['FeatName']}CmdHandler\\s*$"
+    import_statement = rf"^\s*from\s*.constructors.{feat_name}\s*import\s*{context['FeatName']}CmdHandler\s*$"
     del_line_in_rule(lines, import_statement, "placeholder_constructor", placeholder_table)
-    constructor_statement = rf"^\\s*self.{feat_name}_cmd_handler\\s*=\\s*{context['FeatName']}CmdHandler()\\s*$"
-    del_line_in_rule(lines, constructor_statement, "placeholder_constructor", placeholder_table)
-    initialize_statement = rf"^\\s*Global().views_manager.register_view\\s*\(\\s*str\\s*\(\\s*hash\\s*\(\\s*{context['FeatName']}View\\s*\\)\\s*\\)\\s*,\\s*{context['FeatName']}View\\s*\\)\\s*$"
-    del_line_in_rule(lines, initialize_statement, "placeholder_initialize", placeholder_table)
-    assembled_statement = rf"^\\s*self.{feat_name}_cmd_handler.assemble_cmd\\s*\(\\s*self.create_{feat_name}_vm_instance\\s*\(\\s*context\\s*\\)\\s*\\)\\s*$"
-    del_line_in_rule(lines, assembled_statement, "placeholder_assembled", placeholder_table)
+    # 删除函数语句
+    init_statement = rf"^\s*self.{feat_name}_cmd_handler\s*=\s*{context['FeatName']}CmdHandler\s*\(\s*\)\s*$"
+    del_line_in_rule(lines, init_statement, "placeholder_plugin_init", placeholder_table)
+    initialize_statement = rf"^\s*Global\(\).views_manager.register_view\s*\(\s*str\s*\(\s*hash\s*\(\s*{context['FeatName']}View\s*\)\s*\)\s*,\s*{context['FeatName']}View\s*\)\s*$"
+    del_line_in_rule(lines, initialize_statement, "placeholder_plugin_initialize", placeholder_table)
+    assembled_statement = rf"^\s*self.{feat_name}_cmd_handler.assemble_cmd\s*\(\s*self.create_{feat_name}_vm_instance\s*\(\s*context\s*\)\s*\)\s*$"
+    del_line_in_rule(lines, assembled_statement, "placeholder_plugin_assembled", placeholder_table)
     ## 保存lines
-    # plugin_file_content = "\n".join(lines)
-    # plugin_file_path.write_text(plugin_file_content, encoding="utf-8")
+    plugin_file_content = "\n".join(lines)
+    plugin_file_path.write_text(plugin_file_content, encoding="utf-8")
     SUCCESS(f"文件: {plugin_file_path} 插入assembled语句成功")
 
 def update_vmbuild_file(plugin_dir: Path, plugin_name: str, feat_name: str, context: dict, file_placeholder_table: dict):
@@ -78,16 +79,19 @@ def update_vmbuild_file(plugin_dir: Path, plugin_name: str, feat_name: str, cont
     vm_build_file_path = plugin_dir / f"{plugin_name}_plugin" / "constructors" / f"{plugin_name}_vm_build.py"
     placeholder_table = file_placeholder_table[vm_build_file_path]
     lines = vm_build_file_path.read_text(encoding="utf-8").splitlines()
-    import_statement = rf"^\\s*from\\s*\\.\\.viewmodels.{feat_name}_viewmodel\\s*import\\s*{context['FeatName']}ViewModel\\s*$"
+    import_statement = rf"^\s*from\s*\.\.viewmodels.{feat_name}_viewmodel\s*import\s*{context['FeatName']}ViewModel\s*$"
     del_line_in_rule(lines, import_statement, "placeholder_import", placeholder_table)
-    first_line = rf"^\s*def\s*create_{feat_name}_vm_instance\s*\(\s*self\s*,\s*context\s*:\s*dict\s*\)\s*->\s*Callable\[\[\],\s*{context['FeatName']}ViewModel\s*\]\s*:\s*$"
+    first_line = rf"^\s*def\s*create_{feat_name}_vm_instance\s*\(\s*self\s*,\s*context\s*\s*\)\s*->\s*Callable\[\[\],\s*{context['FeatName']}ViewModel\s*\]\s*:\s*$"
     last_line = rf"^\s*return\s*_create_{feat_name}_vm\s*$"
     first_line_index = get_line_num(lines, first_line)
     last_line_index = get_line_num(lines, last_line)
     del_line_in_range(lines, first_line_index, last_line_index, placeholder_table)
+    # 去除函数上方的空行，如果存在
+    if lines[first_line_index - 1].strip() == "":
+        del lines[first_line_index - 1]
     ## 保存lines
-    # vm_build_file_content = "\n".join(lines)
-    # vm_build_file_path.write_text(vm_build_file_content, encoding="utf-8")
+    vm_build_file_content = "\n".join(lines)
+    vm_build_file_path.write_text(vm_build_file_content, encoding="utf-8")
     SUCCESS(f"文件: {vm_build_file_path} 插入create vm instance语句成功")
 
 def del_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):

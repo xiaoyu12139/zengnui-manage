@@ -11,9 +11,9 @@ from ..viewmodels.{{ feat_name }}_view_model import {{ FeatName }}ViewModel
 {{ placeholder_import_end }}
 from typing import Callable
 
-class {{ FeatName }}ViewModelBuilder:
+class {{ PluginName }}ViewModelBuilder:
     """
-    {{ FeatName }}视图模型构建类
+    {{ PluginName }}视图模型构建类
     """
     {{ placeholder_vmbuild_method_start }}
     def create_{{ feat_name }}_vm_instance(self, context) -> Callable[[], {{ FeatName }}ViewModel]:
