@@ -1,2 +1,0 @@
-from .settings_view_model import SettingsViewModel
-from .sub_generate_setting_widget_view_model import SubGenerateSettingWidgetViewModel

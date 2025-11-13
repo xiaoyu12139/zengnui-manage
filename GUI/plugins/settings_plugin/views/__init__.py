@@ -1,2 +1,0 @@
-from .settings_view import SettingsView
-from .sub_generate_setting_widget_view import SubGenerateSettingWidgetView

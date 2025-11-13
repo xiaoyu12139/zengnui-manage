@@ -1,1 +1,0 @@
-from .diagnostics_view_model import DiagnosticsViewModel

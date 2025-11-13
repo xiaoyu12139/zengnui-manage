@@ -1,2 +1,0 @@
-from .diagnostics import DiagnosticsCmdHandler
-from .diagnostics_vm_build import DiagnosticsVMBuilder
