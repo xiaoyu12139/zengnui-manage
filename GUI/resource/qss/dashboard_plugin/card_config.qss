@@ -1,0 +1,6 @@
+/* 卡片配置视图 */
+QWidget#CardConfigWidget{
+    background-color: #18181B;
+    border: 1px solid #27272A;
+    border-radius: 8px;
+}

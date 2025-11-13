@@ -1,0 +1,31 @@
+from core import Global, Plugin
+from .views import {{ PluginView }}View
+from .viewmodels import {{ PluginView }}ViewModel
+from .constructors import {{ PluginName }}ViewModelBuilder, {{ PluginView }}CmdHandler
+from utils import get_logger
+
+logger = get_logger(f"{{ PluginName }}Plugin")
+
+def instance():
+    return {{ PluginName }}Plugin()
+
+class {{ PluginName }}Plugin(Plugin, {{ PluginName }}ViewModelBuilder):
+    """
+    {{ PluginName }} 插件类
+    """
+    def __init__(self):
+        super().__init__()
+        self.{{ plugin_name }}_cmd_handle = {{ PluginView }}CmdHandler()
+
+    def initialize(self):
+        """
+        初始化插件：注册视图
+        """
+        Global().views_manager.register_view(str(hash({{ PluginView }}View)), {{ PluginView }}View)
+
+    def assembled(self, context):
+        """
+        组装插件：注册命令并注入 VM 构造器
+        """
+        self.{{ plugin_name }}_cmd_handle.assemble_cmd(self.create_{{ plugin_name }}_vm_instance(context))
+        

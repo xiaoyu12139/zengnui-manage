@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Z Logo</title>
+  <rect x="0" y="0" width="256" height="256" fill="none"/>
+  <!-- Z glyph using thick stroke lines for crisp rendering at small sizes -->
+  <path d="M 32 48 L 224 48 L 32 208 L 224 208" stroke="#FFFFFF" stroke-width="40" fill="none" stroke-linecap="butt" stroke-linejoin="miter"/>
+</svg>

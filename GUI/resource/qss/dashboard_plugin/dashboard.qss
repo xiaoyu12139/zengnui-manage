@@ -1,0 +1,8 @@
+/* Dashboard 专用样式 */
+QLabel#pageTitle {
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+}
+QLabel#pageDesc {
+    color: #71717B;
+}

@@ -1,10 +1,10 @@
 from PySide6.QtCore import Qt, QPoint, Slot, QEvent, QTimer
-from PySide6.QtGui import QColor, QMouseEvent, QCursor
+from PySide6.QtGui import QColor, QMouseEvent, QCursor, QIcon, QAction
 from typing import Optional
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QDockWidget, QHBoxLayout, QLabel,
     QSplitter, QScrollArea, QVBoxLayout, QGraphicsDropShadowEffect,
-    QSizeGrip
+    QSizeGrip, QSystemTrayIcon, QMenu
 )
 from ...ui_widget.main_window_plugin import Ui_MainWindow
 from ..viewmodels import MainWindowViewModel
@@ -14,8 +14,6 @@ from ..build.rc_xml import *
 from utils.xml_ops import get_menu_list
 from core import Global
 
-
-
 logger = get_logger("MainWindowView")
 
 class MenuItemWidget(QWidget):
@@ -23,40 +21,69 @@ class MenuItemWidget(QWidget):
     左侧菜单项小部件
     """
     current_selected_item = None
+    current_hover_item = None
 
     def __init__(self, menu_name: str, view_id: str, main_window_view_id: str, parent: QWidget = None):
         super().__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)
         item_layout = QHBoxLayout(self)
-        item_layout.setContentsMargins(0, 0, 0, 0)
+        item_layout.setContentsMargins(10, 5, 10, 5)
         item_widget = QWidget(self)
+        # 用于 QSS 选择器与 :hover 的对象名与属性
+        item_widget.setObjectName("menuItem")
+        item_widget.setAttribute(Qt.WA_Hover, True)
+        item_widget.setAttribute(Qt.WA_StyledBackground, True)
+        item_widget.setMouseTracking(True)
         item_layout.addWidget(item_widget)
         inner_layout = QHBoxLayout(item_widget)
         inner_layout.setContentsMargins(8, 10, 8, 10)
-        inner_layout.addWidget(QLabel(menu_name), 0, Qt.AlignmentFlag.AlignCenter)
-        self.setStyleSheet("""
-            font-size: 14px;
-            font-weight: bold;
-        """.format(menu_name))
+        label = QLabel(menu_name)
+        label.setObjectName("menuItemLabel")
+        label.setAttribute(Qt.WA_StyledBackground, True)
+        # 使标签本身可以响应 :hover 选择器
+        label.setAttribute(Qt.WA_Hover, True)
+        label.setMouseTracking(True)
+        inner_layout.addWidget(label, 0, Qt.AlignmentFlag.AlignCenter)
+        # 颜色改为代码控制：基础、悬停、选中
+        self._base_color = "#A1A1AA"
+        self._hover_color = "#EAEFF3"
+        self._selected_color = "#FFFFFF"
+        # 默认未选中时使用基础颜色
+        label.setStyleSheet(f"color: {self._base_color};")
+
+        item_widget.setProperty("selected", False)
         self.view_widget_id = view_id
         self.main_window_view_id = main_window_view_id
+
+        self._item_widget = item_widget
+        self._label = label
+        # 安装事件过滤器以处理悬停与离开
+        self._item_widget.installEventFilter(self)
+        self._label.installEventFilter(self)
+        self._is_selected = False
     
     def set_select(self, is_select: bool):
         """
         设置选中状态
         """
+        self._is_selected = bool(is_select)
         if is_select:
-            self.setStyleSheet("""
-                background-color: #191c21;
-                font-size: 14px;
-                font-weight: bold;
-            """)
-            Global().views_manager.fill_widget_with_execution(self.main_window_view_id, self.view_widget_id, "show_menu_pane")
+            # 标记选中并将文字改为选中颜色
+            self._item_widget.setProperty("selected", True)
+            self._item_widget.style().unpolish(self._item_widget)
+            self._item_widget.style().polish(self._item_widget)
+            self._label.setStyleSheet(f"color: {self._selected_color};")
+            MenuItemWidget.current_selected_item = self
+            try:
+                Global().views_manager.fill_widget_with_execution(self.main_window_view_id, self.view_widget_id, "show_menu_pane")
+            except Exception:
+                pass
         else:
-            self.setStyleSheet("""
-                font-size: 14px;
-                font-weight: bold;
-            """)
+            # 取消选中恢复为基础颜色
+            self._item_widget.setProperty("selected", False)
+            self._item_widget.style().unpolish(self._item_widget)
+            self._item_widget.style().polish(self._item_widget)
+            self._label.setStyleSheet(f"color: {self._base_color};")
     
     # 点击事件
     def mousePressEvent(self, event: QMouseEvent):
@@ -65,11 +92,31 @@ class MenuItemWidget(QWidget):
                 MenuItemWidget.current_selected_item.set_select(False)
             MenuItemWidget.current_selected_item = self
             self.set_select(True)
+    
+    def mouseMoveEvent(self, event: QMouseEvent):
+        # 悬停颜色在事件过滤器里处理，这里保持默认
+        return super().mouseMoveEvent(event)
+
+    def eventFilter(self, obj, event):
+        # 通过事件过滤器处理悬停颜色切换
+        if obj is self._item_widget or obj is self._label:
+            et = event.type()
+            if et in (QEvent.Enter, QEvent.HoverEnter):
+                if not self._is_selected:
+                    self._label.setStyleSheet(f"color: {self._hover_color};")
+            elif et in (QEvent.Leave, QEvent.HoverLeave):
+                if not self._is_selected:
+                    self._label.setStyleSheet(f"color: {self._base_color};")
+        return super().eventFilter(obj, event)
+
 
 class MainWindowView(QMainWindow):
     """
     主窗口视图类
     """
+    WINDOW_WIDTH = 1000
+    WINDOW_HEIGHT = 600
+
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
         self.menu_list = get_menu_list(":/xml/menu.xml")
@@ -89,6 +136,23 @@ class MainWindowView(QMainWindow):
             self.setMouseTracking(True)
         except Exception:
             pass
+        # 初始化系统托盘图标与菜单
+        try:
+            self._tray = QSystemTrayIcon(QIcon(":/img/top_bar_plugin/z_logo.svg"), self)
+            self._tray.setToolTip("ZengNUI Manage")
+            tray_menu = QMenu()
+            act_show = QAction("显示窗口", self)
+            act_exit = QAction("退出", self)
+            tray_menu.addAction(act_show)
+            tray_menu.addSeparator()
+            tray_menu.addAction(act_exit)
+            self._tray.setContextMenu(tray_menu)
+            act_show.triggered.connect(self._restore_from_tray)
+            act_exit.triggered.connect(self._exit_app)
+            self._tray.activated.connect(self._on_tray_activated)
+            self._tray.show()
+        except Exception:
+            self._tray = None
         
     def setup_widget(self):
         """
@@ -97,7 +161,7 @@ class MainWindowView(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setWindowTitle("ZengNUI Manage")
-        self.resize(1200, 800)
+        self.resize(MainWindowView.WINDOW_WIDTH, MainWindowView.WINDOW_HEIGHT)
         self.setWindowFlag(Qt.FramelessWindowHint, True)
 
         # 透明背景 + 阴影
@@ -141,12 +205,18 @@ class MainWindowView(QMainWindow):
         left_scroll.setWidget(left_container)
 
         # 右侧：内容占位
-        right_content = QWidget(splitter)
+        right_scroll = QScrollArea(splitter)
+        right_scroll.setWidgetResizable(True)
+        right_scroll.setObjectName("rightScroll")
+
+        right_content = QWidget()
         right_content.setObjectName("rightContent")
         right_vbox = QVBoxLayout(right_content)
         right_vbox.setContentsMargins(0, 0, 0, 0)
         right_vbox.setSpacing(0)
         right_vbox.addWidget(QLabel("内容区（占位）"))
+
+        right_scroll.setWidget(right_content)
 
         # 将分隔器放入 center_widget 的已有布局中（由 UI 定义）
         center_layout = self.ui.horizontalLayout
@@ -155,21 +225,13 @@ class MainWindowView(QMainWindow):
         center_layout.addWidget(splitter)
 
         # 初始分配比例：左侧 1，右侧 3
-        splitter.setSizes([123, 1200-123])
+        splitter.setSizes([123, MainWindowView.WINDOW_WIDTH-123])
 
         # 保存引用以便后续动态添加列表项
         self._left_container = left_container
         self._left_vbox = left_vbox
         self._right_content = right_content
         self._right_vbox = right_vbox
-
-        left_scroll.setStyleSheet("""
-        background-color: #3B3B3B;
-        color: #FFFFFF;
-        border: none;
-        """)
-
-        
 
     def _apply_shadow(self):
         shadow = QGraphicsDropShadowEffect(self)
@@ -200,7 +262,47 @@ class MainWindowView(QMainWindow):
             self.ui.centralwidget.update()
         except Exception:
             pass
-        return super().moveEvent(event)
+
+    def _on_tray_activated(self, reason):
+        # 单击或双击托盘图标显示窗口
+        if reason in (QSystemTrayIcon.Trigger, QSystemTrayIcon.DoubleClick):
+            self._restore_from_tray()
+
+    def _restore_from_tray(self):
+        self.showNormal()
+        try:
+            self.activateWindow()
+        except Exception:
+            pass
+
+    def _exit_app(self):
+        # 托盘菜单退出时真正关闭应用
+        try:
+            if self._tray:
+                self._tray.hide()
+        except Exception:
+            pass
+        from PySide6.QtWidgets import QApplication
+        QApplication.instance().quit()
+
+    def closeEvent(self, event):
+        # 点击关闭时，隐藏到系统托盘而不退出
+        if hasattr(self, "_tray") and self._tray is not None:
+            event.ignore()
+            self.hide()
+            try:
+                # 提示气泡（可选）
+                self._tray.showMessage(
+                    "ZengNUI Manage",
+                    "应用已最小化到托盘，右键托盘图标可退出",
+                    QSystemTrayIcon.Information,
+                    3000,
+                )
+            except Exception:
+                pass
+        else:
+            return super().closeEvent(event)
+        return None
     
     # 主窗口层面的命中检测（相对于 QMainWindow 自身坐标）
     def _hit_test_window(self, pos: QPoint):

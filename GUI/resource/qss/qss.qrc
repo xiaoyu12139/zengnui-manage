@@ -3,5 +3,9 @@
         <file>default.qss</file>
         <file>top_bar_plugin/top_bar.qss</file>
         <file>main_window_plugin/main_window.qss</file>
+        <file>dashboard_plugin/dashboard.qss</file>
+        <file>dashboard_plugin/card_quick_option.qss</file>
+        <file>dashboard_plugin/card_config.qss</file>
+        <file>settings_plugin/settings_widget.qss</file>
     </qresource>
 </RCC>

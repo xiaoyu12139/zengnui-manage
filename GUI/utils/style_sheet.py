@@ -15,16 +15,20 @@ def get_qss(qss_name: str) -> str:
     Returns:
         str: QSS样式表
     """
-    qss_text = ""
-    qss_file = QFile(qss_name)
-    if qss_file.exists() and qss_file.open(QFile.ReadOnly):
-        # readAll 返回 QByteArray，这里转为 str
-        qss_text = bytes(qss_file.readAll()).decode("utf-8")
-        logger.info(f"加载资源样式: {qss_name}")
-        qss_file.close()
-    else:
-        logger.info(f"资源样式不存在或无法打开: {qss_name}")
-    return qss_text
+    try:
+        qss_text = ""
+        qss_file = QFile(qss_name)
+        if qss_file.exists() and qss_file.open(QFile.ReadOnly):
+            # readAll 返回 QByteArray，这里转为 str
+            qss_text = bytes(qss_file.readAll()).decode("utf-8")
+            logger.info(f"加载资源样式: {qss_name}")
+            qss_file.close()
+        else:
+            logger.info(f"资源样式不存在或无法打开: {qss_name}")
+        return qss_text
+    except Exception as e:
+        logger.error(f"加载资源样式时出错: {e}")
+    return ""
 
 def set_style_sheet(obj: QWidget, qss_name: str):
     """

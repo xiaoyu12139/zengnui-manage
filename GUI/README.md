@@ -10,7 +10,16 @@
 
 #### Plugin
 
-符合约定的目录都为plugin
+符合约定的目录都为plugin：一个*_plugin的目录为一个插件，一个plugin包括view（ui逻辑）、view model（业务逻辑处理）、plugin.py(用于配置管理整个插件)
 
-* plugin下存在main.py，同时文件中存在Plugin的类
-* build函数为构建界面
+#### Resource
+
+资源通过build_all脚本统一生成。
+
+ui文件：一个plugin目录对应一个ui文件目录（命名相同），ui文件的名称以下划线分隔命令，ui文件里面的最顶层widget使用对应于文件名的大坨峰命名。加*_widget.ui
+
+img, qss, xml文件：目录与plugin目录对应
+
+#### 启动
+
+先执行install.cmd配置环境变量，运行launch.py启动

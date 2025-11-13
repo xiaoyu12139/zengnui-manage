@@ -6,3 +6,6 @@ terminal/**/__pycache__
 terminal/zengnui_cli.egg-info
 # 忽略GUI目录下的缓存文件
 GUI/**/__pycache__
+GUI/**/build/
+GUI/plugins/ui_widget/*_plugin/*
+.vscode/

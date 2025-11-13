@@ -8,8 +8,8 @@ QLineEdit {
     border: 1px solid #2a2f38;
     /* border-radius: 10px; */
     padding: 6px 12px;
-    selection-background-color: #0D99FF;
-    selection-color: #ffffff;
+    selection-background-color: palette(Highlight);
+    selection-color: palette(HighlightedText);
 }
 
 /* 悬停与聚焦反馈 */
