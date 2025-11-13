@@ -5,28 +5,28 @@ from core import cmd, Global
 {{ placeholder_ui_start }}
 {{ placeholder_ui_end }}
 {{ placeholder_view_start }}
-from ...views import DashboardView
+from ...views.{{ feat_name }}_view import {{ FeatName }}View
 {{ placeholder_view_end }}
 {{ placeholder_viewmodel_start }}
 {{ placeholder_viewmodel_end }}
 {{ placeholder_import_end }}
 
-class DashboardCmdHandler:
+class {{ FeatName }}CmdHandler:
     """
-    仪表盘命令处理类
+    {{ FeatName }} 命令处理类
     """
 
     def assemble_cmd(self, vm_creator: callable):
         """
-        组装仪表盘命令
+        组装 {{ FeatName }} 命令
         """
 
-        @cmd("be226367-b4c3-4ca3-b36e-10a5aed58ecf", "activate_dashboard")
-        def activate_dashboard():
+        @cmd("be226367-b4c3-4ca3-b36e-10a5aed58ecf", "activate_{{ feat_name }}")
+        def activate_{{ feat_name }}():
             """
-            激活仪表盘插件
+            激活 {{ FeatName }} 插件
             """
-            view_id = Global().views_manager.instance_view(str(hash(DashboardView)), vm_creator())
+            view_id = Global().views_manager.instance_view(str(hash({{ FeatName }}View)), vm_creator())
             instance = Global().views_manager.get_view_instance(view_id)
             # 注册插件到主界面
-            Global().command_manager.execute_command("register_menu_pane", instance, view_id)
+            # Global().command_manager.execute_command("register_menu_pane", instance, view_id)

@@ -1,5 +1,5 @@
 {{ placeholder_import_start }}
-from core import Plugin, Global
+from core import Plugin, Global, Context, cmd
 {{ placeholder_constructor_start }}
 from .constructors.{{ plugin_name }}_vm_build import {{ PluginName }}ViewModelBuilder
 from .constructors.{{ feat_name }}.{{ feat_name }}_cmd_handler import {{ FeatName }}CmdHandler

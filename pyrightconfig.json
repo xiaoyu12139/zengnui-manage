@@ -1,9 +1,9 @@
 {
   "exclude": [
-    "terminal/py_plugin_tools/template/V1/{{ plugin_name }}_plugin"
+    "terminal/project_maker/pyside_plugin_maker/V1/template/{{ plugin_name }}_plugin"
   ],
   "ignore": [
-    "terminal/py_plugin_tools/template/V1/{{ plugin_name }}_plugin/**"
+    "terminal/project_maker/pyside_plugin_maker/V1/template/{{ plugin_name }}_plugin/**"
   ],
   "typeCheckingMode": "off",
   // "typeCheckingMode": "strict",

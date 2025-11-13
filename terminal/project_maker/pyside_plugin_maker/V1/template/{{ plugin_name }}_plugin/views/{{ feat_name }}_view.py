@@ -3,7 +3,7 @@
 {{ placeholder_constructor_end }}
 {{ placeholder_ui_start }}
 {{ placeholder_ui_end }}
-from ...ui_widget.{{ feat_name }}_plugin import Ui_{{ FeatName }}
+# from ...ui_widget.{{ feat_name }}_plugin import Ui_{{ FeatName }}
 {{ placeholder_ui_end }}
 {{ placeholder_view_start }}
 {{ placeholder_view_end }}
@@ -27,8 +27,9 @@ class {{ FeatName }}View(QWidget):
         """
         设置用户界面
         """
-        self.ui = Ui_{{ FeatName }}()
-        self.ui.setupUi(self)
+        # self.ui = Ui_{{ FeatName }}()
+        # self.ui.setupUi(self)
+        pass
         
     def set_view_model(self, vm):
         """

@@ -10,7 +10,7 @@ import copy
 import re
 
 BASE_DIR = Path(__file__).parent
-version_path = BASE_DIR / "template" / "V1"
+version_path = BASE_DIR / "template"
 
 def check_plugin_feat(plugin_dir: Path, plugin_name: str, feat_name: str):
     """
@@ -68,7 +68,7 @@ def update_plugin_file(plugin_dir: Path, plugin_name: str, feat_name: str, conte
     # import_index = placeholder_table["placeholder_viewmodel_end"]
     # insert_before(lines, import_index, placeholder_table, import_statement)
     ### 插入import constructor
-    import_statement = f"from .constructors.{feat_name} import {context['FeatName']}CmdHandler"
+    import_statement = f"from .constructors.{feat_name}.{feat_name}_cmd_handler import {context['FeatName']}CmdHandler"
     import_index = placeholder_table["placeholder_constructor_end"]
     insert_before(lines, import_index, placeholder_table, import_statement)
     SUCCESS(f"文件: {plugin_file_path} 插入import语句成功")
