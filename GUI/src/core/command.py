@@ -1,5 +1,7 @@
-from utils import logger
+from utils import get_logger
 from typing import Callable, Any
+
+logger = get_logger("Command")
 
 class Command:
     """

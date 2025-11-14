@@ -1,10 +1,9 @@
 
-from utils import SingletonMeta
-from utils import logger
+from utils import SingletonMeta, get_logger
 import importlib
-
 from pathlib import Path
 
+logger = get_logger("PluginManager")
 CURRENT_DIR = Path(__file__).parent.parent
 
 class PluginManager(metaclass=SingletonMeta):

@@ -5,7 +5,7 @@ from core import cmd, Global
 ######ui_start######
 ######ui_end######
 ######view_start######
-from ...views import StatusBarView
+from ...views.status_bar_view import StatusBarView
 ######view_end######
 ######viewmodel_start######
 ######viewmodel_end######

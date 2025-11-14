@@ -1,11 +1,12 @@
 from core import Global
-from utils import logger, get_qss
+from utils import get_logger, get_qss
 import sys
 import os
 from PySide6.QtWidgets import QApplication, QStyleFactory
 from PySide6.QtGui import QPalette, QColor, QIcon
 from PySide6.QtCore import QFile
 
+logger = get_logger("Launcher")
 
 def make_dark_palette(app: QApplication):
     pal = QPalette()

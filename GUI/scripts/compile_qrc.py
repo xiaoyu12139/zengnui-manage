@@ -51,7 +51,7 @@ def main():
     # 编译资源文件
     print("编译资源文件")
     qrc_resource_path = (
-        CURRENT_DIR.parent / "src" / "resource" / "resources.qrc"
+        CURRENT_DIR.parent / "src" / "resources" / "resources.qrc"
     )
     for plugin_path in plugins_path:
         print(f"插件路径：{plugin_path}")

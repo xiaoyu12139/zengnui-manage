@@ -2,7 +2,6 @@
 from utils import SingletonMeta
 from .plugin_manager import PluginManager
 from .command_manager import CommandManager
-from .message_queue import MessageQueue
 from .views_manager import ViewsManager
 
 class Global(metaclass=SingletonMeta):
@@ -12,7 +11,6 @@ class Global(metaclass=SingletonMeta):
     def __init__(self):
         self._plugin_manager = PluginManager()
         self._command_manager = CommandManager()
-        self._message_queue = MessageQueue()
         self._views_manager = ViewsManager()
     
     def load_core(self):
@@ -28,10 +26,6 @@ class Global(metaclass=SingletonMeta):
     @property
     def command_manager(self):
         return self._command_manager
-    
-    @property
-    def message_queue(self):
-        return self._message_queue
     
     @property
     def views_manager(self):

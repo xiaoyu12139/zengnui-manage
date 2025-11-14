@@ -1,23 +1,23 @@
 ######import_start######
 from core import Global
 from utils import get_logger, set_style_sheet
-from ..build.rc_style import *
+from ..build.rc_resource import *
 
 ######constructor_start######
 ######constructor_end######
 ######ui_start######
 ######ui_end######
-from ...ui_widget.main_window_plugin import Ui_MainWindow
+from ui_widget.main_window_plugin import Ui_MainWindow
 
 ######ui_end######
 ######view_start######
 ######view_end######
 ######viewmodel_start######
-from ..viewmodels import MainWindowViewModel
+from ..viewmodels.main_window_view_model import MainWindowViewModel
 
 ######viewmodel_end######
 ######import_end######
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt,QPoint,Slot
 from PySide6.QtGui import QColor, QMouseEvent, QCursor, QIcon, QAction
 from PySide6.QtWidgets import (
     QMainWindow,
@@ -153,7 +153,6 @@ class MainWindowView(QWidget):
 
     def __init__(self, parent: QWidget = None):
         super().__init__(parent)
-        self.menu_list = get_menu_list(":/xml/menu.xml")
         self.menu_list = []
         self.setup_widget()
         set_style_sheet(self, ":/qss/main_window_plugin/main_window.qss")
@@ -235,12 +234,6 @@ class MainWindowView(QWidget):
         left_vbox.setContentsMargins(0, 10, 0, 0)
         left_vbox.setSpacing(0)
         left_vbox.setAlignment(Qt.AlignTop)
-
-        # 暂时加入一些占位项示例（可移除或替换为真实项）
-        if self.menu_list:
-            for menu_name in self.menu_list:
-                item = MenuItemWidget(menu_name)
-                left_vbox.addWidget(item)
 
         left_scroll.setWidget(left_container)
 

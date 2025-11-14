@@ -1,6 +1,8 @@
-from utils import logger
+from utils import get_logger
 from uuid import uuid1
 from functools import partial
+
+logger = get_logger("ViewsManager")
 
 class ViewsManager:
     """

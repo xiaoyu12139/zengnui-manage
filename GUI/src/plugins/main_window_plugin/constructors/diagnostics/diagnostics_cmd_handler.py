@@ -5,7 +5,7 @@ from core import cmd, Global
 ######ui_start######
 ######ui_end######
 ######view_start######
-from ...views import DiagnosticsView
+from ...views.diagnostics_view import DiagnosticsView
 ######view_end######
 ######viewmodel_start######
 ######viewmodel_end######

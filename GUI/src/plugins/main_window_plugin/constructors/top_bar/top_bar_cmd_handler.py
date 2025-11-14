@@ -6,7 +6,7 @@ from core import cmd, Global
 ######ui_start######
 ######ui_end######
 ######view_start######
-from ...views import TopBarView
+from ...views.top_bar_view import TopBarView
 ######view_end######
 ######viewmodel_start######
 ######viewmodel_end######

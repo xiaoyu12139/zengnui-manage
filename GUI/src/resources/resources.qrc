@@ -1,11 +1,28 @@
 <RCC>
     <qresource prefix="/qss">
-        <file>default.qss</file>
-        <file>top_bar_plugin/top_bar.qss</file>
-        <file>main_window_plugin/main_window.qss</file>
-        <file>dashboard_plugin/dashboard.qss</file>
-        <file>dashboard_plugin/card_quick_option.qss</file>
-        <file>dashboard_plugin/card_config.qss</file>
-        <file>settings_plugin/settings_widget.qss</file>
+<!-- default -->
+        <!-- style -->
+        <file>default/style/default.qss</file>
+<!--  main_window_plugin -->
+        <!-- icon -->
+        <file>main_window_plugin/icon/bell.svg</file>
+        <file>main_window_plugin/icon/close.svg</file>
+        <file>main_window_plugin/icon/logo.png</file>
+        <file>main_window_plugin/icon/maximize.svg</file>
+        <file>main_window_plugin/icon/minimize.svg</file>
+        <file>main_window_plugin/icon/restore.svg</file>
+        <file>main_window_plugin/icon/theme.svg</file>
+        <file>main_window_plugin/icon/z_logo.svg</file>
+        <!--  style -->
+        <file>main_window_plugin/style/main_window.qss</file>
+        <file>main_window_plugin/style/top_bar.qss</file>
+<!-- dashboard_plugin -->
+        <!-- style -->
+        <file>dashboard_plugin/style/dashboard.qss</file>
+        <file>dashboard_plugin/style/card_quick_option.qss</file>
+        <file>dashboard_plugin/style/card_config.qss</file>
+<!-- settings_plugin -->
+        <!-- style -->
+        <file>settings_plugin/style/settings_widget.qss</file>
     </qresource>
 </RCC>

@@ -6,7 +6,9 @@ from .app_global import Global
 from .command import Command
 import types
 from .command_context import CommandContext
-from utils import logger
+from utils import get_logger
+
+logger = get_logger("Plugin")
 
 class Plugin:
     """

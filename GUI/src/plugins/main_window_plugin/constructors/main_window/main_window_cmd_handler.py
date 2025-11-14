@@ -1,5 +1,6 @@
 ######import_start######
 from core import cmd, Global
+from utils import get_logger
 
 ######constructor_start######
 ######constructor_end######
