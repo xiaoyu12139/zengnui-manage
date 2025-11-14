@@ -15,11 +15,13 @@ class Plugin:
     插件基类
     """
     def __init__(self):
+        """3
+        """
         self.local_commands = {}
         self.collect_and_register_commands()
     
     def cmd(self, command: str, terminal: str = "") -> Callable:
-        """
+        """2
         实例方法版本的命令装饰器
         """
         def decorator(func: Callable) -> Callable:
@@ -31,7 +33,7 @@ class Plugin:
         return decorator
 
     def __init_subclass__(cls, **kwargs):
-        """
+        """1
         子类初始化
         """
         if hasattr(cls, "assembled") and callable(cls.assembled):
@@ -60,6 +62,7 @@ class Plugin:
                 #执行原始方法
                 CommandContext.set_current_instance(self)
                 try:
+                    setattr(self, "_context", context)
                     assambled_result = func(self,context,*args,**kwargs)
                 except Exception as err:
                     logger.error(f"An error occur assambling {self.__class__},{err}.")

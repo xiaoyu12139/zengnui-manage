@@ -17,7 +17,7 @@ from ..viewmodels.main_window_view_model import MainWindowViewModel
 
 ######viewmodel_end######
 ######import_end######
-from PySide6.QtCore import Qt,QPoint,Slot, QEvent
+from PySide6.QtCore import Qt,QPoint,Slot, QEvent, QTimer
 from PySide6.QtGui import QColor, QMouseEvent, QCursor, QIcon, QAction
 from PySide6.QtWidgets import (
     QMainWindow,

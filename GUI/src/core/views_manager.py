@@ -1,6 +1,7 @@
 from utils import get_logger
 from uuid import uuid1
 from functools import partial
+from PySide6.QtWidgets import QDialog
 
 logger = get_logger("ViewsManager")
 
@@ -30,9 +31,9 @@ class ViewsManager:
         """
         if not force_new:
             for win_id, window in self.__window_objs.items():
-                if window.view_model == view_model:
+                if getattr(window, "view_model", None) == view_model:
                     if hasattr(window, "instance_view_id") and window.instance_view_id == view_id:
-                        return window
+                        return win_id
         parent_widget = self.__window_objs.get(parent)
         view_type = self.__window_types.get(view_id)
         if not view_type:
@@ -95,7 +96,7 @@ class ViewsManager:
         if isinstance(window, QDialog):
             window.exec()
         else:
-            window.execNormal()
+            window.show()
     
     def close(self, win_id: str, *args):
         """

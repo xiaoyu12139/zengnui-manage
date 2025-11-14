@@ -1,0 +1,12 @@
+继承Plugin类，Plugin子类中的方法加上cmd装饰器
+
+```
+1.Plugin类中__init_subclass__执行后，在执行__init__
+2.__init_subclass__处理子类中的静态与类方法cmd装饰
+3.__init_subclass__处理assembled方法装饰启用
+4.随后__init__中将前面收集的plugin子类中的cmd装饰方法注册到全局
+5.controctor中的assemble方法中的cmd装饰，执行assemble方法时会加载这个方法中的内部的子方法，这里走的逻辑是core/decorator中的cmd装饰
+6.plugin子类中的cmd装饰实例方法走的是plugin类定义的cmd装饰
+```
+
+cmd定义：plugin子类中定义，controctor类中的assemble方法中内部方法定义
