@@ -17,7 +17,7 @@ from ..viewmodels.main_window_view_model import MainWindowViewModel
 
 ######viewmodel_end######
 ######import_end######
-from PySide6.QtCore import Qt,QPoint,Slot
+from PySide6.QtCore import Qt,QPoint,Slot, QEvent
 from PySide6.QtGui import QColor, QMouseEvent, QCursor, QIcon, QAction
 from PySide6.QtWidgets import (
     QMainWindow,
@@ -143,7 +143,7 @@ class MenuItemWidget(QWidget):
         return super().eventFilter(obj, event)
 
 
-class MainWindowView(QWidget):
+class MainWindowView(QMainWindow):
     """
     MainWindow视图类
     """
@@ -155,7 +155,7 @@ class MainWindowView(QWidget):
         super().__init__(parent)
         self.menu_list = []
         self.setup_widget()
-        set_style_sheet(self, ":/qss/main_window_plugin/main_window.qss")
+        set_style_sheet(self, ":/main_window_plugin/style/main_window.qss")
         self.menu_widget_list = []
 
         # 初始化自定义边缘拖拽缩放行为
@@ -174,7 +174,7 @@ class MainWindowView(QWidget):
         # 初始化系统托盘图标与菜单
         try:
             self._tray = QSystemTrayIcon(
-                QIcon(":/img/top_bar_plugin/z_logo.svg"), self
+                QIcon(":/main_window_plugin/icon/z_logo.svg"), self
             )
             self._tray.setToolTip("ZengNUI Manage")
             tray_menu = QMenu()
@@ -266,11 +266,6 @@ class MainWindowView(QWidget):
         self._right_content = right_content
         self._right_vbox = right_vbox
 
-    def set_view_model(self, vm):
-        """
-        注入视图模型，供 ViewsManager 调用
-        """
-        self.view_model = vm
 
     def _apply_shadow(self):
         shadow = QGraphicsDropShadowEffect(self)
@@ -528,7 +523,8 @@ class MainWindowView(QWidget):
         初始化主窗口槽函数
         """
         logger.info("on_sig_init_main_window")
-        self.menu_widget_list[0].set_select(True)
+        if self.menu_widget_list:
+            self.menu_widget_list[0].set_select(True)
 
     @Slot(object, str)
     def on_sig_register_menu_pane(self, menu_pane: QWidget, pane_view_id: str):

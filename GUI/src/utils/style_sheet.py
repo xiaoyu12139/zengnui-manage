@@ -10,7 +10,7 @@ def get_qss(qss_name: str) -> str:
     获取QSS样式表
 
     Args:
-        qss_name (str): QSS文件名, ":/qss/top_bar_plugin/top_bar.qss"
+        qss_name (str): QSS文件名, ":/main_window_plugin/style/top_bar.qss"
     
     Returns:
         str: QSS样式表
@@ -36,7 +36,7 @@ def set_style_sheet(obj: QWidget, qss_name: str):
 
     Args:
         obj (QWidget): 要设置样式表的对象
-        qss_name (str): QSS文件名, ":/qss/top_bar_plugin/top_bar.qss"
+        qss_name (str): QSS文件名, ":/main_window_plugin/style/top_bar.qss"
     """
     qss_text = get_qss(qss_name)
     obj.setStyleSheet(qss_text)

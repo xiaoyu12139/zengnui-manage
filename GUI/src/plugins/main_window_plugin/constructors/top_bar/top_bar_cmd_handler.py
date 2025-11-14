@@ -29,7 +29,7 @@ class TopBarCmdHandler:
             激活顶部栏
             """
             top_win_id = Global().views_manager.instance_view(
-                "TopBarView", vm_creator()
+                str(hash(TopBarView)), vm_creator()
             )
             Global().views_manager.fill_widget_with_execution(
                 parent_widget_id, top_win_id, "set_top_widget"

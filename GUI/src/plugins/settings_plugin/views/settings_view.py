@@ -24,7 +24,7 @@ class SettingsView(QWidget):
         # 允许 QWidget 绘制样式表背景
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setup_widget()
-        set_style_sheet(self, ":/qss/settings_plugin/settings_widget.qss")
+        set_style_sheet(self, ":/settings_plugin/style/settings_widget.qss")
 
     def setup_widget(self):
         """
@@ -59,10 +59,10 @@ class SettingsView(QWidget):
 
         # 定义分段按钮与对应页索引
         segments = [
-            {"text": "通用设置", "icon": ":/img/top_bar_plugin/bell.svg"},
-            {"text": "通知", "icon": ":/img/top_bar_plugin/bell.svg"},
-            {"text": "安全", "icon": ":/img/top_bar_plugin/bell.svg"},
-            {"text": "外观", "icon": ":/img/top_bar_plugin/theme.svg"},
+            {"text": "通用设置", "icon": ":/main_window_plugin/icon/bell.svg"},
+            {"text": "通知", "icon": ":/main_window_plugin/icon/bell.svg"},
+            {"text": "安全", "icon": ":/main_window_plugin/icon/bell.svg"},
+            {"text": "外观", "icon": ":/main_window_plugin/icon/theme.svg"},
         ]
 
         self._seg_buttons = []

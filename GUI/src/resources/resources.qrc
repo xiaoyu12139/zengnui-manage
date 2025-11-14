@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/qss">
+    <qresource prefix="/">
 <!-- default -->
         <!-- style -->
         <file>default/style/default.qss</file>

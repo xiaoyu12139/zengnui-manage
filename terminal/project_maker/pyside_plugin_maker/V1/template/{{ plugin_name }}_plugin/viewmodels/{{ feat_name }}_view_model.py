@@ -9,7 +9,7 @@
 {{ placeholder_viewmodel_end }}
 {{ placeholder_import_end }}
 
-class {{ FeatName }}ViewModel:
+class {{ FeatName }}ViewModel(QObject):
     """
     {{ FeatName }}视图模型类
     """

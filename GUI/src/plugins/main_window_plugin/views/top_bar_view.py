@@ -26,7 +26,7 @@ class TopBarView(QWidget):
         self._dragging = False
         self._drag_pos = None
         self._max_button_state = True
-        set_style_sheet(self, ":/qss/top_bar_plugin/top_bar.qss")
+        set_style_sheet(self, ":/main_window_plugin/style/top_bar.qss")
 
     def setup_widget(self):
         """
@@ -34,38 +34,38 @@ class TopBarView(QWidget):
         """
         self.ui = Ui_TopWidget()
         self.ui.setupUi(self)
-        self.ui.btn_close.setIcon(QIcon(":/img/top_bar_plugin/close.svg"))
+        self.ui.btn_close.setIcon(QIcon(":/main_window_plugin/icon/close.svg"))
         self.ui.btn_close.setAutoRaise(True)
         self.ui.btn_close.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.ui.btn_close.setToolTip("关闭窗口")
         self.ui.btn_close.clicked.connect(self.on_btn_close_click)
 
-        self.ui.btn_max.setIcon(QIcon(":/img/top_bar_plugin/maximize.svg"))
+        self.ui.btn_max.setIcon(QIcon(":/main_window_plugin/icon/maximize.svg"))
         self.ui.btn_max.setAutoRaise(True)
         self.ui.btn_max.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.ui.btn_max.setToolTip("最大化窗口")
         self.ui.btn_max.clicked.connect(self.on_btn_max_click)
 
-        self.ui.btn_min.setIcon(QIcon(":/img/top_bar_plugin/minimize.svg"))
+        self.ui.btn_min.setIcon(QIcon(":/main_window_plugin/icon/minimize.svg"))
         self.ui.btn_min.setAutoRaise(True)
         self.ui.btn_min.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.ui.btn_min.setToolTip("最小化窗口")
         self.ui.btn_min.clicked.connect(self.on_btn_min_click)
 
-        self.ui.btn_night.setIcon(QIcon(":/img/top_bar_plugin/theme.svg"))
+        self.ui.btn_night.setIcon(QIcon(":/main_window_plugin/icon/theme.svg"))
         self.ui.btn_night.setAutoRaise(True)
         self.ui.btn_night.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.ui.btn_night.setToolTip("切换主题")
         self.ui.btn_night.clicked.connect(self.on_btn_night_click)
 
-        self.ui.btn_diaginostics.setIcon(QIcon(":/img/top_bar_plugin/bell.svg"))
+        self.ui.btn_diaginostics.setIcon(QIcon(":/main_window_plugin/icon/bell.svg"))
         self.ui.btn_diaginostics.setAutoRaise(True)
         self.ui.btn_diaginostics.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.ui.btn_diaginostics.setToolTip("诊断")
         self.ui.btn_diaginostics.clicked.connect(self.on_btn_diaginostics_click)
 
         # 设置logo并按高度缩放
-        self._logo_pix = QPixmap(":/img/top_bar_plugin/logo.png")
+        self._logo_pix = QPixmap(":/main_window_plugin/icon/logo.png")
         self._update_logo_size()
 
         # 安装事件过滤器
@@ -133,13 +133,13 @@ class TopBarView(QWidget):
         """
 
         if not self._max_button_state:
-            self.ui.btn_max.setIcon(QIcon(":/img/top_bar_plugin/maximize.svg"))
+            self.ui.btn_max.setIcon(QIcon(":/main_window_plugin/icon/maximize.svg"))
             self.ui.btn_max.setToolTip("最大化窗口")
             Global().command_manager.execute_command(
                 "maximize_main_window", self._max_button_state
             )
         else:
-            self.ui.btn_max.setIcon(QIcon(":/img/top_bar_plugin/restore.svg"))
+            self.ui.btn_max.setIcon(QIcon(":/main_window_plugin/icon/restore.svg"))
             self.ui.btn_max.setToolTip("还原窗口")
             Global().command_manager.execute_command(
                 "maximize_main_window", self._max_button_state

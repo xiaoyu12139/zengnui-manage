@@ -62,12 +62,12 @@ def main():
         from plugins.main_window_plugin.build import rc_qss  # noqa: F401
         from plugins.main_window_plugin.build import rc_icon  # noqa: F401
 
-        qss_content = get_qss(":/qss/default.qss")
+        qss_content = get_qss(":/default/style/default.qss")
         app.setStyleSheet(app.styleSheet() + "\n" + qss_content)
         # 设置应用窗口图标（影响 Windows 任务栏显示）
         try:
-            app.setWindowIcon(QIcon(":/img/top_bar_plugin/z_logo.svg"))
-            logger.info("已设置应用图标为 :/img/top_bar_plugin/z_logo.svg")
+            app.setWindowIcon(QIcon(":/main_window_plugin/icon/z_logo.svg"))
+            logger.info("已设置应用图标为 :/main_window_plugin/icon/z_logo.svg")
         except Exception as e:
             logger.error(f"设置应用图标失败: {e}")
     except Exception as e:

@@ -17,7 +17,7 @@ from PySide6.QtWidgets import QWidget
 logger = get_logger("MainWindowViewModel")
 
 
-class MainWindowViewModel:
+class MainWindowViewModel(QObject):
     """
     MainWindow视图模型类
     """
