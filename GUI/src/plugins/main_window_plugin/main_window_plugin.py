@@ -75,11 +75,11 @@ class MainWindowPlugin(Plugin, MainWindowViewModelBuilder):
         """
         加载支持插件
         """
-        # 创建一个上下文
-        context = Context(Global().event_bus)
         Global().plugin_manager.load_all_plugins()
         # 遍历插件管理器中的所有插件
         for plugin in Global().plugin_manager.plugin_list:
+            # 创建一个上下文
+            context = Context(Global().event_bus, plugin)
             # 调用插件的assemble方法传入context
             plugin.assembled(context)
         # 显示主窗口

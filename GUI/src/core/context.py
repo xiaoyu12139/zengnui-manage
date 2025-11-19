@@ -2,13 +2,24 @@ from .event_bus import EventBus
 from .app_global import Global
 
 class Context:
-    def __init__(self, global_bus: EventBus | None = None):
+    def __init__(self, global_bus: EventBus | None = None, current_plugin: str | None = None):
         self._global_bus = global_bus or EventBus()
         self._plugin_buses: dict[str, EventBus] = {}
+        self._current_plugin = current_plugin
 
     @property
     def event_bus(self) -> EventBus:
         return self._global_bus
+    
+    @property
+    def plugin_name(self) -> str | None:
+        """
+        当前插件的名称
+        """
+        class_name = self._current_plugin.__class__.__name__
+        if class_name.endswith('Plugin'):
+            class_name = class_name[:-6]
+        return class_name
 
     def get_plugin_bus(self, name: str) -> EventBus:
         bus = self._plugin_buses.get(name)
@@ -32,6 +43,11 @@ class Context:
     def execute(self, terminal: str, *args, **kwargs):
         return Global().command_manager.execute_command(terminal, *args, **kwargs)
 
-    def plugin_execute(self, plugin: str, feature: str, action: str, *args, **kwargs):
-        terminal = f"{plugin}.{feature}.{action}"
+    def plugin_execute(self, feature: str, action: str, *args, **kwargs):
+        """
+        执行插件的命令
+        """
+        if self.plugin_name is None:
+            raise ValueError("当前上下文没有插件")
+        terminal = f"{self.plugin_name}.{feature}.{action}"
         return Global().command_manager.execute_command(terminal, *args, **kwargs)

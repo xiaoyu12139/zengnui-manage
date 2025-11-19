@@ -23,7 +23,7 @@ def cmd(coommand: str, terminal: str) -> Callable:
             return wrapper
     return decorator
 
-def pcmd(feature: str, action: str) -> Callable:
+def pcmd(action: str) -> Callable:
     def _camel_to_snake(name: str) -> str:
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
@@ -48,6 +48,9 @@ def pcmd(feature: str, action: str) -> Callable:
         def wrapper(*args, **kwargs) -> None:
             return func(*args, **kwargs)
 
+        feature = self.__class__.__name__
+        if feature.endswith('_cmd_handler'):
+            feature = feature[:-11]
         plugin = _derive_plugin_name(wrapper)
         terminal = f"{plugin}.{feature}.{action}"
         setattr(wrapper, "__cmd_id__", terminal)

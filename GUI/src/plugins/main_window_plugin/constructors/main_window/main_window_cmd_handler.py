@@ -1,5 +1,5 @@
 ######import_start######
-from core import cmd, Global
+from core import cmd, Global, pcmd
 from utils import get_logger
 
 ######constructor_start######
@@ -55,7 +55,7 @@ class MainWindowCmdHandler:
             vm_creator().init_main_window()
             Global().views_manager.show(main_win_id)
 
-        @cmd("ef8555d2-17c1-4b60-9ddb-98d255788ed4", "close_main_window")
+        @pcmd("close_main_window")
         def close_main_window():
             """
             关闭主窗口
@@ -63,7 +63,7 @@ class MainWindowCmdHandler:
             logger.info("close_main_window")
             vm_creator().close_main_window()
 
-        @cmd("b5a0cd84-ea94-455c-9454-159b16c19047", "move_main_window")
+        @pcmd("move_main_window")
         def move_main_window(pos):
             """
             移动主窗口
@@ -71,7 +71,7 @@ class MainWindowCmdHandler:
             # logger.info(f"move_main_window: {pos}")
             vm_creator().move_main_window(pos)
 
-        @cmd("baf41145-9615-467d-8c0c-45532548b6bd", "minimize_main_window")
+        @pcmd("minimize_main_window")
         def minimize_main_window():
             """
             最小化主窗口
@@ -79,7 +79,7 @@ class MainWindowCmdHandler:
             logger.info("minimize_main_window")
             vm_creator().minimize_main_window()
 
-        @cmd("0ab1b41d-8ca3-473f-b407-7c0f3995eeab", "maximize_main_window")
+        @pcmd("maximize_main_window")
         def maximize_main_window(maximize: bool):
             """
             最大化主窗口
