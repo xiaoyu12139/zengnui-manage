@@ -21,12 +21,13 @@ class StatusBarCmdHandler:
         组装 StatusBar 命令
         """
 
-        @cmd("be226367-b4c3-4ca3-b36e-10a5aed58ecf", "activate_status_bar")
-        def activate_status_bar():
+        @cmd("8ba404a6-6cb6-4804-a719-c82163773eb2", "activate_status_bar")
+        def activate_status_bar(parent_widget_id):
             """
             激活 StatusBar 插件
             """
             view_id = Global().views_manager.instance_view(str(hash(StatusBarView)), vm_creator())
-            instance = Global().views_manager.get_view_instance(view_id)
             # 注册插件到主界面
-            # Global().command_manager.execute_command("register_menu_pane", instance, view_id)
+            Global().views_manager.fill_widget_with_execution(
+                parent_widget_id, view_id, "set_status_bar_widget"
+            )

@@ -3,7 +3,7 @@
 ######constructor_end######
 ######ui_start######
 ######ui_end######
-# from ...ui_widget.status_bar_plugin import Ui_StatusBar
+from ui_widget.main_window_plugin import Ui_StatusBarWidget
 ######ui_end######
 ######view_start######
 ######view_end######
@@ -27,9 +27,8 @@ class StatusBarView(QWidget):
         """
         设置用户界面
         """
-        # self.ui = Ui_StatusBar()
-        # self.ui.setupUi(self)
-        pass
+        self.ui = Ui_StatusBarWidget()
+        self.ui.setupUi(self)
         
     def set_view_model(self, vm):
         """
