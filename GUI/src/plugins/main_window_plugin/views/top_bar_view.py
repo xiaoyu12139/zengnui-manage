@@ -1,9 +1,11 @@
 ######import_start######
+from utils import set_style_sheet
+from core import Global
 ######constructor_start######
 ######constructor_end######
 ######ui_start######
 ######ui_end######
-# from ...ui_widget.top_bar_plugin import Ui_TopBar
+from ui_widget.main_window_plugin import Ui_TopWidget
 ######ui_end######
 ######view_start######
 ######view_end######
@@ -11,7 +13,8 @@
 ######viewmodel_end######
 ######import_end######
 from PySide6.QtWidgets import QWidget
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtCore import Qt, Slot, QEvent
+from PySide6.QtGui import QIcon, QPixmap
 
 
 class TopBarView(QWidget):
@@ -105,9 +108,7 @@ class TopBarView(QWidget):
                 self, "_dragging", False
             ):
                 delta = event.globalPosition().toPoint() - self._drag_pos
-                Global().command_manager.execute_command(
-                    "move_main_window", delta
-                )
+                self.view_model.move_main_window(delta)
                 self._drag_pos = event.globalPosition().toPoint()
                 return True
             elif event.type() == QEvent.MouseButtonRelease:
@@ -124,26 +125,20 @@ class TopBarView(QWidget):
         """
         关闭窗口按钮点击事件
         """
-        Global().command_manager.execute_command("close_main_window")
+        self.view_model.close_main_window()
 
     @Slot()
     def on_btn_max_click(self):
         """
         最大化窗口按钮点击事件
         """
-
         if not self._max_button_state:
             self.ui.btn_max.setIcon(QIcon(":/main_window_plugin/icon/maximize.svg"))
             self.ui.btn_max.setToolTip("最大化窗口")
-            Global().command_manager.execute_command(
-                "maximize_main_window", self._max_button_state
-            )
         else:
             self.ui.btn_max.setIcon(QIcon(":/main_window_plugin/icon/restore.svg"))
             self.ui.btn_max.setToolTip("还原窗口")
-            Global().command_manager.execute_command(
-                "maximize_main_window", self._max_button_state
-            )
+        self.view_model.maximize_main_window(self._max_button_state)
         self._max_button_state = not self._max_button_state
 
     @Slot()
@@ -151,7 +146,7 @@ class TopBarView(QWidget):
         """
         最小化窗口按钮点击事件
         """
-        Global().command_manager.execute_command("minimize_main_window")
+        self.view_model.minimize_main_window()
 
     @Slot()
     def on_btn_night_click(self):

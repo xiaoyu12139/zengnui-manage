@@ -23,3 +23,28 @@ class TopBarViewModel:
         """
         self._win_id = win_id
         self._view_id = view_id
+    
+    def close_main_window(self):
+        """
+        关闭主窗口
+        """
+        self._context.plugin_execute("main_window","close_main_window")
+    
+    def minimize_main_window(self):
+        """
+        最小化主窗口
+        """
+        self._context.plugin_execute("main_window","minimize_main_window")
+    
+    def maximize_main_window(self, maximize: bool):
+        """
+        最大化主窗口
+        """
+        self._context.plugin_execute("main_window","maximize_main_window", maximize)
+    
+    def move_main_window(self, delta):
+        """
+        移动主窗口
+        """
+        self._context.plugin_execute("main_window", "move_main_window", delta)
+    

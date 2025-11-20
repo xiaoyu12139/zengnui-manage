@@ -43,14 +43,21 @@ def pcmd(action: str) -> Callable:
             return seg.replace('_plugin', '').lower()
         return 'plugin'
 
+    def _derive_feature_name(func: Callable) -> str:
+        qn = getattr(func, '__qualname__', '')
+        cls = qn.split('.', 1)[0]
+        if cls.endswith('CmdHandler'):
+            cls = cls[:-10]
+        elif cls.endswith('_cmd_handler'):
+            cls = cls[:-12]
+        return _camel_to_snake(cls)
+
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> None:
             return func(*args, **kwargs)
 
-        feature = self.__class__.__name__
-        if feature.endswith('_cmd_handler'):
-            feature = feature[:-11]
+        feature = _derive_feature_name(wrapper)
         plugin = _derive_plugin_name(wrapper)
         terminal = f"{plugin}.{feature}.{action}"
         setattr(wrapper, "__cmd_id__", terminal)

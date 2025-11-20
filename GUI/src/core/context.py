@@ -1,5 +1,6 @@
 from .event_bus import EventBus
 from .app_global import Global
+import re
 
 class Context:
     def __init__(self, global_bus: EventBus | None = None, current_plugin: str | None = None):
@@ -49,5 +50,11 @@ class Context:
         """
         if self.plugin_name is None:
             raise ValueError("当前上下文没有插件")
-        terminal = f"{self.plugin_name}.{feature}.{action}"
+        
+        def _camel_to_snake(name: str) -> str:
+            s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+            return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        plugin_name = _camel_to_snake(self.plugin_name)
+        feature_name = _camel_to_snake(feature)
+        terminal = f"{plugin_name}.{feature_name}.{action}"
         return Global().command_manager.execute_command(terminal, *args, **kwargs)

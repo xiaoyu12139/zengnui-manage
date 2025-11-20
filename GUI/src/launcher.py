@@ -59,8 +59,7 @@ def main():
     # 尝试从 Qt 资源加载 default.qss（:/qss/default.qss）
     try:
         # 导入资源模块以注册 qss 与图标资源（rc_* 在导入时会调用 qInitResources）
-        from plugins.main_window_plugin.build import rc_qss  # noqa: F401
-        from plugins.main_window_plugin.build import rc_icon  # noqa: F401
+        from plugins.main_window_plugin.build import rc_resource  # noqa: F401
 
         qss_content = get_qss(":/default/style/default.qss")
         app.setStyleSheet(app.styleSheet() + "\n" + qss_content)
