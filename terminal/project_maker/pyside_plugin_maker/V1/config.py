@@ -49,6 +49,14 @@ context = {
     "placeholder_vmbuild_method_end": placeholder_vmbuild_method_end,
 }
 
+plugin_scan_suffix_types = [
+    "_plugin",
+    "_vm_build",
+    "_cmd_handler",
+    "_view",
+    "_viewmodel",
+]
+
 placeholder_import_seq = [
     "placeholder_import_start",
     "placeholder_constructor_start",

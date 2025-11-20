@@ -44,7 +44,11 @@ def check_plugin_rule(plugin_dir: Path, plugin_name: str, file_placeholder_table
     """
     rule_seq = copy.copy(placeholder_import_seq)
     plugin_path = plugin_dir / f"{plugin_name}_plugin"
-    for f in plugin_path.glob("**/*.py"):
+    files = set()
+    for suffix in plugin_scan_suffix_types:
+        for f in plugin_path.glob(f"**/*{suffix}.py"):
+            files.add(f)
+    for f in sorted(files):
         if f.is_file():
             placeholder_table = {}
             if not file_rule_match(f, rule_seq, placeholder_table, context):
