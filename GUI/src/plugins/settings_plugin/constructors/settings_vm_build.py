@@ -7,6 +7,7 @@ from ..viewmodels.settings_view_model import SettingsViewModel
 ######view_start######
 ######view_end######
 ######viewmodel_start######
+from ..viewmodels.sub_generate_setting_viewmodel import SubGenerateSettingViewModel
 ######viewmodel_end######
 ######import_end######
 from typing import Callable
@@ -27,4 +28,16 @@ class SettingsViewModelBuilder:
                 settings_vm = SettingsViewModel(context)
             return settings_vm
         return _create_settings_vm
+
+    def create_sub_generate_setting_vm_instance(self, context) -> Callable[[], SubGenerateSettingViewModel]:
+        """
+        创建SubGenerateSetting视图模型实例
+        """
+        sub_generate_setting_vm = None
+        def _create_sub_generate_setting_vm() -> SubGenerateSettingViewModel:
+            nonlocal sub_generate_setting_vm
+            if sub_generate_setting_vm is None:
+                sub_generate_setting_vm = SubGenerateSettingViewModel(context)
+            return sub_generate_setting_vm
+        return _create_sub_generate_setting_vm
     ######vmbuild_method_end######

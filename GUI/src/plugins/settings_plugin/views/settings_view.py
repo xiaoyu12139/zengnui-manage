@@ -1,16 +1,18 @@
 ######import_start######
+from core import Global
+from utils import set_style_sheet
 ######constructor_start######
 ######constructor_end######
 ######ui_start######
 ######ui_end######
-# from ...ui_widget.settings_plugin import Ui_Settings
+from ui_widget.settings_plugin import Ui_SettingsWidget
 ######ui_end######
 ######view_start######
 ######view_end######
 ######viewmodel_start######
 ######viewmodel_end######
 ######import_end######
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QPushButton, QHBoxLayout, QLabel, QButtonGroup
 from PySide6.QtCore import Qt
 
 
@@ -32,6 +34,11 @@ class SettingsView(QWidget):
         """
         self.ui = Ui_SettingsWidget()
         self.ui.setupUi(self)
+        
+    def init_view(self):
+        """
+        初始化视图
+        """
         self._build_segment_tabs()
 
     def set_view_model(self, vm):
@@ -79,9 +86,7 @@ class SettingsView(QWidget):
             pageLayout = QHBoxLayout(page)
             pageLayout.addWidget(ph)
             if self.ui.contentStackedWidget.count() == 0:
-                page = Global().command_manager.execute_command(
-                    "activate_sub_generate_setting_widget"
-                )
+                page = self.view_model.get_sub_generate_setting_widget()
                 self.ui.contentStackedWidget.addWidget(page)
             else:
                 self.ui.contentStackedWidget.addWidget(page)

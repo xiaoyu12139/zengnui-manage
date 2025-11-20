@@ -21,7 +21,7 @@ class {{ FeatName }}CmdHandler:
         组装 {{ FeatName }} 命令
         """
 
-        @cmd("be226367-b4c3-4ca3-b36e-10a5aed58ecf", "activate_{{ feat_name }}")
+        @cmd("", "activate_{{ feat_name }}")
         def activate_{{ feat_name }}():
             """
             激活 {{ FeatName }} 插件

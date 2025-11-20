@@ -1,5 +1,5 @@
 ######import_start######
-from core import cmd, Global
+from core import cmd, Global, pcmd
 ######constructor_start######
 ######constructor_end######
 ######ui_start######

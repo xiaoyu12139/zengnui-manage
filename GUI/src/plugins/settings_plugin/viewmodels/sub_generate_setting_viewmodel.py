@@ -8,10 +8,12 @@
 ######viewmodel_start######
 ######viewmodel_end######
 ######import_end######
+from PySide6.QtCore import QObject
 
-class SettingsViewModel:
+
+class SubGenerateSettingViewModel(QObject):
     """
-    Settings视图模型类
+    SubGenerateSetting视图模型类
     """
     def __init__(self, context):
         super().__init__()
@@ -23,9 +25,3 @@ class SettingsViewModel:
         """
         self._win_id = win_id
         self._view_id = view_id
-    
-    def get_sub_generate_setting_widget(self):
-        """
-        获取子生成设置小部件
-        """
-        return self._context.plugin_execute("sub_generate_setting", "activate_sub_generate_setting")

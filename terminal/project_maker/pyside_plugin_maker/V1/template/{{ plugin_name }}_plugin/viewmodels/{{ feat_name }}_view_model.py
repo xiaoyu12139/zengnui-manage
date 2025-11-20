@@ -8,6 +8,7 @@
 {{ placeholder_viewmodel_start }}
 {{ placeholder_viewmodel_end }}
 {{ placeholder_import_end }}
+from PySide6.QtCore import QObject
 
 class {{ FeatName }}ViewModel(QObject):
     """
