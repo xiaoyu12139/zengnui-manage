@@ -3,7 +3,7 @@
 {{ placeholder_constructor_end }}
 {{ placeholder_ui_start }}
 {{ placeholder_ui_end }}
-# from ...ui_widget.{{ feat_name }}_plugin import Ui_{{ FeatName }}
+from ui_widget.{{ feat_name }}_plugin import Ui_{{ FeatName }}Widget
 {{ placeholder_ui_end }}
 {{ placeholder_view_start }}
 {{ placeholder_view_end }}

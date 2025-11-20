@@ -21,7 +21,7 @@ class StatusBarCmdHandler:
         组装 StatusBar 命令
         """
 
-        @cmd("8ba404a6-6cb6-4804-a719-c82163773eb2", "activate_status_bar")
+        @cmd("cdec7d58-7551-411f-847b-6285e8eb52c2", "activate_status_bar")
         def activate_status_bar(parent_widget_id):
             """
             激活 StatusBar 插件

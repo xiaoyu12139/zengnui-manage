@@ -3,7 +3,7 @@
 ######constructor_end######
 ######ui_start######
 ######ui_end######
-# from ...ui_widget.card_quick_option_plugin import Ui_CardQuickOption
+from ui_widget.dashboard_plugin import Ui_CardQuickOptionWidget
 ######ui_end######
 ######view_start######
 ######view_end######
@@ -27,9 +27,8 @@ class CardQuickOptionView(QWidget):
         """
         设置用户界面
         """
-        # self.ui = Ui_CardQuickOption()
-        # self.ui.setupUi(self)
-        pass
+        self.ui = Ui_CardQuickOptionWidget()
+        self.ui.setupUi(self)
         
     def set_view_model(self, vm):
         """

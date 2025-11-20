@@ -3,7 +3,7 @@
 ######constructor_end######
 ######ui_start######
 ######ui_end######
-# from ...ui_widget.card_config_plugin import Ui_CardConfig
+from ui_widget.dashboard_plugin import Ui_CardConfigWidget
 ######ui_end######
 ######view_start######
 ######view_end######
@@ -27,9 +27,8 @@ class CardConfigView(QWidget):
         """
         设置用户界面
         """
-        # self.ui = Ui_CardConfig()
-        # self.ui.setupUi(self)
-        pass
+        self.ui = Ui_CardConfigWidget()
+        self.ui.setupUi(self)
         
     def set_view_model(self, vm):
         """

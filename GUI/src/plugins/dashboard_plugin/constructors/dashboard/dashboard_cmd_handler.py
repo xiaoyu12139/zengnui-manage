@@ -5,7 +5,7 @@ from core import cmd, Global
 ######ui_start######
 ######ui_end######
 ######view_start######
-from ...views import DashboardView
+from ...views.dashboard_view import DashboardView
 ######view_end######
 ######viewmodel_start######
 ######viewmodel_end######
@@ -21,7 +21,7 @@ class DashboardCmdHandler:
         组装 Dashboard 命令
         """
 
-        @cmd("be226367-b4c3-4ca3-b36e-10a5aed58ecf", "activate_dashboard")
+        @cmd("0a6cbc07-8c77-4a3d-9f40-59deb58dd59c", "activate_dashboard")
         def activate_dashboard():
             """
             激活 Dashboard 插件
@@ -29,4 +29,4 @@ class DashboardCmdHandler:
             view_id = Global().views_manager.instance_view(str(hash(DashboardView)), vm_creator())
             instance = Global().views_manager.get_view_instance(view_id)
             # 注册插件到主界面
-            # Global().command_manager.execute_command("register_menu_pane", instance, view_id)
+            Global().command_manager.execute_command("register_menu_pane", instance, view_id)
