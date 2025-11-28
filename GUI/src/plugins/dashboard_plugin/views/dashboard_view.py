@@ -12,7 +12,7 @@ from ui_widget.dashboard_plugin import Ui_DashboardWidget
 ######viewmodel_start######
 ######viewmodel_end######
 ######import_end######
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PySide6.QtCore import Qt
 
 logger = get_logger("DashboardView")
@@ -46,3 +46,25 @@ class DashboardView(QWidget):
 
     def get_menu_name(self) -> str:
         return "Dashboard"
+
+    
+    def dashboard_init(self):
+        """
+        初始化 Dashboard 视图
+        """
+        vlayout = QVBoxLayout(self.ui.page)
+        vlayout.setContentsMargins(0, 0, 0, 0)
+        #获取子视图
+        card_quick_option_view = self.view_model.get_quick_option_view()
+        card_config_view = self.view_model.get_card_config_view()
+        # 第1行
+        hlayout_1 = QHBoxLayout()
+        hlayout_1.addWidget(card_quick_option_view)
+        hlayout_1.addStretch()
+        vlayout.addLayout(hlayout_1)
+        # 第2行
+        hlayout_2 = QHBoxLayout()
+        hlayout_2.addWidget(card_config_view)
+        vlayout.addLayout(hlayout_2)
+        # 添加 Spacer 占用剩余空间
+        vlayout.addStretch()

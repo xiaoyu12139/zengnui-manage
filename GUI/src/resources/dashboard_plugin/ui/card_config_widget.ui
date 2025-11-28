@@ -61,7 +61,7 @@
           <widget class="QWidget" name="widget" native="true">
            <layout class="QVBoxLayout" name="verticalLayout">
             <property name="spacing">
-             <number>0</number>
+             <number>8</number>
             </property>
             <property name="leftMargin">
              <number>0</number>
@@ -126,7 +126,7 @@
           <widget class="QWidget" name="widget_3" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <property name="spacing">
-             <number>0</number>
+             <number>8</number>
             </property>
             <property name="leftMargin">
              <number>0</number>
@@ -144,7 +144,7 @@
              <widget class="QWidget" name="widget_4" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <property name="spacing">
-                <number>0</number>
+                <number>8</number>
                </property>
                <property name="leftMargin">
                 <number>0</number>

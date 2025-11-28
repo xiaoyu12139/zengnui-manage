@@ -28,5 +28,6 @@ class DashboardCmdHandler:
             """
             view_id = Global().views_manager.instance_view(str(hash(DashboardView)), vm_creator())
             instance = Global().views_manager.get_view_instance(view_id)
+            instance.dashboard_init()
             # 注册插件到主界面
             Global().command_manager.execute_command("register_menu_pane", instance, view_id)

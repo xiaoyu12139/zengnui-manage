@@ -21,8 +21,8 @@ class CardQuickOptionCmdHandler:
         组装 CardQuickOption 命令
         """
 
-        @pcmd("activate_card_quick_option")
-        def activate_card_quick_option():
+        @pcmd("get_card_quick_option")
+        def get_card_quick_option():
             """
             激活 CardQuickOption 插件
             """

@@ -23,3 +23,15 @@ class DashboardViewModel:
         """
         self._win_id = win_id
         self._view_id = view_id
+    
+    def get_quick_option_view(self):
+        """
+        获取 CardQuickOption 视图
+        """
+        return self._context.plugin_execute("card_quick_option","get_card_quick_option")
+    
+    def get_card_config_view(self):
+        """
+        获取 CardConfig 视图
+        """
+        return self._context.plugin_execute("card_config","get_card_config")

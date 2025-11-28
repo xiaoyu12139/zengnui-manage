@@ -1,4 +1,5 @@
 ######import_start######
+from utils import set_style_sheet
 ######constructor_start######
 ######constructor_end######
 ######ui_start######
@@ -22,6 +23,7 @@ class CardQuickOptionView(QWidget):
         # 允许 QWidget 绘制样式表背景
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setup_widget()
+        set_style_sheet(self, ":/dashboard_plugin/style/card_quick_option.qss")
     
     def setup_widget(self):
         """

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -134,7 +134,7 @@
    </item>
    <item>
     <widget class="QStackedWidget" name="contentStackedWidget">
-     <widget class="QWidget" name="contentStackedWidgetPage1" native="true"/>
+     <widget class="QWidget" name="contentStackedWidgetPage1"/>
     </widget>
    </item>
   </layout>

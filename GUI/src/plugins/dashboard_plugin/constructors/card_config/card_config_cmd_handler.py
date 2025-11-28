@@ -21,10 +21,10 @@ class CardConfigCmdHandler:
         组装 CardConfig 命令
         """
 
-        @pcmd("activate_card_config")
-        def activate_card_config():
+        @pcmd("get_card_config")
+        def get_card_config():
             """
-            激活 CardConfig 插件
+            获取 CardConfig 插件
             """
             view_id = Global().views_manager.instance_view(str(hash(CardConfigView)), vm_creator())
             instance = Global().views_manager.get_view_instance(view_id)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
-    <height>307</height>
+    <width>454</width>
+    <height>359</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -130,7 +130,10 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="contentWidget" native="true"/>
+    <widget class="QStackedWidget" name="centerStackedWidget">
+     <widget class="QWidget" name="page"/>
+     <widget class="QWidget" name="page_2"/>
+    </widget>
    </item>
   </layout>
  </widget>
